@@ -94,7 +94,7 @@ public class Treino {
       tipo_treino = Integer.parseInt(JOptionPane.showInputDialog(
         "Que tipo de treino é que pretendes registar?\n" +  
         "Escolha uma opção:\n"+
-        "1. Alongamentos\n"+
+        "1. Alongamentos (só este é que está def)\n"+
         "2. Força\n"+
         "3. Cardio\n"+
         "4. Misto (registe atividades de diferentes naturezas)\n"+
@@ -107,7 +107,7 @@ public class Treino {
             List<Atividade> alongamentosList = alongamentos.getAlongamentos();
             Object[] alongamentosArray = alongamentosList.toArray();
             Object selectedValue = JOptionPane.showInputDialog(null, "Selecione o alongamento", "Alongamentos",JOptionPane.INFORMATION_MESSAGE, null, alongamentosArray, alongamentosArray[0]);
-            addExercicioRepeticoes(alongamentosList, novo_treino);
+            //addExercicioRepeticoes(alongamentosList, novo_treino);
             treino.toString();
             break;
           case 2:
@@ -152,30 +152,15 @@ public class Treino {
     List<Atividade> exercicios_treino = new ArrayList<>();
     int ex;
 
-    do{
-      int reps = Integer.parseInt(JOptionPane.showInputDialog("Quantas repetições?\n"));
-      //OptionalInt peso = 
-    }
-    while(ex!=0);
-
-    while(ex != 0){
-      ex = scanner_exercicio.nextInt();
-      
-      if(ex > 0 && ex <= listaAtividades.size()){ //se o nº introduzido corresponde a um indice existente
-
-        System.out.println("Quanto peso?");
-        int pesoValue = scanner_exercicio.nextInt();
-        OptionalInt peso = OptionalInt.of(pesoValue);
-        
-        Atividade atividade = listaAtividades.get(ex-1);
-        Repeticoes rep = new Repeticoes(atividade.getNome(), atividade.getTipo(), atividade.getCalorias(), atividade.getDificuldade(), reps, peso, atividade.getDuracao());
-        exercicios_treino.add(rep);
-      }
-    }
+    int reps = Integer.parseInt(JOptionPane.showInputDialog("Quantas repetições?\n"));
+    int pesoValue = Integer.parseInt(JOptionPane.showInputDialog("Quanto peso?\n"));
+    OptionalInt peso = OptionalInt.of(pesoValue);
+    Atividade atividade = listaAtividades.get(ex-1);
+    Repeticoes rep = new Repeticoes(atividade.getNome(), atividade.getTipo(), atividade.getCalorias(), atividade.getDificuldade(), reps, peso, atividade.getDuracao());
+    exercicios_treino.add(rep);
 
     treino.setTreino(exercicios_treino);
     treino.toString();
-    scanner_exercicio.close();
   }
 
 

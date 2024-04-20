@@ -50,11 +50,11 @@ public class Menu {
     do {
       menu_option = Integer.parseInt(JOptionPane.showInputDialog(
           "Escolha uma opção:\n" +
-              "1. Treino\n" +
-              "2. Histórico\n" +
-              "3. Estatísticas\n" +
-              "4. Global\n" +
-              "5. Configurações\n" +
+              "1. Treino (em desenvolvimento)\n" +
+              "2. Histórico (não definido)\n" +
+              "3. Estatísticas (não definido)\n" +
+              "4. Global (print dos users no ficheiro)\n" +
+              "5. Configurações (não definido)\n" +
               "6. Sair\n"));
       switch (menu_option) {
         case 1:
@@ -116,40 +116,16 @@ public class Menu {
     }
     while (opcao != 3);
   }
-
-  public static void clearConsole() {
-    /*
-     * try{
-     * final String os = System.getProperty("os.name");
-     * 
-     * if (os.contains("Windows")){
-     * Runtime.getRuntime().exec("cls");
-     * }
-     * else{
-     * Runtime.getRuntime().exec("clear");
-     * }
-     * }
-     * catch (final Exception e){
-     * System.out.println("Erro ao limpar o terminal: " + e.getMessage());
-     * }
-     */
-    for (int i = 0; i < 100; i++) {
-      System.out.println();
-    }
-    // System.out.print("\033\143");
-  }
 }
 
 /**
  * A resolver:
- * - erro após a definição do user
- * - serialization (loadFromFile) (maybe done)
  * - erro ao selecionar os exercícios para um treino (Treino ->
  * 'addExercicioRepeticoes')
- * - aprimorar os menus
  * 
  * A desenvolver:
- * - calculo da taxa metabólica
+ * - calculo das calorias por treino (taxa metabólica do user já está definida)
  * - criação de rankings e records
  * - criação de um calendário
+ * - aprimorar os menus
  */
