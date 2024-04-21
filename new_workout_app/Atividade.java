@@ -91,3 +91,4 @@ public abstract class Atividade {
     public abstract double calorias();
     public abstract Atividade clone();
 }
+
