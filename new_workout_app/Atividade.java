@@ -6,6 +6,10 @@ public abstract class Atividade {
     private int duracao;
     private Utilizador user;
 
+
+    // ------------------- Construtores ------------------- //
+
+
     public Atividade() {
         this.codigo = "";
         this.descricao = "";
@@ -13,19 +17,26 @@ public abstract class Atividade {
         this.user = new Utilizador();
     }
 
-    public Atividade(String codigo, String descricao, int duracao) {
+    public Atividade(String codigo, String descricao, int duracao, Utilizador user) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.duracao = duracao;
+        this.user = user.clone();
     }
 
     public Atividade(Atividade outro){
         this.codigo = outro.getCodigo();
         this.descricao = outro.getDescricao();
         this.duracao = outro.getDuracao();
+        this.user = outro.getUser();
     }
+
+
+    // ------------------- Métodos ------------------- //
+
+
     public String getCodigo() {
-        return codigo;
+        return this.codigo;
     }
 
     public void setCodigo(String codigo) {
@@ -33,7 +44,7 @@ public abstract class Atividade {
     }
 
     public String getDescricao() {
-        return descricao;
+        return this.descricao;
     }
 
     public void setDescricao(String descricao) {
@@ -41,43 +52,43 @@ public abstract class Atividade {
     }
 
     public int getDuracao() {
-        return duracao;
+        return this.duracao;
     }
 
     public void setDuracao(int duracao) {
         this.duracao = duracao;
     }
 
+    public Utilizador getUser() {
+        return this.user.clone();
+    }
+    
+    public void setUser(Utilizador user) {
+        this.user = user.clone();
+    }
+    
     @Override
     public String toString() {
         return "Atividade{" +
-                "codigo='" + codigo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", duracao=" + duracao +
+                "codigo='" + this.codigo + '\'' +
+                ", descricao='" + this.descricao + '\'' +
+                ", duracao=" + this.duracao +
                 '}';
     }
-
-    public Utilizador getUser() {
-        return user;
-    }
-
-    public void setUser(Utilizador user) {
-        this.user = user;
-    }
-
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         Atividade atividade = (Atividade) o;
         return this.duracao == atividade.getDuracao()
                 && this.codigo.equals(atividade.getCodigo())
-                && this.descricao.equals(atividade.getDescricao());
+                && this.descricao.equals(atividade.getDescricao())
+                && this.user.equals(atividade.getUser());
     }
 
 
     public abstract double calorias();
-    public  abstract  Atividade clone();
+    public abstract Atividade clone();
 }
+
