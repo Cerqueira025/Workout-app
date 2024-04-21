@@ -1,3 +1,8 @@
+package Atividade.Repeticoes;
+
+import Atividade.Atividade;
+import Utilizador.Utilizador;
+
 public abstract class Repeticoes extends Atividade {
     
     private int repeticoes;

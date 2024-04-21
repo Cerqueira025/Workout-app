@@ -1,4 +1,9 @@
-public abstract class Altimetria extends Distância {
+package Atividade.Distancia.Altimetria;
+
+import Atividade.Distancia.Distancia;
+import Utilizador.Utilizador;
+
+public abstract class Altimetria extends Distancia {
     private int altimetria;
 
     public Altimetria() {
@@ -6,10 +11,10 @@ public abstract class Altimetria extends Distância {
         this.altimetria = 0;
     }
 
-    public Altimetria(String codigo, String descrição, int duração, 
+    public Altimetria(String codigo, String descricao, int duracao, 
             Utilizador user, double dist, double velocidade, 
-            String local, int altimetria) {
-        super(codigo, descrição, duração, user, dist, velocidade, local);
+            int altimetria) {
+        super(codigo, descricao, duracao, user, dist, velocidade);
         this.altimetria = altimetria;
     }
 
@@ -44,6 +49,6 @@ public abstract class Altimetria extends Distância {
             ", altimetria='" + this.altimetria + '}';
     }
 
-    public abstract Distância clone();
+    public abstract Distancia clone();
     public abstract double calorias();
 }

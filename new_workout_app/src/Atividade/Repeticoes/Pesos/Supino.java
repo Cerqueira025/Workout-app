@@ -1,3 +1,7 @@
+package Atividade.Repeticoes.Pesos;
+
+import Utilizador.Utilizador;
+
 public class Supino extends Pesos {
     
     private double inclinacao;

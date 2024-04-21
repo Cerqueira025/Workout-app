@@ -1,4 +1,9 @@
-public abstract class Pesos extends Repeticoes{
+package Atividade.Repeticoes.Pesos;
+
+import Atividade.Repeticoes.Repeticoes;
+import Utilizador.Utilizador;
+
+public abstract class Pesos extends Repeticoes {
     
     private double peso;
 

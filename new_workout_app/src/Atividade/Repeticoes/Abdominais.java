@@ -1,3 +1,7 @@
+package Atividade.Repeticoes;
+
+import Utilizador.Utilizador;
+
 public class Abdominais extends Repeticoes {
     
     private double amplitude;

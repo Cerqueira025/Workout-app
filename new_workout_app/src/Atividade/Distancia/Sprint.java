@@ -1,11 +1,15 @@
-public class Sprint extends Distância {
+package Atividade.Distancia;
+
+import Utilizador.Utilizador;
+
+public class Sprint extends Distancia {
 
     public Sprint() {
         super();
     }
 
-    public Sprint(String codigo, String descrição, int duração, Utilizador user, double dist, double velocidade, String local) {
-        super(codigo, descrição, duração, user, dist, velocidade, local);
+    public Sprint(String codigo, String descricao, int duracao, Utilizador user, double dist, double velocidade) {
+        super(codigo, descricao, duracao, user, dist, velocidade);
     }
 
     public Sprint(Sprint outro) {

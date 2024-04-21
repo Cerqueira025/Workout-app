@@ -1,14 +1,18 @@
+package Atividade;
+
+import Utilizador.Utilizador;
+
 
 public abstract class Atividade {
     private String codigo;
     private String descricao;
+    //private String local;
     // private LocalDate data; // não sabemos se tem utilidade
     private int duracao;
     private Utilizador user;
 
 
     // ------------------- Construtores ------------------- //
-
 
     public Atividade() {
         this.codigo = "";
@@ -70,9 +74,9 @@ public abstract class Atividade {
     @Override
     public String toString() {
         return "Atividade{" +
-                "codigo='" + this.codigo + '\'' +
-                ", descricao='" + this.descricao + '\'' +
-                ", duracao=" + this.duracao +
+                "código='" + this.codigo + '\'' +
+                ", descrição='" + this.descricao + '\'' +
+                ", duração=" + this.duracao +
                 '}';
     }
 
