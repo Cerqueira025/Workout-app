@@ -87,7 +87,6 @@ public abstract class Atividade {
                 && this.user.equals(atividade.getUser());
     }
 
-
     public abstract double calorias();
     public abstract Atividade clone();
 }

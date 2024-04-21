@@ -78,5 +78,8 @@ public class BicicletaMontanha extends Altimetria {
         return new BicicletaMontanha(this);
     }
 
-    public double calorias() {}
+    @Override
+    public double calorias() {
+        return 9312.123;
+    }
 }

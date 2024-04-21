@@ -9,7 +9,7 @@ public abstract class Altimetria extends Distância {
     public Altimetria(String codigo, String descrição, int duração, 
             Utilizador user, double dist, double velocidade, 
             String local, int altimetria) {
-        super(codigo, descrição, duração, user, dist, local);
+        super(codigo, descrição, duração, user, dist, velocidade, local);
         this.altimetria = altimetria;
     }
 
@@ -45,6 +45,5 @@ public abstract class Altimetria extends Distância {
     }
 
     public abstract Distância clone();
-
     public abstract double calorias();
 }

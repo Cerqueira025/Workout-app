@@ -5,7 +5,7 @@ public class Sprint extends Distância {
     }
 
     public Sprint(String codigo, String descrição, int duração, Utilizador user, double dist, double velocidade, String local) {
-        super(codigo, descrição, duração, user, dist, local);
+        super(codigo, descrição, duração, user, dist, velocidade, local);
     }
 
     public Sprint(Sprint outro) {
@@ -30,5 +30,8 @@ public class Sprint extends Distância {
         return new Sprint(this);
     }
 
-    public double calorias() {}
+    @Override
+    public double calorias() {
+        return 818.32;
+    }
 }

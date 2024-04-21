@@ -50,10 +50,12 @@ public class Supino extends Pesos {
                 && Double.compare(this.inclinacao,supino.getInclinacao()) == 0;
     }
 
+    @Override
     public double calorias() {
         return 312.31;
     }
 
+    @Override
     public Supino clone() {
         return new Supino(this);
     }

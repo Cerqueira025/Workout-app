@@ -70,5 +70,5 @@ public abstract class Distância extends Atividade {
 
 
     public abstract Distância clone();
-    public abstract double    calorias();
+    public abstract double calorias();
 }

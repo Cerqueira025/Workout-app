@@ -50,10 +50,12 @@ public class Abdominais extends Repeticoes {
                 && Double.compare(this.amplitude, abdominais.getAmplitude()) == 0;
     }
 
+    @Override
     public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************
         return 218.2;
     }
 
+    @Override
     public Abdominais clone() {
         return new Abdominais(this);
     }
