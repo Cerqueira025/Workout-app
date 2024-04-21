@@ -106,8 +106,10 @@ public class Treino {
             GestorAtividades alongamentos = new GestorAtividades();
             List<Atividade> alongamentosList = alongamentos.getAlongamentos();
             Object[] alongamentosArray = alongamentosList.toArray();
-            Object selectedValue = JOptionPane.showInputDialog(null, "Selecione o alongamento", "Alongamentos",JOptionPane.INFORMATION_MESSAGE, null, alongamentosArray, alongamentosArray[0]);
-            //addExercicioRepeticoes(alongamentosList, novo_treino);
+            Atividade selectedValue = (Atividade) JOptionPane.showInputDialog(null, "Selecione o alongamento", 
+                                      "Alongamentos",JOptionPane.INFORMATION_MESSAGE, null, alongamentosArray, 
+                                      alongamentosArray[0]);
+            addExercicioRepeticoes(selectedValue, novo_treino);
             treino.toString();
             break;
           case 2:
@@ -147,7 +149,7 @@ public class Treino {
    * @param listaAtividades
    * @param treino
    */
-  private void addExercicioRepeticoes(List<Atividade> listaAtividades, Treino treino){
+  private void addExercicioRepeticoes(Atividade selectedValue, Treino treino){
     Scanner scanner_exercicio = new Scanner(System.in);
     List<Atividade> exercicios_treino = new ArrayList<>();
     int ex;
@@ -155,7 +157,7 @@ public class Treino {
     int reps = Integer.parseInt(JOptionPane.showInputDialog("Quantas repetições?\n"));
     int pesoValue = Integer.parseInt(JOptionPane.showInputDialog("Quanto peso?\n"));
     OptionalInt peso = OptionalInt.of(pesoValue);
-    Atividade atividade = listaAtividades.get(ex-1);
+    Atividade atividade = selectedValue;
     Repeticoes rep = new Repeticoes(atividade.getNome(), atividade.getTipo(), atividade.getCalorias(), atividade.getDificuldade(), reps, peso, atividade.getDuracao());
     exercicios_treino.add(rep);
 
