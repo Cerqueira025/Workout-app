@@ -37,9 +37,9 @@ public abstract class Altimetria extends Distancia {
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
-        if(!super.equals(o)) return false;
         Altimetria altimetria = (Altimetria) o;
-        return this.altimetria == altimetria.getAltimetria();
+        return super.equals(altimetria) 
+                && this.altimetria == altimetria.getAltimetria();
     }
 
      

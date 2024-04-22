@@ -46,9 +46,9 @@ public abstract class Distancia extends Atividade {
     public boolean equals(Object o){
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
-        if(!super.equals(o)) return false;
         Distancia distancia = (Distancia) o;
-        return Double.compare(this.distancia, distancia.getDistancia()) == 0
+        return super.equals(distancia)
+               && Double.compare(this.distancia, distancia.getDistancia()) == 0
                && Double.compare(this.velocidade, distancia.getVelocidade()) == 0;
     }
 

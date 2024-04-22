@@ -60,9 +60,9 @@ public class BicicletaMontanha extends Altimetria {
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
-        if(!super.equals(o)) return false;
         BicicletaMontanha bicicleta = (BicicletaMontanha) o;
-        return Double.compare(this.variacaoSuspensao, bicicleta.getVariacaoSuspensao()) == 0
+        return super.equals(bicicleta) 
+            && Double.compare(this.variacaoSuspensao, bicicleta.getVariacaoSuspensao()) == 0
             && this.númeroMudancas == bicicleta.getNúmeroMudancas()
             && this.discoTravao == bicicleta.hasDiscoTravao();
     }
