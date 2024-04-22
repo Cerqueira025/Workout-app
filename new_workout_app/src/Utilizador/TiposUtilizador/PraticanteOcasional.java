@@ -19,12 +19,12 @@ public class PraticanteOcasional extends Utilizador {
         super(outro);
     }
 
-    @Override
+     
     public PraticanteOcasional clone() {
         return new PraticanteOcasional(this);
     }
 
-    @Override
+     
     public double fatorMultiplicativo() {
         return 1;
     }

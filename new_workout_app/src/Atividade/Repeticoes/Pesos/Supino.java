@@ -37,7 +37,7 @@ public class Supino extends Pesos {
         this.inclinacao = inclinacao;
     }
 
-    @Override
+     
     public String toString() {
         return "Supino{" +
                 super.toString() +
@@ -45,7 +45,7 @@ public class Supino extends Pesos {
                 '}';
     }
 
-    @Override
+     
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
@@ -54,12 +54,12 @@ public class Supino extends Pesos {
                 && Double.compare(this.inclinacao,supino.getInclinacao()) == 0;
     }
 
-    @Override
+     
     public double calorias() {
         return 312.31;
     }
 
-    @Override
+     
     public Supino clone() {
         return new Supino(this);
     }

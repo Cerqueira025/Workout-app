@@ -33,7 +33,7 @@ public abstract class Altimetria extends Distancia {
 	}
 
     
-    @Override
+     
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
@@ -42,7 +42,7 @@ public abstract class Altimetria extends Distancia {
         return this.altimetria == altimetria.getAltimetria();
     }
 
-    @Override
+     
     public String toString() {
         return "Altimetria{" +
             super.toString() + 

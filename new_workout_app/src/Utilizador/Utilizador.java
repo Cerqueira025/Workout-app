@@ -13,7 +13,7 @@ public abstract class Utilizador {
     private String email;
     private String password; // Sem informação no guioum
 
-    private GestorAtividades atividades;
+    private Map<String, Atividade> atividades;
 
 
     // ----------------- Construtores ---------------- //
@@ -28,12 +28,12 @@ public abstract class Utilizador {
         this.morada = "";
         this.email = "";
         this.password = "";
-        this.atividades = new GestorAtividades();
+        this.atividades = new HashMap<>();
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, int altura,
             String nome, String morada, String email, String password,
-            GestorAtividades atividades) {
+            Map<String, Atividade> atividades) {
         this.codigo = codigo;
         this.bpmMedio = bpmMedio;
         this.peso = peso;
@@ -42,7 +42,7 @@ public abstract class Utilizador {
         this.morada = morada;
         this.email = email;
         this.password = password;
-        this.atividades = atividades.clone();
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
     public Utilizador(Utilizador outro) {
@@ -125,17 +125,26 @@ public abstract class Utilizador {
 		this.password = password;
 	}
 
-	public GestorAtividades getAtividades() {
-		return this.atividades.clone();
+	public Map<String, Atividade> getAtividades() {
+		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
 
-	public void setAtividades(GestorAtividades atividades) {
-		this.atividades = atividades.clone();
+	public void setAtividades(Map<String, Atividade> atividades) {
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
 
 	public void addAtividade(Atividade atividade) {
-		this.atividades.addAtividade(atividade);
-	}
+        this.atividades.put(atividade.getCodigo(), atividade.clone());
+    }
+
+    public void removeAtividade(String codigo_atividade) {
+        this.atividades.remove(codigo_atividade);
+    }
+
+    public Atividade getAtividade(String codigo_atividade) {
+        if(!this.atividades.containsKey(codigo_atividade)) return null;
+        return this.atividades.get(codigo_atividade).clone();
+    }
 
 
     public String toString() {

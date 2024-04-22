@@ -38,7 +38,7 @@ public abstract class Pesos extends Repeticoes {
         this.peso = peso;
     }
 
-    @Override
+     
     public String toString() {
         return "Pesos{" +
                 super.toString() +
@@ -46,7 +46,7 @@ public abstract class Pesos extends Repeticoes {
                 '}';
     }
 
-    @Override
+     
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;

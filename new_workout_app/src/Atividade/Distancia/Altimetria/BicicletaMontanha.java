@@ -56,7 +56,7 @@ public class BicicletaMontanha extends Altimetria {
 	}
 
 
-    @Override
+     
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
@@ -67,7 +67,7 @@ public class BicicletaMontanha extends Altimetria {
             && this.discoTravao == bicicleta.hasDiscoTravao();
     }
 
-    @Override
+     
     public String toString() {
         return "BicicletaMontanha{" +
             super.toString() + 
@@ -77,12 +77,12 @@ public class BicicletaMontanha extends Altimetria {
             '}';
     }
 
-    @Override
+     
     public BicicletaMontanha clone() {
         return new BicicletaMontanha(this);
     }
 
-    @Override
+     
     public double calorias() {
         return 9312.123;
     }

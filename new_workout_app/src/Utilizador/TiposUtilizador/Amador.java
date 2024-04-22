@@ -19,12 +19,12 @@ public class Amador extends Utilizador {
         super(outro);
     }
 
-    @Override
+     
     public Amador clone() {
         return new Amador(this);
     }
 
-    @Override
+     
     public double fatorMultiplicativo() {
         return 1.5;
     }

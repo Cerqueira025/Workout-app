@@ -16,25 +16,25 @@ public class Sprint extends Distancia {
         super(outro);
     }
 
-    @Override
+     
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
         return super.equals(o);
     }
 
-    @Override
+     
     public String toString() {
         return "Sprint{" +
             super.toString() + '}';
     }
 
-    @Override
+     
     public Sprint clone() {
         return new Sprint(this);
     }
 
-    @Override
+     
     public double calorias() {
         return 818.32;
     }

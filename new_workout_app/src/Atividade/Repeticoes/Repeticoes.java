@@ -38,7 +38,7 @@ public abstract class Repeticoes extends Atividade {
         this.repeticoes = repeticoes;
     }
 
-    @Override
+     
     public String toString() {
         return "Repetições{" +
                 super.toString()+
@@ -46,7 +46,7 @@ public abstract class Repeticoes extends Atividade {
                 '}';
     }
 
-    @Override
+     
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;

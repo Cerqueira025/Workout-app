@@ -37,7 +37,7 @@ public class Abdominais extends Repeticoes {
         this.amplitude = amplitude;
     }
 
-    @Override
+     
     public String toString() {
         return "Abdominais{" +
                 super.toString() +
@@ -45,7 +45,7 @@ public class Abdominais extends Repeticoes {
                 '}';
     }
 
-    @Override
+     
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
@@ -54,12 +54,12 @@ public class Abdominais extends Repeticoes {
                 && Double.compare(this.amplitude, abdominais.getAmplitude()) == 0;
     }
 
-    @Override
+     
     public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************
         return 218.2;
     }
 
-    @Override
+     
     public Abdominais clone() {
         return new Abdominais(this);
     }

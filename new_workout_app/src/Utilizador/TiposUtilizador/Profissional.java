@@ -19,12 +19,12 @@ public class Profissional extends Utilizador {
         super(outro);
     }
 
-    @Override
+     
     public Profissional clone() {
         return new Profissional(this);
     }
 
-    @Override
+     
     public double fatorMultiplicativo() {
         return 2;
     }

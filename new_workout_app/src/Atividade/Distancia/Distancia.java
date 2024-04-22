@@ -42,7 +42,7 @@ public abstract class Distancia extends Atividade {
     }
 
 
-    @Override
+     
     public boolean equals(Object o){
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
@@ -52,7 +52,7 @@ public abstract class Distancia extends Atividade {
                && Double.compare(this.velocidade, distancia.getVelocidade()) == 0;
     }
 
-    @Override
+     
     public String toString() {
         return "Distancia{" +
             super.toString() + 
