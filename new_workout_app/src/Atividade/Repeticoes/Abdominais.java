@@ -40,7 +40,7 @@ public class Abdominais extends Repeticoes {
     @Override
     public String toString() {
         return "Abdominais{" +
-                super.toString()+
+                super.toString() +
                 "amplitude=" + this.amplitude +
                 '}';
     }

@@ -36,6 +36,7 @@ public class GestorAtividades {
     public void removeAtividade(String codigo) {
         this.atividades.remove(codigo);
     }
+
     public Atividade getAtividade(String codigo) {
         if(!this.atividades.containsKey(codigo)) return null;
         return this.atividades.get(codigo).clone();

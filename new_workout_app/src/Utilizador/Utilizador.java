@@ -3,11 +3,11 @@ package Utilizador;
 import Atividade.Atividade;
 import Atividade.GestorAtividades;
 
-public class Utilizador {
-    private int    codigo;
+public abstract class Utilizador {
     private int    bpmMedio;
     private int    altura; // Sem informação no guioum 
     private double peso; // Sem informação no guioum
+    private String codigo;
     private String nome;
     private String morada;
     private String email;
@@ -20,10 +20,10 @@ public class Utilizador {
 
     
     public Utilizador() {
-        this.codigo = 0;
         this.bpmMedio = 0;
         this.peso = 0;
         this.altura = 0;
+        this.codigo = "";
         this.nome = "";
         this.morada = "";
         this.email = "";
@@ -31,7 +31,7 @@ public class Utilizador {
         this.atividades = new GestorAtividades();
     }
 
-    public Utilizador(int codigo, int bpmMedio, double peso, int altura, 
+    public Utilizador(String codigo, int bpmMedio, double peso, int altura,
             String nome, String morada, String email, String password,
             GestorAtividades atividades) {
         this.codigo = codigo;
@@ -61,11 +61,11 @@ public class Utilizador {
     // ------------------- Métodos ------------------- //
 
 
-    public int getCodigo() {
+    public String getCodigo() {
 		return this.codigo;
 	}
 
-	public void setCodigo(int codigo) {
+	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 
@@ -133,20 +133,30 @@ public class Utilizador {
 		this.atividades = atividades.clone();
 	}
 
-	public void addAtividades(Atividade atividade) {
+	public void addAtividade(Atividade atividade) {
 		this.atividades.addAtividade(atividade);
 	}
 
 
-    public Utilizador clone() {
-        return new Utilizador(this);
+    public String toString() {
+        return "Utiliador{" +
+                "código='" + this.codigo + '\'' +
+                ", nome='" + this.nome + '\'' +
+                ", morada='" + this.morada + '\'' +
+                ", email='" + this.email + '\'' +
+                /*", password='" + this.password + '\'' + */
+                ", bpm='" + this.bpmMedio + '\'' +
+                ", altura='" + this.altura + '\'' +
+                ", peso='" + this.peso + '\'' +
+                ", atividades='" + this.atividades.toString() +
+                '}';
     }
 
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
         Utilizador outro = (Utilizador) o;
-        return this.codigo == outro.getCodigo()
+        return this.codigo.equals(outro.getCodigo())
                 && this.bpmMedio == outro.getBpmMedio()
                 && Double.compare(this.peso, outro.getPeso()) == 0
                 && this.altura == outro.getAltura()
@@ -157,6 +167,8 @@ public class Utilizador {
                 && this.atividades.equals(outro.getAtividades());
     }
 
+    public abstract Utilizador clone();
+    public abstract double fatorMultiplicativo();
 
 
 

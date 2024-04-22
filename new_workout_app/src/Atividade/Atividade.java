@@ -18,7 +18,7 @@ public abstract class Atividade {
         this.codigo = "";
         this.descricao = "";
         this.duracao = 0;
-        this.user = new Utilizador();
+        this.user = new Utilizador(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
     public Atividade(String codigo, String descricao, int duracao, Utilizador user) {
@@ -71,7 +71,6 @@ public abstract class Atividade {
         this.user = user.clone();
     }
     
-    @Override
     public String toString() {
         return "Atividade{" +
                 "código='" + this.codigo + '\'' +
@@ -80,7 +79,6 @@ public abstract class Atividade {
                 '}';
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
