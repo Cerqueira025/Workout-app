@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import Atividade.Atividade;
-import Atividade.GestorAtividades;
+import PlanoTreino.PlanoDeTreino;
 
 public abstract class Utilizador {
     private int    bpmMedio;
@@ -14,8 +14,7 @@ public abstract class Utilizador {
     private String nome;
     private String morada;
     private String email;
-    private String password; // Sem informação no guioum
-
+    private String password; // Sem informação no guião
     private Map<String, Atividade> atividades;
     private Map<String,PlanoDeTreino> planos;
 

@@ -20,7 +20,8 @@ public class Sprint extends Distancia {
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
-        return super.equals(o);
+        Sprint sprint = (Sprint) o;
+        return super.equals(sprint);
     }
 
      

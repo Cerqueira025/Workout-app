@@ -1,15 +1,16 @@
 package PlanoTreino;
 
 import Atividade.Atividade;
-import Atividade.GestorAtividades;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PlanoDeTreino {
     private String codigo;
     private LocalDate dataRealizacao;
     private int iteracoes;
-
     private Map<String, Atividade> atividades;
 
 
@@ -64,8 +65,6 @@ public class PlanoDeTreino {
         this.iteracoes = iteracoes;
     }
 
-    
-
     public Map<String, Atividade> getAtividades() {
 		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
@@ -109,8 +108,8 @@ public class PlanoDeTreino {
         PlanoDeTreino plano = (PlanoDeTreino) o;
         return this.codigo.equals(plano.getCodido())
                 && this.dataRealizacao.isEqual(plano.getDataRealizacao())
-                && this.iteracoes == plano.getIteracoes();
-                && this.atividades.equals(plano.getAtividades())
+                && this.iteracoes == plano.getIteracoes()
+                && this.atividades.equals(plano.getAtividades());
     }
 
     public PlanoDeTreino clone() {
