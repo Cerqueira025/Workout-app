@@ -1,6 +1,7 @@
 package Atividade;
 
 import Utilizador.Utilizador;
+import Utilizador.TiposUtilizador.Amador;
 
 
 public abstract class Atividade {
@@ -18,7 +19,7 @@ public abstract class Atividade {
         this.codigo = "";
         this.descricao = "";
         this.duracao = 0;
-        this.user = new Utilizador(); /* UTILIZADOR PRATICANTE OCASIONAL*/
+        this.user = new Amador(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
     public Atividade(String codigo, String descricao, int duracao, Utilizador user) {
