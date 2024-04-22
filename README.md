@@ -1,8 +1,8 @@
 A fazer:
-	⁃	melhorar toString
-	⁃	Colocar construtor que não recebe hashmap
-	⁃	Colocar verificação de exceção em remove e get__
-	⁃	Calorias
+	⁃	melhorar toString \
+	⁃	Colocar construtor que não recebe hashmap \
+	⁃	Colocar verificação de exceção em remove e get__ \
+	⁃	Calorias 
 
     1. implementar classe geral
     2. implementar testes para todas a classes
