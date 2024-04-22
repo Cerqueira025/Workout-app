@@ -192,10 +192,10 @@ public abstract class Utilizador {
                 ", bpm='" + this.bpmMedio + '\'' +
                 ", altura='" + this.altura + '\'' +
                 ", peso='" + this.peso + '\'' +
-                ", atividades={" + this.atividades.toString();
+                ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
            a += atividade.toString() + ",";
-        }
+        }   
         a += "}, planos={";
         for(PlanoDeTreino plano : this.planos.values()) {
            a += plano.toString() + ",";

@@ -8,32 +8,33 @@ import java.time.LocalDate;
 public class PlanoDeTreino {
     private String codigo;
     private LocalDate dataRealizacao;
-    private GestorAtividades atividades;
     private int iteracoes;
+
+    private Map<String, Atividade> atividades;
 
 
     // Construtor
     public PlanoDeTreino() {
         this.codigo = "";
         this.dataRealizacao = LocalDate.EPOCH;
-        this.atividades = new GestorAtividades();
         this.iteracoes = 0;
+        this.atividades = new HashMap<>();
     }
 
     // Construtor
-    public PlanoDeTreino(String codigo, LocalDate dataRealizacao, GestorAtividades atividades, int iteracoes) {
+    public PlanoDeTreino(String codigo, LocalDate dataRealizacao, int iteracoes, Map<String, Atividade> atividades) {
         this.codigo = codigo;
         this.dataRealizacao = dataRealizacao;
-        this.atividades = atividades.clone();
         this.iteracoes = iteracoes;
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
     // Construtor
     public PlanoDeTreino(PlanoDeTreino outro) {
         this.codigo = outro.getCodido();
         this.dataRealizacao = outro.getDataRealizacao();
-        this.atividades = outro.getAtividades();
         this.iteracoes = outro.getIteracoes();
+        this.atividades = outro.getAtividades();
     }
 
 
@@ -55,14 +56,6 @@ public class PlanoDeTreino {
         this.dataRealizacao = dataRealizacao;
     }
 
-    public GestorAtividades getAtividades() {
-        return this.atividades.clone();
-    }
-
-    public void setAtividades(GestorAtividades atividades) {
-        this.atividades = atividades.clone();
-    }
-
     public int getIteracoes() {
         return this.iteracoes;
     }
@@ -71,17 +64,43 @@ public class PlanoDeTreino {
         this.iteracoes = iteracoes;
     }
 
-    public void addAtividade(Atividade atividade) {
-		this.atividades.addAtividade(atividade);
+    
+
+    public Map<String, Atividade> getAtividades() {
+		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
 
+	public void setAtividades(Map<String, Atividade> atividades) {
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+	}
+
+	public void addAtividade(Atividade atividade) {
+        this.atividades.put(atividade.getCodigo(), atividade.clone());
+    }
+
+    public void removeAtividade(String codigo_atividade) {
+        this.atividades.remove(codigo_atividade);
+    }
+
+    public Atividade getAtividade(String codigo_atividade) {
+        if(!this.atividades.containsKey(codigo_atividade)) return null;
+        return this.atividades.get(codigo_atividade).clone();
+    }
+
+
+
+
     public String toString() {
-        return "Plano de Treino{" +
+        String a = "Plano de Treino{" +
                 "código='" + this.codigo + '\'' +
-                "data='" + this.dataRealizacao + '\'' +
-                ", atividades='" + this.atividades.toString() + '\'' +
-                ", iterações=" + this.iteracoes +
-                '}';
+                ", data='" + this.dataRealizacao + '\'' +
+                ", iterações=" + this.iteracoes + '\'' +
+                ", atividades={";
+        for(Atividade atividade : this.atividades.values()) {
+           a += atividade.toString() + ",";
+        }
+        a += '}';
+        return a;
     }
 
     public boolean equals(Object o) {
@@ -90,8 +109,8 @@ public class PlanoDeTreino {
         PlanoDeTreino plano = (PlanoDeTreino) o;
         return this.codigo.equals(plano.getCodido())
                 && this.dataRealizacao.isEqual(plano.getDataRealizacao())
-                && this.atividades.equals(plano.getAtividades())
                 && this.iteracoes == plano.getIteracoes();
+                && this.atividades.equals(plano.getAtividades())
     }
 
     public PlanoDeTreino clone() {
