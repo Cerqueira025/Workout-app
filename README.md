@@ -1,5 +1,6 @@
 A fazer: 
 ```
+- Remover n° iteracões na classe plano de treino
 ⁃ Melhorar toString 
 ⁃ Colocar construtor que não recebe hashmap 
 ⁃ Colocar verificação de exceção em remove e get__ 
