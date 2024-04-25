@@ -11,7 +11,8 @@ public abstract class Atividade {
     //private String local;
     private LocalDate data;
     private int duracao;
-    private int bpmAtividade; //------------ bpmAtividade = user.bpmMedio*user.peso*(fator de atividade)
+    private int bpm; //------------ bpm = user.bpmMedio*user.peso*(fator de atividade)
+    private double calorias;
     private Utilizador user;
 
 
@@ -22,7 +23,8 @@ public abstract class Atividade {
         this.descricao = "";
         this.data = LocalDate.EPOCH;
         this.duracao = 0;
-        this.bpmAtividade = 0;
+        this.bpm = 0;
+        this.calorias = 0;
         this.user = new Amador(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
@@ -31,7 +33,8 @@ public abstract class Atividade {
         this.descricao = descricao;
         this.data = data;
         this.duracao = duracao;
-        this.bpmAtividade = this.getBpm();
+        this.bpm = 0;
+        this.calorias = 0;
         this.user = user.clone();
     }
 
@@ -40,7 +43,8 @@ public abstract class Atividade {
         this.descricao = outro.getDescricao();
         this.data = outro.getData();
         this.duracao = outro.getDuracao();
-        this.bpmAtividade = outro.getBpm();
+        this.bpm = outro.getBpm();
+        this.calorias = outro.getCalorias();
         this.user = outro.getUser();
     }
 
@@ -87,14 +91,31 @@ public abstract class Atividade {
     public void setUser(Utilizador user) {
         this.user = user.clone();
     }
+
+    public int getBpm() {
+        return this.bpm;
+    }
+
+    public void setBpm(int bpm) {
+        this.bpm = bpm;
+    }
+
+    public double getCalorias() {
+        return this.calorias;
+    }
+
+    public void setCalorias(double calorias) {
+        this.calorias = calorias;
+    }
     
     public String toString() {
         return "Atividade{" +
                 "código='" + this.codigo + '\'' +
                 ", descrição='" + this.descricao + '\'' +
                 ", data= '" + this.data + '\'' +
-                ", duração='" + this.duracao +
-                ", bpm médio='" + this.bpmAtividade +
+                ", duração='" + this.duracao + '\'' +
+                ", bpm médio='" + this.bpm + '\''
+                ", calorias='" + this.calorias +
                 '}';
     }
 
@@ -106,12 +127,13 @@ public abstract class Atividade {
                 && this.codigo.equals(atividade.getCodigo())
                 && this.descricao.equals(atividade.getDescricao())
                 && this.data.equals(atividade.getData())
-                && this.bpmAtividade == atividade.getBpm()
+                && this.bpm == atividade.getBpm()
+                && Double.equals(this.calorias, outro.getCalorias())
                 && this.user.equals(atividade.getUser());
     }
 
     public abstract Atividade clone();
-    public abstract double calorias();
-    public abstract int getBpm();
+    public abstract double calorias(); // verificar se há necessiade de incluir o bpm médio da atividade no cálculo das calorias
+    public abstract int bpm();
 }
 

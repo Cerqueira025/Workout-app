@@ -54,5 +54,5 @@ public abstract class Altimetria extends Distancia {
 
     public abstract Distancia clone();
     public abstract double calorias();
-    public abstract int getBpm();
+    public abstract int bpm();
 }

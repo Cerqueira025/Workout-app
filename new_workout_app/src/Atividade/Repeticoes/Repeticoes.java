@@ -58,6 +58,6 @@ public abstract class Repeticoes extends Atividade {
 
     public abstract Atividade clone();
     public abstract double calorias();
-    public abstract int getBpm();
+    public abstract int bpm();
 
 }

@@ -95,7 +95,7 @@ public class BicicletaMontanha extends Altimetria {
       return mult * this.getUser().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
     }
 
-    public int getBpm(){
+    public int bpm(){
       return (int) (this.getUser().getBpmMedio() + 20 * this.getUser().fatorMultiplicativo());
     }
 }

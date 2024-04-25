@@ -59,12 +59,11 @@ public class Abdominais extends Repeticoes {
       return new Abdominais(this);
     }
     
-    public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************o
+    public double calorias() { 
       return this.getUser().fatorMultiplicativo() * (this.amplitude/4) * this.getDuracao() * (this.getBpm()/100);
     }
     
-    public int getBpm(){
+    public int bpm(){
       return (int) (this.getUser().getBpmMedio() + 10 * this.getUser().fatorMultiplicativo());
     }
-
-  }
+}

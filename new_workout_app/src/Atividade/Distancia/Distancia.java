@@ -69,5 +69,5 @@ public abstract class Distancia extends Atividade {
 
     public abstract Distancia clone();
     public abstract double calorias();
-    public abstract int getBpm();
+    public abstract int bpm();
 }

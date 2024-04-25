@@ -84,7 +84,7 @@ public abstract class Utilizador {
 
     // ----------------- Métodos getters e setters ----------------- //
 
-  public String getCodigo() {
+    public String getCodigo() {
 		return this.codigo;
 	}
 
@@ -124,13 +124,13 @@ public abstract class Utilizador {
         this.nome = nome;
     }
 
-  public Genero getGenero(){
-    return this.genero;
-  }
+    public Genero getGenero() {
+        return this.genero;
+    }
 
-  public void setGenero(Genero genero){
-    this.genero = genero;
-  }
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
 
 	public String getMorada() {
 		return this.morada;
@@ -156,13 +156,13 @@ public abstract class Utilizador {
 		this.password = password;
 	}
   
-  public PlanoDeTreino getPlanoDeTreino() {
-      return this.plano.clone();
-  }
+    public PlanoDeTreino getPlanoDeTreino() {
+        return this.plano.clone();
+    }
 
-  public void setPlanoDeTreino(PlanoDeTreino plano) {
-      this.plano = plano.clone();
-  }
+    public void setPlanoDeTreino(PlanoDeTreino plano) {
+        this.plano = plano.clone();
+    }
 
 
 	public Map<String, Atividade> getAtividades() {
@@ -210,6 +210,7 @@ public abstract class Utilizador {
         a += "}";
         return a;
     }
+    
 
     public boolean equals(Object o) {
         if(this == o) return true;

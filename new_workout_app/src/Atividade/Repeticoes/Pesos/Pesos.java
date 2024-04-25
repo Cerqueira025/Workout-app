@@ -58,5 +58,5 @@ public abstract class Pesos extends Repeticoes {
 
     public abstract Pesos clone();
     public abstract double calorias();
-    public abstract int getBpm();
+    public abstract int bpm();
 }

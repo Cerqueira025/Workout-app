@@ -42,7 +42,7 @@ public class Sprint extends Distancia {
         return this.getUser().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100);
     }
 
-    public int getBpm(){
+    public int bpm(){
       return (int) (this.getUser().getBpmMedio() + 30 * this.getUser().fatorMultiplicativo());
     }
 }
