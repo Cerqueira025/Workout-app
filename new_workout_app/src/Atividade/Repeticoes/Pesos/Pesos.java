@@ -1,5 +1,7 @@
 package Atividade.Repeticoes.Pesos;
 
+import java.time.LocalDate;
+
 import Atividade.Repeticoes.Repeticoes;
 import Utilizador.Utilizador;
 
@@ -16,8 +18,8 @@ public abstract class Pesos extends Repeticoes {
         this.peso = 0;
     }
 
-    public Pesos(String codigo, String descricao, int duracao, Utilizador user, int repeticoes, double peso) {
-        super(codigo, descricao, duracao, user, repeticoes);
+    public Pesos(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, int repeticoes, double peso) {
+        super(codigo, descricao, data, duracao, user, repeticoes);
         this.peso = peso;
     }
 
@@ -57,4 +59,5 @@ public abstract class Pesos extends Repeticoes {
 
     public abstract double calorias();
     public abstract Pesos clone();
+    public abstract int getBpm();
 }

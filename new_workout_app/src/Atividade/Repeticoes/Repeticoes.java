@@ -1,5 +1,7 @@
 package Atividade.Repeticoes;
 
+import java.time.LocalDate;
+
 import Atividade.Atividade;
 import Utilizador.Utilizador;
 
@@ -16,8 +18,8 @@ public abstract class Repeticoes extends Atividade {
         this.repeticoes = 0;
     }
 
-    public Repeticoes(String codigo, String descricao, int duracao, Utilizador user, int repeticoes) {
-        super(codigo, descricao, duracao, user);
+    public Repeticoes(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, int repeticoes) {
+        super(codigo, descricao, data, duracao, user);
         this.repeticoes = repeticoes;
     }
 
@@ -58,5 +60,6 @@ public abstract class Repeticoes extends Atividade {
 
     public abstract double calorias();
     public abstract Atividade clone();
+    public abstract int getBpm();
 
 }

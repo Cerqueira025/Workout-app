@@ -4,18 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class GestorUtilizadores {
+public class Fitness {
     private Map<String, Utilizador> utilizadores;
 
-    public GestorUtilizadores() {
+
+    // ----------------- Construtores ---------------- //
+
+    public Fitness() {
         this.utilizadores = new HashMap<>();
     }
 
-    public GestorUtilizadores(Map<String, Utilizador> utilizadores) {
+    public Fitness(Map<String, Utilizador> utilizadores) {
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
-    public GestorUtilizadores(GestorUtilizadores outro) {
+    public Fitness(Fitness outro) {
         this.utilizadores = outro.getUtilizadores();
     }
 
@@ -42,7 +45,7 @@ public class GestorUtilizadores {
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
-        GestorUtilizadores gu = (GestorUtilizadores) o;
+        Fitness gu = (Fitness) o;
         return this.utilizadores.equals(gu.getUtilizadores());
     }
 
@@ -54,8 +57,8 @@ public class GestorUtilizadores {
         return a;
     }
 
-    public GestorUtilizadores clone() {
-        return new GestorUtilizadores(this);
+    public Fitness clone() {
+        return new Fitness(this);
     }
 
 }

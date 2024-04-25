@@ -1,5 +1,7 @@
 package Atividade.Distancia.Altimetria;
 
+import java.time.LocalDate;
+
 import Utilizador.Utilizador;
 
 public class BicicletaMontanha extends Altimetria {
@@ -14,11 +16,10 @@ public class BicicletaMontanha extends Altimetria {
         this.discoTravao = false;
     }
 
-    public BicicletaMontanha(String codigo, String descricao, int duracao, 
-            Utilizador user, double dist, double velocidade, 
-            int altimetria, double variacaoSuspensao, int númeroMudancas,
+    public BicicletaMontanha(String codigo, String descricao, LocalDate data, int duracao, 
+            Utilizador user, double dist, int altimetria, double variacaoSuspensao, int númeroMudancas,
             boolean discoTravao) {
-        super(codigo, descricao, duracao, user, dist, velocidade, altimetria);
+        super(codigo, descricao, data, duracao, user, dist, altimetria);
         this.variacaoSuspensao = variacaoSuspensao;
         this.númeroMudancas = númeroMudancas;
         this.discoTravao = discoTravao;
@@ -84,6 +85,14 @@ public class BicicletaMontanha extends Altimetria {
 
      
     public double calorias() {
-        return 9312.123;
+      double mult = 1;
+      if(this.hasDiscoTravao()){
+        mult = 0.5;
+      }
+      return mult * this.getUser().fatorMultiplicativo() * (this.getVariacaoSuspensao()/2) * this.getNúmeroMudancas() * (this.getBpm()/100);
+    }
+
+    public int getBpm(){
+      return (int) (this.getUser().getBpmMedio() + 20 * this.getUser().fatorMultiplicativo());
     }
 }

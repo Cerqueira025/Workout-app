@@ -1,5 +1,7 @@
 package Atividade.Distancia;
 
+import java.time.LocalDate;
+
 import Atividade.Atividade;
 import Utilizador.Utilizador;
 
@@ -12,11 +14,11 @@ public abstract class Distancia extends Atividade {
        distancia = 0;
     }
 
-    public Distancia(String codigo, String descricao, int duracao, 
-            Utilizador user, double dist, double velocidade) {
-       super(codigo, descricao, duracao, user); 
+    public Distancia(String codigo, String descricao, LocalDate data, int duracao, 
+            Utilizador user, double dist) {
+       super(codigo, descricao, data, duracao, user); 
        this.distancia = dist;
-       this.velocidade = velocidade;
+       this.velocidade = dist/duracao;
     }
 
     public Distancia(Distancia outro) {
@@ -63,4 +65,5 @@ public abstract class Distancia extends Atividade {
 
     public abstract Distancia clone();
     public abstract double calorias();
+    public abstract int getBpm();
 }
