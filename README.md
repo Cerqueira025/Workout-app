@@ -5,6 +5,11 @@ A fazer:
 ⁃ rever calorias
 - Verificar clones
 - Trocar user para utilizador
+- LocalData -> LocalDateTime na atividade
+- Classe fitness vai ter de ter "tempo atual"
+- Interface hard
+- Adicionar lista de atividades REALIZADAS para posteriormente escrever e ler de um ficheiro
+
 ```
 
     1. implementar classe geral
