@@ -40,6 +40,7 @@ public abstract class Atividade {
         this.descricao = outro.getDescricao();
         this.data = outro.getData();
         this.duracao = outro.getDuracao();
+        this.bpmAtividade = outro.getBpm();
         this.user = outro.getUser();
     }
 
@@ -92,7 +93,8 @@ public abstract class Atividade {
                 "código='" + this.codigo + '\'' +
                 ", descrição='" + this.descricao + '\'' +
                 ", data= '" + this.data + '\'' +
-                ", duração=" + this.duracao +
+                ", duração='" + this.duracao +
+                ", bpm médio='" + this.bpmAtividade +
                 '}';
     }
 
@@ -104,11 +106,12 @@ public abstract class Atividade {
                 && this.codigo.equals(atividade.getCodigo())
                 && this.descricao.equals(atividade.getDescricao())
                 && this.data.equals(atividade.getData())
+                && this.bpmAtividade == atividade.getBpm()
                 && this.user.equals(atividade.getUser());
     }
 
-    public abstract double calorias();
     public abstract Atividade clone();
+    public abstract double calorias();
     public abstract int getBpm();
 }
 

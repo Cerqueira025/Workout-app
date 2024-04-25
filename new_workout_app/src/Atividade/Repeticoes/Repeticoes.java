@@ -12,7 +12,6 @@ public abstract class Repeticoes extends Atividade {
 
     // ------------------- Construtores ------------------- //
 
-
     public Repeticoes() {
         super();
         this.repeticoes = 0;
@@ -27,7 +26,6 @@ public abstract class Repeticoes extends Atividade {
         super(outro);
         this.repeticoes = outro.getRepeticoes();
     }
-
 
     // ------------------- Construtores ------------------- //
 
@@ -58,8 +56,8 @@ public abstract class Repeticoes extends Atividade {
     }
 
 
-    public abstract double calorias();
     public abstract Atividade clone();
+    public abstract double calorias();
     public abstract int getBpm();
 
 }

@@ -8,10 +8,8 @@ public class Supino extends Pesos {
     
     private double inclinacao;
 
-
     // ------------------- Construtores ------------------- //
-
-
+    
     public Supino() {
         super();
         this.inclinacao = 0;
@@ -57,13 +55,12 @@ public class Supino extends Pesos {
     }
 
      
-    public double calorias() {
-        return this.getUser().fatorMultiplicativo() * (this.getInclinacao()/3) * this.getDuracao() * (this.getBpm()/100);
-    }
-
-     
     public Supino clone() {
         return new Supino(this);
+    }
+    
+    public double calorias() {
+        return this.getUser().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100);
     }
 
     public int getBpm(){

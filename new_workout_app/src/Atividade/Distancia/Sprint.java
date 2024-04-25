@@ -6,6 +6,7 @@ import Utilizador.Utilizador;
 
 public class Sprint extends Distancia {
 
+    // ----------------- Construtores ---------------- //
     public Sprint() {
         super();
     }
@@ -18,7 +19,7 @@ public class Sprint extends Distancia {
         super(outro);
     }
 
-     
+    // ----------------- Métodos getters e setters ----------------- //
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
@@ -37,7 +38,6 @@ public class Sprint extends Distancia {
         return new Sprint(this);
     }
 
-     
     public double calorias() {
         return this.getUser().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100);
     }

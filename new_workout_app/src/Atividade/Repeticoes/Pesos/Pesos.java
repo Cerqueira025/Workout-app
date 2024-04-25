@@ -12,7 +12,6 @@ public abstract class Pesos extends Repeticoes {
     
     // ------------------- Construtores ------------------- //
 
-
     public Pesos() {
         super();
         this.peso = 0;
@@ -57,7 +56,7 @@ public abstract class Pesos extends Repeticoes {
                 && Double.compare(this.peso,pesos.getPeso()) == 0;
     }
 
-    public abstract double calorias();
     public abstract Pesos clone();
+    public abstract double calorias();
     public abstract int getBpm();
 }

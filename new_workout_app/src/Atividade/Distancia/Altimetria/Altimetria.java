@@ -8,6 +8,7 @@ import Utilizador.Utilizador;
 public abstract class Altimetria extends Distancia {
     private int altimetria;
 
+    // ----------------- Construtores ---------------- //
     public Altimetria() {
         super();
         this.altimetria = 0;
@@ -24,6 +25,7 @@ public abstract class Altimetria extends Distancia {
         this.altimetria = outro.getAltimetria();
     }
 
+    // ----------------- Métodos getters e setters ----------------- //
 
 	public int getAltimetria() {
 		return altimetria;

@@ -11,7 +11,6 @@ public class Abdominais extends Repeticoes {
     
     // ------------------- Construtores ------------------- //
 
-
     public Abdominais() {
         super();
         this.amplitude = 0;
@@ -60,11 +59,12 @@ public class Abdominais extends Repeticoes {
       return new Abdominais(this);
     }
     
+    public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************o
+      return this.getUser().fatorMultiplicativo() * (this.amplitude/4) * this.getDuracao() * (this.getBpm()/100);
+    }
+    
     public int getBpm(){
       return (int) (this.getUser().getBpmMedio() + 10 * this.getUser().fatorMultiplicativo());
     }
 
-    public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************o
-      return this.getUser().fatorMultiplicativo() * (this.getAmplitude()/4) * this.getDuracao() * (this.getBpm()/100);
-    }
   }

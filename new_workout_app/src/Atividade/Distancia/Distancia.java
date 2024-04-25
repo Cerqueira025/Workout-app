@@ -9,9 +9,11 @@ public abstract class Distancia extends Atividade {
     private double distancia;
     private double velocidade;
 
+    // ----------------- Construtores ---------------- //
     public Distancia() {
        super(); 
        distancia = 0;
+       velocidade = 0;
     }
 
     public Distancia(String codigo, String descricao, LocalDate data, int duracao, 
@@ -27,7 +29,9 @@ public abstract class Distancia extends Atividade {
        this.velocidade = outro.getVelocidade();
     }
 
-	public double getDistancia() {
+    // ----------------- Métodos getters e setters ----------------- //
+
+    public double getDistancia() {
 		return distancia;
 	}
 
