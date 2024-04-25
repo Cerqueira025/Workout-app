@@ -8,19 +8,19 @@ import PlanoTreino.PlanoDeTreino;
 
 public abstract class Utilizador {
     private int    bpmMedio;
-    private int    altura; // Sem informação no guioum 
-    private double peso; // Sem informação no guioum
+    private int    altura; // Sem informação no guião 
+    private double peso; // Sem informação no guião
     private String codigo;
     private String nome;
+    private Genero genero;
     private String morada;
     private String email;
     private String password; // Sem informação no guião
     private Map<String, Atividade> atividades;
-    private Map<String,PlanoDeTreino> planos;
+    private PlanoDeTreino plano;
 
 
     // ----------------- Construtores ---------------- //
-
     
     public Utilizador() {
         this.bpmMedio = 0;
@@ -28,26 +28,43 @@ public abstract class Utilizador {
         this.altura = 0;
         this.codigo = "";
         this.nome = "";
+        this.genero = Genero.Outro;
         this.morada = "";
         this.email = "";
         this.password = "";
         this.atividades = new HashMap<>();
-        this.planos = new HashMap<>();
+        this.plano = new PlanoDeTreino();
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, int altura,
-            String nome, String morada, String email, String password,
-            Map<String, Atividade> atividades, Map<String, PlanoDeTreino> planos) {
+            String nome, Genero genero, String morada, String email, String password,
+            Map<String, Atividade> atividades, PlanoDeTreino plano) {
         this.codigo = codigo;
         this.bpmMedio = bpmMedio;
         this.peso = peso;
         this.altura = altura;
         this.nome = nome;
+        this.genero = genero;
         this.morada = morada;
         this.email = email;
         this.password = password;
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-        this.planos = planos.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.plano = plano.clone(); //verificar clone
+    }
+
+    public Utilizador(String codigo, int bpmMedio, double peso, int altura,
+            String nome, Genero genero, String morada, String email, String password) {
+        this.codigo = codigo;
+        this.bpmMedio = bpmMedio;
+        this.peso = peso;
+        this.altura = altura;
+        this.nome = nome;
+        this.genero = genero;
+        this.morada = morada;
+        this.email = email;
+        this.password = password;
+        this.atividades = new HashMap<>();
+        this.plano = new PlanoDeTreino();
     }
 
     public Utilizador(Utilizador outro) {
@@ -56,18 +73,18 @@ public abstract class Utilizador {
         this.peso = outro.getPeso();
         this.altura = outro.getAltura();
         this.nome = outro.getNome();
+        this.genero = outro.getGenero();
         this.morada = outro.getMorada();
         this.email = outro.getEmail();
         this.password = outro.getPassword();
         this.atividades = outro.getAtividades();
-        this.planos = outro.getPlanos();
+        this.plano = outro.getPlanoDeTreino();
     }
 
 
-    // ------------------- Métodos ------------------- //
+    // ----------------- Métodos getters e setters ----------------- //
 
-
-    public String getCodigo() {
+  public String getCodigo() {
 		return this.codigo;
 	}
 
@@ -107,6 +124,14 @@ public abstract class Utilizador {
         this.nome = nome;
     }
 
+  public Genero getGenero(){
+    return this.genero;
+  }
+
+  public void setGenero(Genero genero){
+    this.genero = genero;
+  }
+
 	public String getMorada() {
 		return this.morada;
 	}
@@ -130,7 +155,14 @@ public abstract class Utilizador {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+  
+  public PlanoDeTreino getPlanoDeTreino() {
+      return this.plano.clone();
+  }
 
+  public void setPlanoDeTreino(PlanoDeTreino plano) {
+      this.plano = plano.clone();
+  }
 
 
 	public Map<String, Atividade> getAtividades() {
@@ -156,28 +188,6 @@ public abstract class Utilizador {
 
 
 
-    public Map<String,PlanoDeTreino> getPlanos() {
-        return this.planos.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-    }
-
-    public void setPlanos(Map<String,PlanoDeTreino> planos) {
-        this.planos = planos.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-    }
-
-    public void addPlanoDeTreino(PlanoDeTreino plano) {
-        this.planos.put(plano.getCodido(), plano.clone());
-    }
-
-    public void removePlanoDeTreino(String codigo_plano) {
-        this.planos.remove(codigo_plano);
-    }
-
-    public PlanoDeTreino getPlanoDeTreino(String codigo_plano) {
-        if(!this.planos.containsKey(codigo_plano)) return null;
-        return this.planos.get(codigo_plano).clone();
-    }
-
-
 
 
 
@@ -185,20 +195,18 @@ public abstract class Utilizador {
         String a = "Utiliador{" +
                 "código='" + this.codigo + '\'' +
                 ", nome='" + this.nome + '\'' +
+                ", genero='" + this.genero + '\'' +
                 ", morada='" + this.morada + '\'' +
                 ", email='" + this.email + '\'' +
                 /*", password='" + this.password + '\'' + */
                 ", bpm='" + this.bpmMedio + '\'' +
                 ", altura='" + this.altura + '\'' +
                 ", peso='" + this.peso + '\'' +
+                ", plano de treino=' " + this.plano.toString() + '\'' +
                 ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
            a += atividade.toString() + ",";
         }   
-        a += "}, planos={";
-        for(PlanoDeTreino plano : this.planos.values()) {
-           a += plano.toString() + ",";
-        }
         a += "}";
         return a;
     }
@@ -212,11 +220,12 @@ public abstract class Utilizador {
                 && Double.compare(this.peso, outro.getPeso()) == 0
                 && this.altura == outro.getAltura()
                 && this.nome.equals(outro.getNome())
+                && this.genero == outro.getGenero()
                 && this.morada.equals(outro.getMorada())
                 && this.email.equals(outro.getEmail())
                 && this.password.equals(outro.getPassword())
                 && this.atividades.equals(outro.getAtividades())
-                && this.planos.equals(outro.getPlanos());
+                && this.plano.equals(outro.getPlanoDeTreino());
     }
 
     public abstract Utilizador clone();

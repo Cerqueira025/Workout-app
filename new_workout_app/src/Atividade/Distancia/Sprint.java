@@ -1,22 +1,25 @@
 package Atividade.Distancia;
 
+import java.time.LocalDate;
+
 import Utilizador.Utilizador;
 
 public class Sprint extends Distancia {
 
+    // ----------------- Construtores ---------------- //
     public Sprint() {
         super();
     }
 
-    public Sprint(String codigo, String descricao, int duracao, Utilizador user, double dist, double velocidade) {
-        super(codigo, descricao, duracao, user, dist, velocidade);
+    public Sprint(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, double dist) {
+        super(codigo, descricao, data, duracao, user, dist);
     }
 
     public Sprint(Sprint outro) {
         super(outro);
     }
 
-     
+    // ----------------- Métodos getters e setters ----------------- //
     public boolean equals(Object o) {
         if(o == this) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
@@ -35,8 +38,11 @@ public class Sprint extends Distancia {
         return new Sprint(this);
     }
 
-     
     public double calorias() {
-        return 818.32;
+        return this.getUser().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100);
+    }
+
+    public int getBpm(){
+      return (int) (this.getUser().getBpmMedio() + 30 * this.getUser().fatorMultiplicativo());
     }
 }

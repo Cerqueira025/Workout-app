@@ -1,20 +1,22 @@
 package Atividade.Distancia.Altimetria;
 
+import java.time.LocalDate;
+
 import Atividade.Distancia.Distancia;
 import Utilizador.Utilizador;
 
 public abstract class Altimetria extends Distancia {
     private int altimetria;
 
+    // ----------------- Construtores ---------------- //
     public Altimetria() {
         super();
         this.altimetria = 0;
     }
 
-    public Altimetria(String codigo, String descricao, int duracao, 
-            Utilizador user, double dist, double velocidade, 
-            int altimetria) {
-        super(codigo, descricao, duracao, user, dist, velocidade);
+    public Altimetria(String codigo, String descricao, LocalDate data, int duracao, 
+            Utilizador user, double dist, int altimetria) {
+        super(codigo, descricao, data, duracao, user, dist);
         this.altimetria = altimetria;
     }
 
@@ -23,6 +25,7 @@ public abstract class Altimetria extends Distancia {
         this.altimetria = outro.getAltimetria();
     }
 
+    // ----------------- Métodos getters e setters ----------------- //
 
 	public int getAltimetria() {
 		return altimetria;
@@ -51,4 +54,5 @@ public abstract class Altimetria extends Distancia {
 
     public abstract Distancia clone();
     public abstract double calorias();
+    public abstract int getBpm();
 }

@@ -1,37 +1,41 @@
 package Atividade.Distancia.Altimetria;
 
+import java.time.LocalDate;
+
 import Utilizador.Utilizador;
 
 public class BicicletaMontanha extends Altimetria {
     private double variacaoSuspensao; // mm
-    private int númeroMudancas;
+    private int numeroMudancas;
     private boolean discoTravao;
 
+    // ----------------- Construtores ---------------- //
     public BicicletaMontanha() {
         super();
         this.variacaoSuspensao = 0;
-        this.númeroMudancas = 0;
+        this.numeroMudancas = 0;
         this.discoTravao = false;
     }
 
-    public BicicletaMontanha(String codigo, String descricao, int duracao, 
-            Utilizador user, double dist, double velocidade, 
-            int altimetria, double variacaoSuspensao, int númeroMudancas,
+    public BicicletaMontanha(String codigo, String descricao, LocalDate data, int duracao, 
+            Utilizador user, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
             boolean discoTravao) {
-        super(codigo, descricao, duracao, user, dist, velocidade, altimetria);
+        super(codigo, descricao, data, duracao, user, dist, altimetria);
         this.variacaoSuspensao = variacaoSuspensao;
-        this.númeroMudancas = númeroMudancas;
+        this.numeroMudancas = numeroMudancas;
         this.discoTravao = discoTravao;
     }
 
     public BicicletaMontanha(BicicletaMontanha outro) {
         super(outro);
         this.variacaoSuspensao = getVariacaoSuspensao();
-        this.númeroMudancas = getNúmeroMudancas();
+        this.numeroMudancas = getNumeroMudancas();
         this.discoTravao = hasDiscoTravao();
     }
 
-	public double getVariacaoSuspensao() {
+    // ----------------- Métodos getters e setters ----------------- //
+
+    public double getVariacaoSuspensao() {
 		return variacaoSuspensao;
 	}
  
@@ -39,12 +43,12 @@ public class BicicletaMontanha extends Altimetria {
 		this.variacaoSuspensao = variacaoSuspensao;
 	}
 
-	public int getNúmeroMudancas() {
-		return númeroMudancas;
+	public int getNumeroMudancas() {
+		return numeroMudancas;
 	}
 
-	public void setNúmeroMudancas(int númeroMudancas) {
-		this.númeroMudancas = númeroMudancas;
+	public void setNumeroMudancas(int numeroMudancas) {
+		this.numeroMudancas = numeroMudancas;
 	}
 
 	public boolean hasDiscoTravao() {
@@ -63,7 +67,7 @@ public class BicicletaMontanha extends Altimetria {
         BicicletaMontanha bicicleta = (BicicletaMontanha) o;
         return super.equals(bicicleta) 
             && Double.compare(this.variacaoSuspensao, bicicleta.getVariacaoSuspensao()) == 0
-            && this.númeroMudancas == bicicleta.getNúmeroMudancas()
+            && this.numeroMudancas == bicicleta.getNumeroMudancas()
             && this.discoTravao == bicicleta.hasDiscoTravao();
     }
 
@@ -72,7 +76,7 @@ public class BicicletaMontanha extends Altimetria {
         return "BicicletaMontanha{" +
             super.toString() + 
             "variacaoSuspencao='" + this.variacaoSuspensao + '\'' +
-            ", númeroMudancas='" + this.númeroMudancas + '\'' +
+            ", numeroMudancas='" + this.numeroMudancas + '\'' +
             ", discoTravao='" + this.discoTravao + '\'' +
             '}';
     }
@@ -84,6 +88,14 @@ public class BicicletaMontanha extends Altimetria {
 
      
     public double calorias() {
-        return 9312.123;
+      double mult = 1;
+      if(this.hasDiscoTravao()){
+        mult = 0.5;
+      }
+      return mult * this.getUser().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
+    }
+
+    public int getBpm(){
+      return (int) (this.getUser().getBpmMedio() + 20 * this.getUser().fatorMultiplicativo());
     }
 }

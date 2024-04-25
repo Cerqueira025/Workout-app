@@ -8,46 +8,39 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PlanoDeTreino {
-    private String codigo;
     private LocalDate dataRealizacao;
-    private int iteracoes;
+    private int duracao; //duração em semanas
     private Map<String, Atividade> atividades;
 
 
-    // Construtor
+    // ----------------- Construtores ---------------- //
+
     public PlanoDeTreino() {
-        this.codigo = "";
         this.dataRealizacao = LocalDate.EPOCH;
-        this.iteracoes = 0;
+        this.duracao = 0;
         this.atividades = new HashMap<>();
     }
 
-    // Construtor
-    public PlanoDeTreino(String codigo, LocalDate dataRealizacao, int iteracoes, Map<String, Atividade> atividades) {
-        this.codigo = codigo;
+    public PlanoDeTreino(LocalDate dataRealizacao, int duracao, Map<String, Atividade> atividades) {
         this.dataRealizacao = dataRealizacao;
-        this.iteracoes = iteracoes;
+        this.duracao = duracao;
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
-    // Construtor
+    public PlanoDeTreino(LocalDate dataRealizacao, int duracao) {
+      this.dataRealizacao = dataRealizacao;
+      this.duracao = duracao;
+      this.atividades = new HashMap<>();
+    }
+
     public PlanoDeTreino(PlanoDeTreino outro) {
-        this.codigo = outro.getCodido();
         this.dataRealizacao = outro.getDataRealizacao();
-        this.iteracoes = outro.getIteracoes();
+        this.duracao = outro.getDuracao();
         this.atividades = outro.getAtividades();
     }
 
 
-    // Métodos getters e setters
-
-    public String getCodido() {
-        return this.codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
+    // ----------------- Métodos getters e setters ----------------- //
 
     public LocalDate getDataRealizacao() {
         return this.dataRealizacao;
@@ -57,12 +50,12 @@ public class PlanoDeTreino {
         this.dataRealizacao = dataRealizacao;
     }
 
-    public int getIteracoes() {
-        return this.iteracoes;
+    public int getDuracao() {
+        return this.duracao;
     }
 
-    public void setIteracoes(int iteracoes) {
-        this.iteracoes = iteracoes;
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
     }
 
     public Map<String, Atividade> getAtividades() {
@@ -91,9 +84,8 @@ public class PlanoDeTreino {
 
     public String toString() {
         String a = "Plano de Treino{" +
-                "código='" + this.codigo + '\'' +
-                ", data='" + this.dataRealizacao + '\'' +
-                ", iterações=" + this.iteracoes + '\'' +
+                "data='" + this.dataRealizacao + '\'' +
+                ", duração=" + this.duracao + '\'' +
                 ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
            a += atividade.toString() + ",";
@@ -106,9 +98,8 @@ public class PlanoDeTreino {
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
         PlanoDeTreino plano = (PlanoDeTreino) o;
-        return this.codigo.equals(plano.getCodido())
-                && this.dataRealizacao.isEqual(plano.getDataRealizacao())
-                && this.iteracoes == plano.getIteracoes()
+        return this.dataRealizacao.equals(plano.getDataRealizacao())
+                && this.duracao == plano.getDuracao()
                 && this.atividades.equals(plano.getAtividades());
     }
 

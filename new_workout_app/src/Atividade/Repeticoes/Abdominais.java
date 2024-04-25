@@ -1,5 +1,7 @@
 package Atividade.Repeticoes;
 
+import java.time.LocalDate;
+
 import Utilizador.Utilizador;
 
 public class Abdominais extends Repeticoes {
@@ -9,14 +11,13 @@ public class Abdominais extends Repeticoes {
     
     // ------------------- Construtores ------------------- //
 
-
     public Abdominais() {
         super();
         this.amplitude = 0;
     }
 
-    public Abdominais(String codigo, String descricao, int duracao, Utilizador user, int repeticoes, double amplitude) {
-        super(codigo, descricao, duracao, user, repeticoes);
+    public Abdominais(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, int repeticoes, double amplitude) {
+        super(codigo, descricao, data, duracao, user, repeticoes);
         this.amplitude = amplitude;
     }
 
@@ -54,13 +55,16 @@ public class Abdominais extends Repeticoes {
                 && Double.compare(this.amplitude, abdominais.getAmplitude()) == 0;
     }
 
-     
-    public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************
-        return 218.2;
+    public Abdominais clone() {
+      return new Abdominais(this);
+    }
+    
+    public double calorias() { // ESTE MÉTODO ESTÁ TOTALMENTE INCORRETO *********************************o
+      return this.getUser().fatorMultiplicativo() * (this.amplitude/4) * this.getDuracao() * (this.getBpm()/100);
+    }
+    
+    public int getBpm(){
+      return (int) (this.getUser().getBpmMedio() + 10 * this.getUser().fatorMultiplicativo());
     }
 
-     
-    public Abdominais clone() {
-        return new Abdominais(this);
-    }
-}
+  }
