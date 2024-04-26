@@ -1,5 +1,4 @@
 import Utilizador.Genero;
-import Utilizador.Utilizador;
 
 public class FitnessController {
 

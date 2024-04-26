@@ -2,9 +2,6 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import Atividade.Atividade;
-import PlanoTreino.PlanoDeTreino;
-import Utilizador.Genero;
 
 import java.util.InputMismatchException;
 
