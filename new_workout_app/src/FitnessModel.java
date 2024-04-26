@@ -1,8 +1,10 @@
-import Utilizador.Utilizador;
-import Utilizador.Genero;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import Utilizador.Genero;
+import Utilizador.Utilizador;
+import Utilizador.TiposUtilizador.PraticanteOcasional;
 
 public class FitnessModel {
     private Map<String, Utilizador> utilizadores;
@@ -34,6 +36,13 @@ public class FitnessModel {
         this.utilizadores.put(utilizador.getCodigo(), utilizador.clone());
     }
 
+    public void criaUtilizador(String codigo, int bpmMedio, double peso, int altura,
+                        String nome, Genero genero, String morada, String email, String password) {
+        Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, altura,
+                                                        nome, genero, morada, email, password);
+        this.addUtilizador(utilizador);
+    }
+
     public void removeUtilizador(String codigo) {
         this.utilizadores.remove(codigo);
     }
@@ -42,20 +51,7 @@ public class FitnessModel {
         if(!this.utilizadores.containsKey(codigo)) return null;
         return this.utilizadores.get(codigo).clone();
     }
-
-    public void createUtilizador(String codigo, int bpmMedio, double peso, 
-            int altura, String nome, Genero genero, String morada, 
-            String email, String password) {
-        Utilizador novoUtilizador = new Utilizador(codigo, bpmMedio, peso, altura,
-            nome, genero, morada, email, password);
-        addUtilizador(novoUtilizador);
-    }
-
-
-
-
-
-
+    
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;

@@ -2,7 +2,7 @@ package Atividade;
 
 import java.time.LocalDate;
 import Utilizador.Utilizador;
-import Utilizador.TiposUtilizador.Amador;
+import Utilizador.TiposUtilizador.PraticanteOcasional;
 
 
 public abstract class Atividade {
@@ -25,7 +25,7 @@ public abstract class Atividade {
         this.duracao = 0;
         this.bpm = 0;
         this.calorias = 0;
-        this.user = new Amador(); /* UTILIZADOR PRATICANTE OCASIONAL*/
+        this.user = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
     public Atividade(String codigo, String descricao, LocalDate data, int duracao, Utilizador user) {
