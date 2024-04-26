@@ -1,5 +1,6 @@
 A fazer: 
 ```
+- Alterar map<atividade> -> list<atividade>
 ⁃ Melhorar toString, rever as calorias
 ⁃ Colocar verificação de exceção em remove e get__ 
 ⁃ rever calorias
