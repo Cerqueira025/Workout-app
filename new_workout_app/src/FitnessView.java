@@ -1,7 +1,9 @@
 import java.util.List;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import Excessoes.AtividadeExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
 import Excessoes.EmailExisteException;
 import Excessoes.ParametrosInvalidosException;
@@ -16,12 +18,14 @@ public class FitnessView {
     private String codUtilizador;
     private TipoMenu menu;
     private List<String> opcoes;
+    private List<String> atividades;
     private FitnessController controller;
    
    
 
-    public FitnessView(String[] opcoes, FitnessController controller) {
+    public FitnessView(String[] opcoes, String[] atividades, FitnessController controller) {
         this.opcoes = Arrays.asList(opcoes);
+        this.atividades = Arrays.asList(atividades);
         this.menu = TipoMenu.Principal;
         this.controller = controller;
         this.op = 0;
@@ -219,16 +223,28 @@ public class FitnessView {
         // String codigo, String descricao, LocalDate data, int duracao, Utilizador user;
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("N: ");
+        System.out.print("\nQual a atividade que queres adicionar: \n");
+        for (int i = 0; i < this.atividades.size(); i++) {
+            System.out.println(i+1 + " - " + this.atividades.get(i));
+        }
+        String op = scanner.nextLine();
+
+        System.out.print("Codigo da atividade: ");
         String codigo = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        System.out.print("Descrição da atividade: ");
+        String descricao = scanner.nextLine();
+        System.out.print("Data (dd/mm/aaaa): ");
+        String data = scanner.nextLine();
+        System.out.print("Duração (minutos): ");
+        int duracao = scanner.nextInt();
+
 
         try {
-            this.controller.loginUtilizador(codigo, password);
-            System.out.println("\n[SUCESSO] Login efetuado!\n");
-            this.menu = TipoMenu.Utilizador;
-            this.op = -1;
+            this.controller.adicionarAtividade(this.codUtilizador, codigo, descricao, data, duracao);
+            System.out.println("\n[SUCESSO] Atividade adicionada\n");
+        }
+        catch (DateTimeParseException e) {
+            System.out.println("\n[ERRO] Formato de data inválido\n");
         }
         catch (ParametrosInvalidosException e) {
             System.out.println("\n[ERRO] Parâmetros inválidos\n");
@@ -236,8 +252,8 @@ public class FitnessView {
         catch (UtilizadorNaoExisteException e) {
             System.out.println("\n[ERRO] Utilizador não existe\n");
         }
-        catch (CredenciaisNaoCoincidem e) {
-            System.out.println("\n[ERRO] Password incorreta\n");
+        catch (AtividadeExisteException e) {
+            System.out.println("\n[ERRO] Atividade já existe\n");
         }
     }
 

@@ -1,7 +1,10 @@
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import Atividade.Atividade;
+import Atividade.Repeticoes.Abdominais;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
 import Utilizador.Genero;
@@ -66,6 +69,19 @@ public class FitnessModel {
     public Utilizador getUtilizador(String codigo) {
         if(!this.utilizadores.containsKey(codigo)) return null;
         return this.utilizadores.get(codigo).clone();
+    }
+
+    public boolean atividadeExiste(String codigoUtilizador, String codigoAtividade) {
+        return this.utilizadores.get(codigoUtilizador).atividadeExiste(codigoAtividade);
+    }
+
+    public void addAtividade(String codigoUtilizador, Atividade atividade) {
+        this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
+    }
+
+    public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDate data, int duracao) {
+        Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, this.utilizadores.get(codigoUtilizador), 10, 45.2);
+        this.addAtividade(codigoUtilizador, a);
     }
     
     public boolean equals(Object o) {
