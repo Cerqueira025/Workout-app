@@ -10,7 +10,6 @@ public class Fitness {
     }
 
 
-
     private void run() {
         String[] opcoes = new String[] {"Registar", "Login"};
         String[] atividades = new String[] {"Distância: Sprint", 
@@ -23,7 +22,4 @@ public class Fitness {
         FitnessView view = new FitnessView(opcoes, atividades, controller);
         view.run();
     }
-
-
-
 }

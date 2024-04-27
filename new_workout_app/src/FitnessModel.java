@@ -1,3 +1,10 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -5,15 +12,13 @@ import java.util.stream.Collectors;
 
 import Atividade.Atividade;
 import Atividade.Repeticoes.Abdominais;
-import Excessoes.AtividadeNaoExisteException;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
-import Excessoes.UtilizadorNaoExisteException;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
 
-public class FitnessModel {
+public class FitnessModel implements Serializable {
     private Map<String, Utilizador> utilizadores;
 
 
@@ -31,6 +36,8 @@ public class FitnessModel {
         this.utilizadores = outro.getUtilizadores();
     }
 
+    // ----------------- Getters e Setters ---------------- //
+
     public Map<String, Utilizador> getUtilizadores() {
         return this.utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
@@ -38,6 +45,8 @@ public class FitnessModel {
     public void setUtilizadores(Map<String, Utilizador> utilizadores) {
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
+
+    // ----------------- Utilizador ---------------- //
 
     public boolean codigoUtilizadorExiste(String codigo) {
         return this.utilizadores.containsKey(codigo);
@@ -73,10 +82,13 @@ public class FitnessModel {
         return this.utilizadores.get(codigo).clone();
     }
 
+
+
+    // ----------------- Atividades ---------------- //
+
     public boolean atividadeExiste(String codigoUtilizador, String codigoAtividade) {
         return this.utilizadores.get(codigoUtilizador).atividadeExiste(codigoAtividade);
     }
-
 
     public void addAtividade(String codigoUtilizador, Atividade atividade) {
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
@@ -85,10 +97,16 @@ public class FitnessModel {
     public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDate data, int duracao) {
         Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, this.utilizadores.get(codigoUtilizador), 10, 45.2);
         this.addAtividade(codigoUtilizador, a);
+    }
 
     public void removerAtividade(String codigoUtilizador, String codigoAtividade) {
         this.utilizadores.get(codigoUtilizador).removeAtividade(codigoAtividade);
     }
+
+
+    // ----------------- Plano de treinos ---------------- //
+
+    // ----------------- Gerais ---------------- //
     
     public boolean equals(Object o) {
         if(this == o) return true;
@@ -109,4 +127,24 @@ public class FitnessModel {
         return new FitnessModel(this);
     }
 
+    public void guardaEstado(String nomeFicheiro) throws FileNotFoundException, IOException {
+        FileOutputStream file_output = new FileOutputStream(nomeFicheiro);
+        ObjectOutputStream object_output = new ObjectOutputStream(file_output);
+
+        object_output.writeObject(this);
+
+        object_output.flush();
+        object_output.close();
+    }
+
+    public static FitnessModel carregaEstado(String nomeFicheiro) throws IOException, ClassNotFoundException {
+        FileInputStream file_input = new FileInputStream(nomeFicheiro);
+        ObjectInputStream object_input = new ObjectInputStream(file_input);
+
+        FitnessModel novoModel = (FitnessModel) object_input.readObject();
+
+        object_input.close();
+
+        return novoModel;
+    }
 }

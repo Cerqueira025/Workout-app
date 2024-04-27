@@ -182,13 +182,14 @@ public abstract class Utilizador {
     }
 
     public Atividade getAtividade(String codigo_atividade) {
-        if(!this.atividadeExiste(codigo_atividade)) return null;
+        if(!atividadeExiste(codigo_atividade)) return null;
         return this.atividades.get(codigo_atividade).clone();
     }
 
     public boolean atividadeExiste(String codigo) {
         return this.atividades.containsKey(codigo);
     }
+
 
 
 

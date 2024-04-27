@@ -1,4 +1,5 @@
 import java.util.List;
+import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -39,7 +40,7 @@ public class FitnessView {
         do {
             switch (this.menu) {
                 case Principal:
-                    opcoes = new String[] {"Registar", "Login"};
+                    opcoes = new String[] {"Registar", "Login", "Carregar estado"};
                     this.opcoes = Arrays.asList(opcoes);
                     runPrincipal();
                     break;
@@ -52,6 +53,13 @@ public class FitnessView {
                     break;
             }
         } while (this.menu != TipoMenu.Sair);
+
+        try {
+            this.controller.guardaEstado("log.obj");
+            System.out.println("\n[SUCESSO] Ficheiro guardado\n\nAdeus\n");
+        } catch (IOException e) {
+            System.out.println("\n[ERRO] Falha ao guardar dados\n" + e);
+        }
     }
 
 
@@ -65,6 +73,8 @@ public class FitnessView {
                 case 2:
                     loginUtilizador();
                     break;
+                case 3:
+                    carregarEstado();
                 default:
                     break;
             }
@@ -81,7 +91,7 @@ public class FitnessView {
                     adicionarAtividade();
                     break;
                 case 2:
-                    // Remover uma atividade realizada;
+                    removerAtividade();
                     break;
                 case 3:
                     // Mostrar todas as atividades realizadas;
@@ -216,6 +226,20 @@ public class FitnessView {
         catch (CredenciaisNaoCoincidem e) {
             System.out.println("\n[ERRO] Password incorreta\n");
         }
+    }
+
+    public void carregarEstado() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Ficheiro a carregar: ");
+        String nomeFicheiro = scanner.nextLine();
+
+        try {
+            this.controller.carregaEstado(nomeFicheiro);
+            System.out.println("\n[SUCESSO] Ficheiro carregado\n");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("\n[ERRO] Falha ao ler dados\n" + e);
+        } 
     }
 
 
