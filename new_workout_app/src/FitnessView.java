@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
 import Excessoes.EmailExisteException;
 import Excessoes.ParametrosInvalidosException;
@@ -238,6 +239,29 @@ public class FitnessView {
         }
         catch (CredenciaisNaoCoincidem e) {
             System.out.println("\n[ERRO] Password incorreta\n");
+        }
+    }
+
+
+
+    public void removerAtividade() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Código da atividade: ");
+        String codigoAtividade = scanner.nextLine();
+
+        try {
+            this.controller.removerAtividade(this.codUtilizador, codigoAtividade);
+            System.out.println("\n[SUCESSO] Atividade eliminada!\n");
+        }
+        catch (ParametrosInvalidosException e) {
+            System.out.println("\n[ERRO] Parâmetros inválidos\n");
+        }
+        catch (UtilizadorNaoExisteException e) {
+            System.out.println("\n[ERRO] Utilizador não existe\n");
+        }
+        catch (AtividadeNaoExisteException e) {
+            System.out.println("\n[ERRO] Atividade não existe\n");
         }
     }
 

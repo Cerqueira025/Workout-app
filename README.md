@@ -10,6 +10,7 @@ A fazer:
 - Classe fitness vai ter de ter "tempo atual"
 - Interface hard
 - Adicionar lista de atividades REALIZADAS para posteriormente escrever e ler de um ficheiro
+- Melhorar a forma como se lê o género
 
 ```
 

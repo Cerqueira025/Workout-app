@@ -2,8 +2,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
+import Excessoes.UtilizadorNaoExisteException;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
@@ -66,6 +68,14 @@ public class FitnessModel {
     public Utilizador getUtilizador(String codigo) {
         if(!this.utilizadores.containsKey(codigo)) return null;
         return this.utilizadores.get(codigo).clone();
+    }
+
+    public boolean atividadeExiste(String codigoUtilizador, String codigoAtividade) {
+        return this.utilizadores.get(codigoUtilizador).atividadeExiste(codigoAtividade);
+    }
+
+    public void removerAtividade(String codigoUtilizador, String codigoAtividade) {
+        this.utilizadores.get(codigoUtilizador).removeAtividade(codigoAtividade);
     }
     
     public boolean equals(Object o) {

@@ -1,3 +1,4 @@
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
 import Excessoes.EmailExisteException;
 import Excessoes.ParametrosInvalidosException;
@@ -48,6 +49,15 @@ public class FitnessController {
         if (codigo.length() == 0 || password.length() == 0) throw new ParametrosInvalidosException();
         if (!this.model.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
         if (!this.model.credenciaisCoincidem(codigo, password)) throw new CredenciaisNaoCoincidem();
+    }
+
+
+
+    public void removerAtividade(String codigoUtilizador, String codigoAtividade) throws AtividadeNaoExisteException, UtilizadorNaoExisteException, ParametrosInvalidosException {
+        if (codigoAtividade.length() == 0) throw new ParametrosInvalidosException();
+        if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        if (!this.model.atividadeExiste(codigoUtilizador,codigoAtividade)) throw new AtividadeNaoExisteException();
+        this.model.removerAtividade(codigoUtilizador,codigoAtividade);
     }
 
 }
