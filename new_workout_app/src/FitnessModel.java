@@ -2,6 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import Excessoes.EmailExisteException;
+import Excessoes.UtilizadorExisteException;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
@@ -32,12 +34,26 @@ public class FitnessModel {
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
-    public void addUtilizador(Utilizador utilizador) {
+    public boolean codigoUtilizadorExiste(String codigo) {
+        return this.utilizadores.containsKey(codigo);
+    }
+
+    public boolean emailUtilizadorExiste(String email) {
+        return this.utilizadores.values().stream().map(u -> u.getEmail()).anyMatch(email::equals);
+    }
+
+    public boolean credenciaisCoincidem(String codigo, String password) {
+        return this.utilizadores.get(codigo).getPassword().equals(password);
+    }
+
+    public void addUtilizador(Utilizador utilizador) throws UtilizadorExisteException, EmailExisteException {
+        if (this.codigoUtilizadorExiste(utilizador.getCodigo())) throw new UtilizadorExisteException(utilizador.getCodigo());
+        if (this.emailUtilizadorExiste(utilizador.getEmail())) throw new EmailExisteException(utilizador.getEmail());
         this.utilizadores.put(utilizador.getCodigo(), utilizador.clone());
     }
 
     public void criaUtilizador(String codigo, int bpmMedio, double peso, int altura,
-                        String nome, Genero genero, String morada, String email, String password) {
+                        String nome, Genero genero, String morada, String email, String password) throws UtilizadorExisteException, EmailExisteException {
         Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, altura,
                                                         nome, genero, morada, email, password);
         this.addUtilizador(utilizador);

@@ -1,5 +1,7 @@
 package Utilizador;
 
 public enum Genero {
-  Masculino, Feminino, Outro
+  Masculino,
+  Feminino,
+  Outro
 }
