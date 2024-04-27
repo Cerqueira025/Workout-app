@@ -1,5 +1,6 @@
 A fazer: 
 ```
+- Perguntar ao utilizador se pretende ou não salvar as informações num ficheiro
 ⁃ Melhorar toString, rever as calorias
 ⁃ Colocar verificação de exceção em remove e add SO NO CONTROLLER
 ⁃ rever calorias

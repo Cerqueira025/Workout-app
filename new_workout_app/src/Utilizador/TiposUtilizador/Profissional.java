@@ -1,5 +1,6 @@
 package Utilizador.TiposUtilizador;
 
+import java.io.Serializable;
 import java.util.Map;
 import Atividade.Atividade;
 import PlanoTreino.PlanoDeTreino;

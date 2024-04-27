@@ -1,12 +1,13 @@
 package Utilizador;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import Atividade.Atividade;
 import PlanoTreino.PlanoDeTreino;
 
-public abstract class Utilizador {
+public abstract class Utilizador implements Serializable {
     private int    bpmMedio;
     private int    altura; // Sem informação no guião 
     private double peso; // Sem informação no guião

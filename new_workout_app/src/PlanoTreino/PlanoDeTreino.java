@@ -2,12 +2,13 @@ package PlanoTreino;
 
 import Atividade.Atividade;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PlanoDeTreino {
+public class PlanoDeTreino implements Serializable {
     private LocalDate dataRealizacao;
     private int duracao; //duração em semanas
     private Map<String, Atividade> atividades;

@@ -1,5 +1,6 @@
 package Atividade.Repeticoes;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import Atividade.Atividade;

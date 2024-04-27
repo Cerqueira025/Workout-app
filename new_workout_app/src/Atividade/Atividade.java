@@ -1,11 +1,12 @@
 package Atividade;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
 
 
-public abstract class Atividade {
+public abstract class Atividade implements Serializable {
     private String codigo;
     private String descricao;
     //private String local;
