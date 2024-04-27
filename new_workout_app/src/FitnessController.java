@@ -1,3 +1,10 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+
+import Atividade.Atividade;
+import Excessoes.AtividadeExisteException;
 import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
 import Excessoes.EmailExisteException;
@@ -52,6 +59,16 @@ public class FitnessController {
     }
 
 
+
+    public void adicionarAtividade(String codigoUtilizador, String codigoAtividade, String descricao, String data, int duracao) throws DateTimeParseException, UtilizadorNaoExisteException, ParametrosInvalidosException, AtividadeExisteException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate data_aux = LocalDate.parse(data, formatter);
+
+        if (codigoUtilizador.length() == 0 || codigoAtividade.length() == 0 || descricao.length() == 0 || (duracao <= 0 || duracao >= 1440)) throw new ParametrosInvalidosException();
+        if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        if (this.model.atividadeExiste(codigoUtilizador, codigoAtividade)) throw new AtividadeExisteException();
+        this.model.criaAtividade(codigoUtilizador, codigoAtividade, descricao, data_aux, duracao);
+    }
 
     public void removerAtividade(String codigoUtilizador, String codigoAtividade) throws AtividadeNaoExisteException, UtilizadorNaoExisteException, ParametrosInvalidosException {
         if (codigoAtividade.length() == 0) throw new ParametrosInvalidosException();
