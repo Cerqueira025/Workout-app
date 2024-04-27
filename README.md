@@ -10,6 +10,8 @@ A fazer:
 - Interface hard
 - Passar tudo o que seja throws é feito no controller
 - !!!!PERMITIR A CRIAÇÃO DE DIFERENTES TIPOS DE UTILIZADOR E ATIVIDADES!!!!
+- Adicionar lista de atividades REALIZADAS para posteriormente escrever e ler de um ficheiro
+- Melhorar a forma como se lê o género
 ```
 
     1. implementar testes para todas a classes

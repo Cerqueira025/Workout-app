@@ -5,8 +5,10 @@ import java.util.stream.Collectors;
 
 import Atividade.Atividade;
 import Atividade.Repeticoes.Abdominais;
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
+import Excessoes.UtilizadorNaoExisteException;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
@@ -75,6 +77,7 @@ public class FitnessModel {
         return this.utilizadores.get(codigoUtilizador).atividadeExiste(codigoAtividade);
     }
 
+
     public void addAtividade(String codigoUtilizador, Atividade atividade) {
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
@@ -82,6 +85,9 @@ public class FitnessModel {
     public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDate data, int duracao) {
         Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, this.utilizadores.get(codigoUtilizador), 10, 45.2);
         this.addAtividade(codigoUtilizador, a);
+
+    public void removerAtividade(String codigoUtilizador, String codigoAtividade) {
+        this.utilizadores.get(codigoUtilizador).removeAtividade(codigoAtividade);
     }
     
     public boolean equals(Object o) {
