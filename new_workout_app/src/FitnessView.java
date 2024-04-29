@@ -57,7 +57,7 @@ public class FitnessView {
         do {
             String[] opcoes = new String[] {"Registar", "Login", "Carregar estado"};
             this.opcoes = Arrays.asList(opcoes);
-            executa();
+            executa(() -> showMenu(""), true);
             switch (this.op) {
                 case 1:
                     registarUtilizador();
@@ -79,7 +79,7 @@ public class FitnessView {
         do {
             String [] opcoes = new String[] {"Adicionar uma atividade solta (realizada)", "Remover uma atividade realizada", "Mostrar todas as atividades realizadas", "Adicionar um plano de treino", "Remover um plano de treino", "Adicionar uma atividade no plano de treino", "Remover uma atividade do plano de treino", "Mostrar o plano de treino detalhado", "Mostrar o plano de treino geral"};
             this.opcoes = Arrays.asList(opcoes);
-            executa();
+            executa(() -> showMenu(" UTILIZADOR"), true);
             switch (this.op) {
                 case 1:
                     adicionarAtividade();
@@ -116,26 +116,26 @@ public class FitnessView {
     }
 
 
-    public void executa() {
+    public void executa(Runnable runnable, boolean ler0) {
         do {
-            showMenu();
-            this.op = lerOpcao(this.opcoes.size());
+            runnable.run();
+            this.op = lerOpcao(ler0);
         } while (this.op == -1);
     }
     
-
-
-    private void showMenu() {
-        System.out.println("\n=======MENU=======\n");
-        for (int i = 0; i < this.opcoes.size(); i++) {
-            System.out.println(i+1 + " - " + this.opcoes.get(i));
-        }
+    private void showMenu(String titulo) {
+        System.out.println("\n=======MENU" + titulo + "=======\n");
+        showOpcoes();
         System.out.println("0 - Guardar e Sair");
     }
 
+    private void showOpcoes() {
+        for (int i = 0; i < this.opcoes.size(); i++) {
+            System.out.println(i+1 + " - " + this.opcoes.get(i));
+        }
+    }
 
-
-    public int lerOpcao(int numeroOpcoes) {
+    public int lerOpcao(boolean ler0) {
         int op;
         Scanner scanner = new Scanner(System.in);
         
@@ -145,7 +145,7 @@ public class FitnessView {
         } catch (InputMismatchException e) {
             op = -1;
         }
-        if (op < 0 || op > numeroOpcoes) {
+        if (op < (ler0 ? 0 : 1) || op > this.opcoes.size()) {
             System.out.println("\n[ERRO] Opção Inválida!\n");
             op = -1;
         }
@@ -252,7 +252,7 @@ public class FitnessView {
 
     public void adicionarAtividade() {
         this.opcoes = this.atividades;
-        executa();
+        executa(() -> showOpcoes(), false);
 
         Scanner scanner = new Scanner(System.in);
 

@@ -1,6 +1,7 @@
 A fazer: 
 ```
-- Perguntar ao utilizador se pretende ou não salvar as informações num ficheiro
+- Adicionar opção no menu principal "Sair sem guardar" +
+- Perguntar ao utilizador se pretende ou não salvar as informações num ficheiro +
 ⁃ Melhorar toString, rever as calorias
 ⁃ Colocar verificação de exceção em remove e add SO NO CONTROLLER
 ⁃ rever calorias
@@ -11,10 +12,26 @@ A fazer:
 - Interface hard
 - Passar tudo o que seja throws é feito no controller
 - !!!!PERMITIR A CRIAÇÃO DE DIFERENTES TIPOS DE UTILIZADOR E ATIVIDADES!!!!
-- Adicionar lista de atividades REALIZADAS para posteriormente escrever e ler de um ficheiro
 - Melhorar a forma como se lê o género
+- Criar um método "show" que é usado pelo "showMenu", que dá prints adicionais
 ```
 
     1. implementar testes para todas a classes
     2. guardar/ler dados de um ficheiro
     3. implementar o salto no tempo
+
+
+
+DUVIDAS
+```
+Duvida: Como fazer a distinção da criação de diferentes objetos da mesma super classe, aka, utilizadores e atividades
+Resposta:
+
+Duvida: O salto no tempo tem em atenção a hora?
+Resposta:
+
+Duvida: Um tipo de utilizador é apenas uma subclasse de utilizador. Um utilizador pode ter diferentes niveis de aptidão em diferentes atividades.
+Resposta:
+
+
+```
