@@ -11,7 +11,7 @@ A fazer:
 - Interface hard
 - Passar tudo o que seja throws é feito no controller
 - !!!!PERMITIR A CRIAÇÃO DE DIFERENTES TIPOS DE UTILIZADOR E ATIVIDADES!!!!
-- Melhorar a forma como se lê o género
+- Melhorar a forma como se lê o género -
 - Criar um método "show" que é usado pelo "showMenu", que dá prints adicionais
 ```
 
