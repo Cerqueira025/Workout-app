@@ -7,6 +7,7 @@ model:
 - Melhorar toString, rever as calorias
 - Colocar throws no model
 - Verificar clones
+- Implementar métodos gerais
 
 view:
 - lidar com as exceções todas
