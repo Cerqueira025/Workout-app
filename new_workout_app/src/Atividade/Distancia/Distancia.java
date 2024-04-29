@@ -17,8 +17,8 @@ public abstract class Distancia extends Atividade {
     }
 
     public Distancia(String codigo, String descricao, LocalDateTime data, int duracao, 
-            Utilizador utilizador, double dist) {
-       super(codigo, descricao, data, duracao, utilizador); 
+            int series, Utilizador utilizador, double dist) {
+       super(codigo, descricao, data, duracao, series, utilizador); 
        this.distancia = dist;
        this.velocidade = dist/duracao;
     }

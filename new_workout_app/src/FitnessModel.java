@@ -108,7 +108,7 @@ public class FitnessModel implements Serializable {
     }
 
     public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDateTime data, int duracao) {
-        Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, this.utilizadores.get(codigoUtilizador), 10, 45.2);
+        Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, -100, this.utilizadores.get(codigoUtilizador), 10, 45.2); // -100 tem de ser substituido por nIterações
         this.addAtividade(codigoUtilizador, a);
     }
 
@@ -141,11 +141,7 @@ public class FitnessModel implements Serializable {
         return new FitnessModel(this);
     }
 
-
-
-
-
-
+    
     // ----------------- Guardar e carregar estados ---------------- //
 
     public void guardaEstado(String nomeFicheiro) throws FileNotFoundException, IOException {

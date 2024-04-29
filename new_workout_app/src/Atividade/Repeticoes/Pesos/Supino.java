@@ -15,8 +15,8 @@ public class Supino extends Pesos {
         this.inclinacao = 0;
     }
 
-    public Supino(String codigo, String descricao, LocalDateTime data,int duracao, Utilizador utilizador, int repeticoes, double peso, double inclinacao) {
-        super(codigo, descricao, data, duracao, utilizador, repeticoes, peso);
+    public Supino(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador, int repeticoes, double peso, double inclinacao) {
+        super(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso);
         this.inclinacao = 0;
     }
 

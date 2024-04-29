@@ -17,10 +17,10 @@ public class BicicletaMontanha extends Altimetria {
         this.discoTravao = false;
     }
 
-    public BicicletaMontanha(String codigo, String descricao, LocalDateTime data, int duracao, 
+    public BicicletaMontanha(String codigo, String descricao, LocalDateTime data, int duracao, int series, 
             Utilizador utilizador, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
             boolean discoTravao) {
-        super(codigo, descricao, data, duracao, utilizador, dist, altimetria);
+        super(codigo, descricao, data, duracao, series, utilizador, dist, altimetria);
         this.variacaoSuspensao = variacaoSuspensao;
         this.numeroMudancas = numeroMudancas;
         this.discoTravao = discoTravao;

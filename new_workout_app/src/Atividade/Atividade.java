@@ -14,6 +14,7 @@ public abstract class Atividade implements Serializable {
     private LocalDateTime data;
     private int duracao;
     private int bpm; //------------ bpm = utilizador.bpmMedio*utilizador.peso*(fator de atividade)
+    private int series;
     private double calorias;
     private Utilizador utilizador;
 
@@ -26,18 +27,20 @@ public abstract class Atividade implements Serializable {
         this.data = LocalDateTime.of(1970, 01, 01, 00, 00 ,00);
         this.duracao = 0;
         this.bpm = 0;
+        this.series = 0;
         this.calorias = 0;
         this.utilizador = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
-    public Atividade(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador) {
+    public Atividade(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.data = data;
         this.duracao = duracao;
         this.bpm = 0;
+        this.series = series;
         this.calorias = 0;
-        this.utilizador = utilizador.clone();
+        this.utilizador = utilizador;
     }
 
     public Atividade(Atividade outro){
@@ -46,6 +49,7 @@ public abstract class Atividade implements Serializable {
         this.data = outro.getData();
         this.duracao = outro.getDuracao();
         this.bpm = outro.getBpm();
+        this.series = outro.getSeries();
         this.calorias = outro.getCalorias();
         this.utilizador = outro.getUtilizador();
     }
@@ -87,11 +91,11 @@ public abstract class Atividade implements Serializable {
     }
 
     public Utilizador getUtilizador() {
-        return this.utilizador.clone();
+        return this.utilizador;
     }
     
     public void setUtilizador(Utilizador utilizador) {
-        this.utilizador = utilizador.clone();
+        this.utilizador = utilizador;
     }
 
     public int getBpm() {
@@ -100,6 +104,14 @@ public abstract class Atividade implements Serializable {
 
     public void setBpm(int bpm) {
         this.bpm = bpm;
+    }
+    
+    public int getSeries() {
+        return this.series;
+    }
+
+    public void setSeries(int series) {
+        this.series = series;
     }
 
     public double getCalorias() {
@@ -117,6 +129,7 @@ public abstract class Atividade implements Serializable {
                 ", data= '" + this.data + '\'' +
                 ", duração='" + this.duracao + '\'' +
                 ", bpm médio='" + this.bpm + '\'' +
+                ", séries='" + this.series + '\'' +
                 ", calorias='" + this.calorias +
                 '}';
     }
@@ -130,6 +143,7 @@ public abstract class Atividade implements Serializable {
                 && this.descricao.equals(atividade.getDescricao())
                 && this.data.equals(atividade.getData())
                 && this.bpm == atividade.getBpm()
+                && this.series == atividade.getSeries()
                 && Double.compare(this.calorias, atividade.getCalorias()) == 0
                 && this.utilizador.equals(atividade.getUtilizador());
     }

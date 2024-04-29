@@ -16,8 +16,8 @@ public class Abdominais extends Repeticoes {
         this.amplitude = 0;
     }
 
-    public Abdominais(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, int repeticoes, double amplitude) {
-        super(codigo, descricao, data, duracao, utilizador, repeticoes);
+    public Abdominais(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador, int repeticoes, double amplitude) {
+        super(codigo, descricao, data, duracao, series, utilizador, repeticoes);
         this.amplitude = amplitude;
     }
 
