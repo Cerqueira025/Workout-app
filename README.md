@@ -16,8 +16,7 @@ A fazer:
 ```
 
     1. implementar testes para todas a classes
-    2. guardar/ler dados de um ficheiro
-    3. implementar o salto no tempo
+    2. implementar o salto no tempo
 
 
 
