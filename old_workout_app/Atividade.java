@@ -4,7 +4,7 @@ public class Atividade  {
   private String nome;
   private int tipo; // 1-alongamento 2-força parte superior 3-força parte inferior 4-cardio 5-outros
   private int calorias; // nº de calorias que gastará (nº que deve ser multiplicado de acordo com o
-                        // user)
+                        // utilizador)
   private int dificuldade; //1-easy 2-medium 3-hard
   private OptionalInt duracao; // duração em segundos que deve ser definida de acordo com o plano
   

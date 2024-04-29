@@ -15,8 +15,8 @@ public abstract class Altimetria extends Distancia {
     }
 
     public Altimetria(String codigo, String descricao, LocalDate data, int duracao, 
-            Utilizador user, double dist, int altimetria) {
-        super(codigo, descricao, data, duracao, user, dist);
+            Utilizador utilizador, double dist, int altimetria) {
+        super(codigo, descricao, data, duracao, utilizador, dist);
         this.altimetria = altimetria;
     }
 

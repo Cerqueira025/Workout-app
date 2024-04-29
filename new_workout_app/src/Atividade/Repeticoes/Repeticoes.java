@@ -18,8 +18,8 @@ public abstract class Repeticoes extends Atividade {
         this.repeticoes = 0;
     }
 
-    public Repeticoes(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, int repeticoes) {
-        super(codigo, descricao, data, duracao, user);
+    public Repeticoes(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, int repeticoes) {
+        super(codigo, descricao, data, duracao, utilizador);
         this.repeticoes = repeticoes;
     }
 

@@ -15,8 +15,8 @@ public class Supino extends Pesos {
         this.inclinacao = 0;
     }
 
-    public Supino(String codigo, String descricao, LocalDate data,int duracao, Utilizador user, int repeticoes, double peso, double inclinacao) {
-        super(codigo, descricao, data, duracao, user, repeticoes, peso);
+    public Supino(String codigo, String descricao, LocalDate data,int duracao, Utilizador utilizador, int repeticoes, double peso, double inclinacao) {
+        super(codigo, descricao, data, duracao, utilizador, repeticoes, peso);
         this.inclinacao = 0;
     }
 
@@ -60,11 +60,11 @@ public class Supino extends Pesos {
     }
     
     public double calorias() {
-        return this.getUser().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100);
+        return this.getUtilizador().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100);
     }
 
     public int bpm(){
-      return (int) (this.getUser().getBpmMedio() + 10 * this.getUser().fatorMultiplicativo());
+      return (int) (this.getUtilizador().getBpmMedio() + 10 * this.getUtilizador().fatorMultiplicativo());
     }
 }
 

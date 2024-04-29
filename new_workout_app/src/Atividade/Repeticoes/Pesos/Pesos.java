@@ -17,8 +17,8 @@ public abstract class Pesos extends Repeticoes {
         this.peso = 0;
     }
 
-    public Pesos(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, int repeticoes, double peso) {
-        super(codigo, descricao, data, duracao, user, repeticoes);
+    public Pesos(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, int repeticoes, double peso) {
+        super(codigo, descricao, data, duracao, utilizador, repeticoes);
         this.peso = peso;
     }
 

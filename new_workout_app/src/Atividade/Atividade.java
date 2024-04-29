@@ -12,9 +12,9 @@ public abstract class Atividade implements Serializable {
     //private String local;
     private LocalDate data;
     private int duracao;
-    private int bpm; //------------ bpm = user.bpmMedio*user.peso*(fator de atividade)
+    private int bpm; //------------ bpm = utilizador.bpmMedio*utilizador.peso*(fator de atividade)
     private double calorias;
-    private Utilizador user;
+    private Utilizador utilizador;
 
 
     // ------------------- Construtores ------------------- //
@@ -26,17 +26,17 @@ public abstract class Atividade implements Serializable {
         this.duracao = 0;
         this.bpm = 0;
         this.calorias = 0;
-        this.user = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
+        this.utilizador = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
-    public Atividade(String codigo, String descricao, LocalDate data, int duracao, Utilizador user) {
+    public Atividade(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.data = data;
         this.duracao = duracao;
         this.bpm = 0;
         this.calorias = 0;
-        this.user = user.clone();
+        this.utilizador = utilizador.clone();
     }
 
     public Atividade(Atividade outro){
@@ -46,7 +46,7 @@ public abstract class Atividade implements Serializable {
         this.duracao = outro.getDuracao();
         this.bpm = outro.getBpm();
         this.calorias = outro.getCalorias();
-        this.user = outro.getUser();
+        this.utilizador = outro.getUtilizador();
     }
 
 
@@ -85,12 +85,12 @@ public abstract class Atividade implements Serializable {
         this.duracao = duracao;
     }
 
-    public Utilizador getUser() {
-        return this.user.clone();
+    public Utilizador getUtilizador() {
+        return this.utilizador.clone();
     }
     
-    public void setUser(Utilizador user) {
-        this.user = user.clone();
+    public void setUtilizador(Utilizador utilizador) {
+        this.utilizador = utilizador.clone();
     }
 
     public int getBpm() {
@@ -130,7 +130,7 @@ public abstract class Atividade implements Serializable {
                 && this.data.equals(atividade.getData())
                 && this.bpm == atividade.getBpm()
                 && Double.compare(this.calorias, atividade.getCalorias()) == 0
-                && this.user.equals(atividade.getUser());
+                && this.utilizador.equals(atividade.getUtilizador());
     }
 
     public abstract Atividade clone();
