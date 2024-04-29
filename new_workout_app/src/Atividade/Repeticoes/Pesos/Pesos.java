@@ -1,6 +1,6 @@
 package Atividade.Repeticoes.Pesos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Atividade.Repeticoes.Repeticoes;
 import Utilizador.Utilizador;
@@ -17,7 +17,7 @@ public abstract class Pesos extends Repeticoes {
         this.peso = 0;
     }
 
-    public Pesos(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, int repeticoes, double peso) {
+    public Pesos(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, int repeticoes, double peso) {
         super(codigo, descricao, data, duracao, utilizador, repeticoes);
         this.peso = peso;
     }

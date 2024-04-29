@@ -1,7 +1,6 @@
 package Atividade.Repeticoes;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Atividade.Atividade;
 import Utilizador.Utilizador;
@@ -18,7 +17,7 @@ public abstract class Repeticoes extends Atividade {
         this.repeticoes = 0;
     }
 
-    public Repeticoes(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, int repeticoes) {
+    public Repeticoes(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, int repeticoes) {
         super(codigo, descricao, data, duracao, utilizador);
         this.repeticoes = repeticoes;
     }

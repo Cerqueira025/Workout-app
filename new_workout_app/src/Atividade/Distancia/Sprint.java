@@ -1,6 +1,6 @@
 package Atividade.Distancia;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Utilizador.Utilizador;
 
@@ -11,7 +11,7 @@ public class Sprint extends Distancia {
         super();
     }
 
-    public Sprint(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, double dist) {
+    public Sprint(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, double dist) {
         super(codigo, descricao, data, duracao, utilizador, dist);
     }
 

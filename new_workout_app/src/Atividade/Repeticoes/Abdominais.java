@@ -1,6 +1,6 @@
 package Atividade.Repeticoes;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Utilizador.Utilizador;
 
@@ -16,7 +16,7 @@ public class Abdominais extends Repeticoes {
         this.amplitude = 0;
     }
 
-    public Abdominais(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador, int repeticoes, double amplitude) {
+    public Abdominais(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, int repeticoes, double amplitude) {
         super(codigo, descricao, data, duracao, utilizador, repeticoes);
         this.amplitude = amplitude;
     }

@@ -1,6 +1,6 @@
 package Atividade.Distancia.Altimetria;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Utilizador.Utilizador;
 
@@ -17,7 +17,7 @@ public class BicicletaMontanha extends Altimetria {
         this.discoTravao = false;
     }
 
-    public BicicletaMontanha(String codigo, String descricao, LocalDate data, int duracao, 
+    public BicicletaMontanha(String codigo, String descricao, LocalDateTime data, int duracao, 
             Utilizador utilizador, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
             boolean discoTravao) {
         super(codigo, descricao, data, duracao, utilizador, dist, altimetria);

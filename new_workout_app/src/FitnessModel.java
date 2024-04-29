@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,25 +20,37 @@ import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
 
 public class FitnessModel implements Serializable {
+    private LocalDate dataAtual;
     private Map<String, Utilizador> utilizadores;
 
 
     // ----------------- Construtores ---------------- //
 
     public FitnessModel() {
+        this.dataAtual = LocalDate.EPOCH;
         this.utilizadores = new HashMap<>();
     }
 
-    public FitnessModel(Map<String, Utilizador> utilizadores) {
+    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores) {
+        this.dataAtual = data;
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
     public FitnessModel(FitnessModel outro) {
+        this.dataAtual = outro.getData();
         this.utilizadores = outro.getUtilizadores();
     }
 
     // ----------------- Getters e Setters ---------------- //
 
+    public LocalDate getData() {
+        return this.dataAtual;
+    }
+
+    public void setData(LocalDate data) {
+        this.dataAtual = data;
+    }
+    
     public Map<String, Utilizador> getUtilizadores() {
         return this.utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
@@ -94,7 +107,7 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
 
-    public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDate data, int duracao) {
+    public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDateTime data, int duracao) {
         Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, this.utilizadores.get(codigoUtilizador), 10, 45.2);
         this.addAtividade(codigoUtilizador, a);
     }
@@ -112,11 +125,12 @@ public class FitnessModel implements Serializable {
         if(this == o) return true;
         if(o == null || this.getClass() != o.getClass()) return false;
         FitnessModel fm = (FitnessModel) o;
-        return this.utilizadores.equals(fm.getUtilizadores());
+        return this.dataAtual.equals(fm.getData())
+            && this.utilizadores.equals(fm.getUtilizadores());
     }
 
     public String toString() {
-        String a = "";
+        String a = "Data atual='" + this.dataAtual + '\'';
         for(Utilizador utilizador : this.utilizadores.values()) {
             a += utilizador.toString() + " ";
         }
@@ -126,6 +140,13 @@ public class FitnessModel implements Serializable {
     public FitnessModel clone() {
         return new FitnessModel(this);
     }
+
+
+
+
+
+
+    // ----------------- Guardar e carregar estados ---------------- //
 
     public void guardaEstado(String nomeFicheiro) throws FileNotFoundException, IOException {
         FileOutputStream file_output = new FileOutputStream(nomeFicheiro);

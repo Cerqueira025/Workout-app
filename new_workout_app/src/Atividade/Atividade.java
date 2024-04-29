@@ -1,7 +1,8 @@
 package Atividade;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
 
@@ -10,7 +11,7 @@ public abstract class Atividade implements Serializable {
     private String codigo;
     private String descricao;
     //private String local;
-    private LocalDate data;
+    private LocalDateTime data;
     private int duracao;
     private int bpm; //------------ bpm = utilizador.bpmMedio*utilizador.peso*(fator de atividade)
     private double calorias;
@@ -22,14 +23,14 @@ public abstract class Atividade implements Serializable {
     public Atividade() {
         this.codigo = "";
         this.descricao = "";
-        this.data = LocalDate.EPOCH;
+        this.data = LocalDateTime.of(1970, 01, 01, 00, 00 ,00);
         this.duracao = 0;
         this.bpm = 0;
         this.calorias = 0;
         this.utilizador = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
-    public Atividade(String codigo, String descricao, LocalDate data, int duracao, Utilizador utilizador) {
+    public Atividade(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.data = data;
@@ -69,11 +70,11 @@ public abstract class Atividade implements Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDate getData(){
+    public LocalDateTime getData(){
         return this.data;
     }
 
-    public void setData(LocalDate data){
+    public void setData(LocalDateTime data){
         this.data = data;
     }
 
