@@ -18,9 +18,9 @@ public class BicicletaMontanha extends Altimetria {
     }
 
     public BicicletaMontanha(String codigo, String descricao, LocalDate data, int duracao, 
-            Utilizador user, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
+            Utilizador utilizador, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
             boolean discoTravao) {
-        super(codigo, descricao, data, duracao, user, dist, altimetria);
+        super(codigo, descricao, data, duracao, utilizador, dist, altimetria);
         this.variacaoSuspensao = variacaoSuspensao;
         this.numeroMudancas = numeroMudancas;
         this.discoTravao = discoTravao;
@@ -92,10 +92,10 @@ public class BicicletaMontanha extends Altimetria {
       if(this.hasDiscoTravao()){
         mult = 0.5;
       }
-      return mult * this.getUser().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
+      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
     }
 
     public int bpm(){
-      return (int) (this.getUser().getBpmMedio() + 20 * this.getUser().fatorMultiplicativo());
+      return (int) (this.getUtilizador().getBpmMedio() + 20 * this.getUtilizador().fatorMultiplicativo());
     }
 }

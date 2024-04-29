@@ -6,7 +6,6 @@ A fazer:
 ⁃ Colocar verificação de exceção em remove e add SO NO CONTROLLER
 ⁃ rever calorias
 - Verificar clones
-- Trocar user para utilizador
 - LocalData -> LocalDateTime na atividade
 - Classe fitness vai ter de ter "tempo atual"
 - Interface hard
@@ -24,14 +23,15 @@ A fazer:
 
 DUVIDAS
 ```
-Duvida: Como fazer a distinção da criação de diferentes objetos da mesma super classe, aka, utilizadores e atividades
+Dúvida: Como fazer a distinção da criação de diferentes objetos da mesma super classe, aka, utilizadores e atividades
 Resposta:
 
-Duvida: O salto no tempo tem em atenção a hora?
+Dúvida: O salto no tempo tem em atenção a hora?
 Resposta:
 
-Duvida: Um tipo de utilizador é apenas uma subclasse de utilizador. Um utilizador pode ter diferentes niveis de aptidão em diferentes atividades.
+Dúvida: Um tipo de utilizador é apenas uma subclasse de utilizador. Um utilizador pode ter diferentes niveis de aptidão em diferentes atividades.
 Resposta:
 
-
+Dúvida: Variáveis de instância na main?
+Resposta:
 ```
