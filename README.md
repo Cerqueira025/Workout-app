@@ -6,13 +6,13 @@ A fazer:
 ⁃ Colocar verificação de exceção em remove e add SO NO CONTROLLER
 ⁃ rever calorias
 - Verificar clones
-- Trocar user para utilizador
-- LocalData -> LocalDateTime na atividade
+- Trocar user para utilizador -
+- LocalData -> LocalDateTime na atividade -
 - Classe fitness vai ter de ter "tempo atual"
 - Interface hard
 - Passar tudo o que seja throws é feito no controller
 - !!!!PERMITIR A CRIAÇÃO DE DIFERENTES TIPOS DE UTILIZADOR E ATIVIDADES!!!!
-- Melhorar a forma como se lê o género
+- Melhorar a forma como se lê o género -
 - Criar um método "show" que é usado pelo "showMenu", que dá prints adicionais
 ```
 
