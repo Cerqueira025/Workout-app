@@ -6,6 +6,7 @@ A fazer:
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
+- Implementar métodos gerais
 
 view:
 - lidar com as exceções todas
