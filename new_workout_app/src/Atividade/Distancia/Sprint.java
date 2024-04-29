@@ -11,8 +11,8 @@ public class Sprint extends Distancia {
         super();
     }
 
-    public Sprint(String codigo, String descricao, LocalDateTime data, int duracao, Utilizador utilizador, double dist) {
-        super(codigo, descricao, data, duracao, utilizador, dist);
+    public Sprint(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador, double dist) {
+        super(codigo, descricao, data, duracao, series, utilizador, dist);
     }
 
     public Sprint(Sprint outro) {

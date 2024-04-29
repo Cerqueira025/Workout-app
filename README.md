@@ -6,7 +6,6 @@ A fazer:
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
-- Verificar clones
 - Implementar métodos gerais
 
 view:
@@ -24,6 +23,8 @@ view:
 
 DUVIDAS
 ```
-Dúvida: Como fazer a distinção da criação de diferentes objetos da mesma super classe, aka, utilizadores e atividades
-Resposta: Fazer switch
+Dúvida: Atividade é agregação de utilizador, mas não sabemos se o utilizador tem de ser agragação de atividade
+Reposta: 
+
+
 ```
