@@ -73,7 +73,7 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codigo).getPassword().equals(password);
     }
 
-    public void addUtilizador(Utilizador utilizador) throws UtilizadorExisteException, EmailExisteException {
+    private void addUtilizador(Utilizador utilizador) throws UtilizadorExisteException, EmailExisteException {
         if (this.codigoUtilizadorExiste(utilizador.getCodigo())) throw new UtilizadorExisteException(utilizador.getCodigo());
         if (this.emailUtilizadorExiste(utilizador.getEmail())) throw new EmailExisteException(utilizador.getEmail());
         this.utilizadores.put(utilizador.getCodigo(), utilizador.clone());
