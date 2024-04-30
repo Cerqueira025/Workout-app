@@ -60,7 +60,7 @@ public class Supino extends Pesos {
     }
     
     public double calorias() {
-        return this.getUtilizador().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100);
+        return this.getUtilizador().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100) * this.getSeries();
     }
 
     public int bpm(){

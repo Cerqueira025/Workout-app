@@ -1,7 +1,9 @@
 package Utilizador;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import Atividade.Atividade;
@@ -165,7 +167,6 @@ public abstract class Utilizador implements Serializable {
         this.plano = plano.clone();
     }
 
-
 	public Map<String, Atividade> getAtividades() {
 		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
@@ -173,6 +174,10 @@ public abstract class Utilizador implements Serializable {
 	public void setAtividades(Map<String, Atividade> atividades) {
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
+
+    public List<Atividade> getAtividadesList() {
+        return this.atividades.values().stream().map(a -> a.clone()).collect(Collectors.toList());
+    }
 
 	public void addAtividade(Atividade atividade) {
         this.atividades.put(atividade.getCodigo(), atividade.clone());
@@ -189,6 +194,34 @@ public abstract class Utilizador implements Serializable {
 
     public boolean atividadeExiste(String codigo) {
         return this.atividades.containsKey(codigo);
+    }
+
+    public void addAtividadePlanoDeTreino(Atividade atividade) {
+        this.plano.addAtividade(atividade);
+    }
+
+    public void removeAtividadePlanoDeTreino(String codAtividade) {
+        this.plano.removeAtividade(codAtividade);
+    }
+
+    public Map<String, Atividade> getAtividadesPlanoDeTreino() {
+        return this.plano.getAtividades();
+    }
+
+    public void limparPlanoDeTreino() {
+        this.plano = new PlanoDeTreino();
+    }
+
+    public double saltoNoTempo(LocalDate proximaData) {
+        double calorias = 0;
+        for (Atividade a : this.plano.getAtividades().values()) {
+            if(a.getData().toLocalDate().compareTo(proximaData) == -1) {
+                this.addAtividade(a);
+                this.plano.addAtividade(a);
+                calorias += a.calorias();
+            }
+        }
+        return calorias;
     }
 
 

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import Atividade.Atividade;
 import Atividade.Repeticoes.Abdominais;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
+import PlanoTreino.PlanoDeTreino;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
@@ -107,6 +109,7 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
 
+    // ESTE MÉTODO ESTÁ ERRADO
     public void criaAtividade(String codigoUtilizador, String codigoAtividade, String descricao, LocalDateTime data, int duracao) {
         Atividade a = new Abdominais(codigoAtividade, descricao, data, duracao, -100, this.utilizadores.get(codigoUtilizador), 10, 45.2); // -100 tem de ser substituido por nIterações
         this.addAtividade(codigoUtilizador, a);
@@ -116,8 +119,40 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codigoUtilizador).removeAtividade(codigoAtividade);
     }
 
+    public List<Atividade> getAtividadesRealizadas(String codUtilizador) {
+        return this.utilizadores.get(codUtilizador).getAtividadesList();
+    }
+
 
     // ----------------- Plano de treinos ---------------- //
+
+    public void setPlanoDeTreino(String codUtilizador, PlanoDeTreino planoDeTreino) {
+        this.utilizadores.get(codUtilizador).setPlanoDeTreino(planoDeTreino);
+    }
+
+    public void limparPlanoDeTreino(String codUtilizador) {
+        this.utilizadores.get(codUtilizador).limparPlanoDeTreino();
+    }
+
+    public void addAtividadePlanoDeTreino(String codUtilizador, Atividade atividade) {
+        this.utilizadores.get(codUtilizador).addAtividadePlanoDeTreino(atividade);
+    }
+
+    public void removeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) {
+        this.utilizadores.get(codUtilizador).removeAtividadePlanoDeTreino(codAtividade);
+    }
+
+    public PlanoDeTreino getPlanoDeTreino(String codUtilizador) {
+        return this.utilizadores.get(codUtilizador).getPlanoDeTreino();
+    }
+
+    // ----------------- Salto no tempo ---------------- //
+
+    public double saltoNoTempo(LocalDate proximaData, String codUtilizador) {
+        this.dataAtual = proximaData;
+        return this.utilizadores.get(codUtilizador).saltoNoTempo(proximaData);
+    }
+
 
     // ----------------- Gerais ---------------- //
     

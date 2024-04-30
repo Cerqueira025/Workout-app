@@ -2,6 +2,7 @@ A fazer:
 ```
 - Rever dateTime do controller
 - Interface hard
+- Rever nomenclatura
 
 model: 
 - Melhorar toString, rever as calorias
@@ -25,6 +26,8 @@ DUVIDAS
 ```
 Dúvida: Atividade é agregação de utilizador, mas não sabemos se o utilizador tem de ser agragação de atividade
 Reposta: 
+
+Dúvida: temos muitos métodos no model que apresentam exatamente o mesmo início (this.xxxxx.get(codigo).xx). O strategy resolve isso? Ou não há forma de resolver este problema?
 
 
 ```

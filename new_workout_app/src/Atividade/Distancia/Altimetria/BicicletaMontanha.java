@@ -92,7 +92,7 @@ public class BicicletaMontanha extends Altimetria {
       if(this.hasDiscoTravao()){
         mult = 0.5;
       }
-      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
+      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100) * this.getSeries();
     }
 
     public int bpm(){

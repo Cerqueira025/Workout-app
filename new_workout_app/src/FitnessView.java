@@ -92,25 +92,25 @@ public class FitnessView {
                     removerAtividade();
                     break;
                 case 3:
-                    // Mostrar todas as atividades realizadas;
+                    // Mostrar todas as atividades realizadas; (Feito)
                     break;
                 case 4:
-                    // Adicionar um plano de treino;
+                    // Adicionar um plano de treino; (Em processo...)
                     break;
                 case 5:
-                    // Remover um plano de treino;
+                    // Remover um plano de treino; (Feito)
                     break;
                 case 6:
-                    // Adicionar uma atividade no plano de treino;
+                    // Adicionar uma atividade no plano de treino; (Feito)
                     break;
                 case 7:
-                    // Remover uma atividade do plano de treino;
+                    // Remover uma atividade do plano de treino; (Feito)
                     break;
                 case 8:
-                    // Mostrar o plano de treino detalhado;
+                    // Mostrar o plano de treino detalhado; (Feito)
                     break;
                 case 9:
-                    // Mostrar o plano de treino geral;
+                    // Mostrar o plano de treino geral; (Provavelmente será ignorado)
                     break;
                 default:
                     break;

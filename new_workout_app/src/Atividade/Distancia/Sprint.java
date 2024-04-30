@@ -39,7 +39,7 @@ public class Sprint extends Distancia {
     }
 
     public double calorias() {
-        return this.getUtilizador().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100);
+        return this.getUtilizador().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100) * this.getSeries();
     }
 
     public int bpm(){
