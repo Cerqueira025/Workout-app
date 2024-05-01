@@ -2,13 +2,20 @@ A fazer:
 ```
 - Rever dateTime do controller
 - Rever nomenclatura
-- Implementar recordes de calorias
+- Implementar recordes por atividade, bem como quem os consegui
+- Implementar recordes por atividade, por utilizador
+- Implementar, pelo menos as seguintes métricas: calorias gastas, km percorridos, metros acumulados
+- Alterar o número de iterações da classe atividade para a classe plano de treino (REVER)
+- Plano de treino recebe dias, não uma data
+
+- Implementar as queries gerais
+- Criar um plano de treino a partir do número de vezes que quer que uma atividade se repita por semana e ter em conta os seus objetivos
+
+
 
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
-- Implementar métodos gerais
-- implementar o salto no tempo
 
 view:
 - lidar com as exceções todas
@@ -18,7 +25,7 @@ view:
 ```
 
     1. implementar testes para todas a classes
-    2. guardar/ler dados de um ficheiro
+    2. restruturar o model/view para usar o desgin pattern do delegate
 
 
 
