@@ -81,9 +81,9 @@ public class FitnessModel implements Serializable {
         this.utilizadores.put(utilizador.getCodigo(), utilizador.clone());
     }
 
-    public void criaUtilizador(String codigo, int bpmMedio, double peso, int altura,
+    public void criaUtilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
                         String nome, Genero genero, String morada, String email, String password) throws UtilizadorExisteException, EmailExisteException {
-        Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, altura,
+        Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, caloriasGastas, altura,
                                                         nome, genero, morada, email, password);
         this.addUtilizador(utilizador);
     }
@@ -101,8 +101,8 @@ public class FitnessModel implements Serializable {
 
     // ----------------- Atividades ---------------- //
 
-    public boolean atividadeExiste(String codigoUtilizador, String codigoAtividade) {
-        return this.utilizadores.get(codigoUtilizador).atividadeExiste(codigoAtividade);
+    public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) {
+        return this.utilizadores.get(codigoUtilizador).existeAtividade(codigoAtividade);
     }
 
     public void addAtividade(String codigoUtilizador, Atividade atividade) {
@@ -124,7 +124,7 @@ public class FitnessModel implements Serializable {
     }
 
 
-    // ----------------- Plano de treinos ---------------- //
+    // ----------------- Plano de treino ---------------- //
 
     public void setPlanoDeTreino(String codUtilizador, PlanoDeTreino planoDeTreino) {
         this.utilizadores.get(codUtilizador).setPlanoDeTreino(planoDeTreino);
@@ -148,11 +148,26 @@ public class FitnessModel implements Serializable {
 
     // ----------------- Salto no tempo ---------------- //
 
-    public double saltoNoTempo(LocalDate proximaData, String codUtilizador) {
-        this.dataAtual = proximaData;
-        return this.utilizadores.get(codUtilizador).saltoNoTempo(proximaData);
-    }
+    public void saltoNoTempo(LocalDate proximaData) {
+        for(Utilizador u : this.utilizadores.values()) {
+            for(Atividade a : u.getAtividades().values()) {
+                if(a.getData().toLocalDate().compareTo(proximaData) == -1) {
+                    double caloriasAtividade = a.calorias();
 
+                    a.setBpm(a.bpm());
+                    a.setCalorias(caloriasAtividade);
+
+                    u.removeAtividadePlanoDeTreino(a.getCodigo());
+                    u.addAtividade(a);
+                    
+                    u.atualizaCaloriasGastas(caloriasAtividade);
+                    u.atualizaPeso(caloriasAtividade);
+                    // ATUALIZA RECORDES
+                }
+            }
+        }
+        this.dataAtual = proximaData;
+    }
 
     // ----------------- Gerais ---------------- //
     

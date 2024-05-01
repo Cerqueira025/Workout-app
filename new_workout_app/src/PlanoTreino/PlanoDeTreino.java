@@ -80,6 +80,9 @@ public class PlanoDeTreino implements Serializable {
         return this.atividades.get(codigo_atividade).clone();
     }
 
+    public boolean existeAtividade(String codigoAtividade) {
+        return this.atividades.containsKey(codigoAtividade);
+    }
 
 
 

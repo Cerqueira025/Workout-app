@@ -1,13 +1,14 @@
 A fazer: 
 ```
 - Rever dateTime do controller
-- Interface hard
 - Rever nomenclatura
+- Implementar recordes de calorias
 
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
 - Implementar métodos gerais
+- implementar o salto no tempo
 
 view:
 - lidar com as exceções todas
@@ -18,7 +19,6 @@ view:
 
     1. implementar testes para todas a classes
     2. guardar/ler dados de um ficheiro
-    3. implementar o salto no tempo
 
 
 

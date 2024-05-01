@@ -54,7 +54,7 @@ public class FitnessController {
             throw new ParametrosInvalidosException();
         }
 
-        this.model.criaUtilizador(codigo, bpmMedio, peso, altura, nome, g, morada, email, password);
+        this.model.criaUtilizador(codigo, bpmMedio, peso, 0, altura, nome, g, morada, email, password);
     }
 
     public void loginUtilizador(String codigo, String password) throws UtilizadorNaoExisteException, ParametrosInvalidosException, CredenciaisNaoCoincidem {
@@ -74,14 +74,14 @@ public class FitnessController {
 
         if (codigoUtilizador.length() == 0 || codigoAtividade.length() == 0 || descricao.length() == 0 || (duracao <= 0 || duracao >= 1440)) throw new ParametrosInvalidosException();
         if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (this.model.atividadeExiste(codigoUtilizador, codigoAtividade)) throw new AtividadeExisteException();
+        if (this.model.existeAtividade(codigoUtilizador, codigoAtividade)) throw new AtividadeExisteException();
         //this.model.criaAtividade(codigoUtilizador, codigoAtividade, descricao, data_aux, duracao);
     }
 
     public void removerAtividade(String codigoUtilizador, String codigoAtividade) throws ParametrosInvalidosException, UtilizadorNaoExisteException, AtividadeNaoExisteException {
         if (codigoUtilizador.length() == 0 || codigoAtividade.length() == 0) throw new ParametrosInvalidosException();
         if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (!this.model.atividadeExiste(codigoUtilizador,codigoAtividade)) throw new AtividadeNaoExisteException();
+        if (!this.model.existeAtividade(codigoUtilizador,codigoAtividade)) throw new AtividadeNaoExisteException();
         this.model.removerAtividade(codigoUtilizador,codigoAtividade);
     }
 

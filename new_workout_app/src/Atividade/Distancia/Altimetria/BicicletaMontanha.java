@@ -2,9 +2,10 @@ package Atividade.Distancia.Altimetria;
 
 import java.time.LocalDateTime;
 
+import Atividade.Hard;
 import Utilizador.Utilizador;
 
-public class BicicletaMontanha extends Altimetria {
+public class BicicletaMontanha extends Altimetria implements Hard {
     private double variacaoSuspensao; // mm
     private int numeroMudancas;
     private boolean discoTravao;

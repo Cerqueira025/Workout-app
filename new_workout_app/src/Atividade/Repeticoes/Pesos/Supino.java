@@ -2,9 +2,10 @@ package Atividade.Repeticoes.Pesos;
 
 import java.time.LocalDateTime;
 
+import Atividade.Hard;
 import Utilizador.Utilizador;
 
-public class Supino extends Pesos {
+public class Supino extends Pesos implements Hard {
     
     private double inclinacao;
 
