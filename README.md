@@ -6,11 +6,10 @@ A fazer:
 - Criar um plano de treino a partir do número de vezes que quer que uma atividade se repita por semana e ter em conta os seus objetivos
 
 
-
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
-
+- Métodos de criação de objetos (Atividade, Utilizador, PlanoDeTreino, ...(não sei se há mais)). Ver switch case de cada um.
 
 
 controller:
