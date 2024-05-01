@@ -7,13 +7,22 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import Atividade.Atividade;
+import Atividade.Distancia.Distancia;
+import Atividade.Distancia.Altimetria.Altimetria;
 import Atividade.Repeticoes.Abdominais;
+import Atividade.Repeticoes.Repeticoes;
+import Atividade.Repeticoes.Pesos.Pesos;
 import Excessoes.EmailExisteException;
 import Excessoes.UtilizadorExisteException;
 import PlanoTreino.PlanoDeTreino;
@@ -146,9 +155,91 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codUtilizador).getPlanoDeTreino();
     }
 
+    // ----------------- Outras queries e auxiliares ---------------- //
+
+    private double estatisticaAcumulacaoPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim, Predicate<Atividade> insOf, ToDoubleFunction<Atividade> fun) { // verificar se datas sao válidas
+        Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
+        return this.utilizadores
+               .get(codigoUtilizador)
+               .getAtividades()
+               .values()
+               .stream()
+               .filter(predicate) // filtrar atividades que estão enquadradas na data limite
+               .filter(insOf) // ex: a -> a instanceof Distancia
+               .mapToDouble(fun) // ex: a -> ((Distancia) a).getDistancia()
+               .sum();
+    }
+    
+    public double caloriasGastasPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Atividade), a -> a.getCalorias());
+    }
+
+    public int repeticoesAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        return (int) this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Repeticoes), a -> ((Repeticoes) a).getRepeticoes());
+    }
+
+    public double pesoAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Pesos), a -> ((Pesos) a).getPeso());
+    }
+
+    public int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
+        return (int) this.utilizadores.get(codigoUtilizador).getAtividades().values().stream().filter(predicate).count();
+    }
+    
+    // ----------------- Queries ---------------- //
+
+    // 1. qual é o utilizador que mais calorias dispendeu num período ou desde sempre
+    public Utilizador utilizadorMaisCalorias(LocalDate inicio, LocalDate fim) { // referência no relatório
+        Comparator<Utilizador> comparator = (u1, u2) -> {
+                                                            double dif = this.caloriasGastasPeriodo(u2.getCodigo(), inicio, fim) - this.caloriasGastasPeriodo(u1.getCodigo(), inicio, fim);
+                                                            return Double.compare(dif,0);
+                                                        };
+        
+        return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null);
+    }
+    
+    // 2. qual o utilizador que mais actividades realizou num período ou desde sempre
+    public Utilizador utilizadorComMaisAtividades(LocalDate inicio, LocalDate fim) {
+        Comparator<Utilizador> comparator = (u1, u2) -> this.numeroAtividadesPeriodo(u2.getCodigo(), inicio, fim) - this.numeroAtividadesPeriodo(u1.getCodigo(), inicio, fim);
+        return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null);
+    }
+
+    // 3. qual o tipo de actividade mais realizada
+
+    
+    
+    
+    // 4. quantos kms é que um utilizdor realizou num período ou desde sempre
+    public double distanciaPercorridaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Distancia), a -> ((Distancia) a).getDistancia());
+    }
+    
+    // 5. quantos metros de altimetria é que um utilizar totalizou num período ou desde sempre
+    public int altimetriaAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+        return (int) this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Altimetria), a -> ((Altimetria) a).getAltimetria());
+    }
+    
+    // 6. qual o plano de treino mais exigente em função do dispêndio de calorias proposto
+    
+    
+    
+    // 7. listar as actividades de um utilizador
+    public Map<String,Atividade> atividadesRealizadas(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getAtividades();
+    }
+
+    // (Bónus) listar as actividades do plano de treino de um utilizador
+    public Map<String,Atividade> atividadesPlanoDeTreino(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getAtividadesPlanoDeTreino();
+    }
+
+
     // ----------------- Salto no tempo ---------------- //
 
-    public void saltoNoTempo(LocalDate proximaData) {
+    public void saltoNoTempo(int dias) {
+        LocalDate proximaData = this.dataAtual.plusDays(dias);
+
         for(Utilizador u : this.utilizadores.values()) {
             for(Atividade a : u.getAtividades().values()) {
                 if(a.getData().toLocalDate().compareTo(proximaData) == -1) {

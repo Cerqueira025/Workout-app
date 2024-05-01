@@ -2,11 +2,8 @@ A fazer:
 ```
 - Rever dateTime do controller
 - Rever nomenclatura
-- Implementar recordes por atividade, bem como quem os consegui
+- Implementar recordes por atividade, bem como quem os conseguiu
 - Implementar recordes por atividade, por utilizador
-- Implementar, pelo menos as seguintes métricas: calorias gastas, km percorridos, metros acumulados
-- Alterar o número de iterações da classe atividade para a classe plano de treino (REVER)
-- Plano de treino recebe dias, não uma data
 
 - Implementar as queries gerais
 - Criar um plano de treino a partir do número de vezes que quer que uma atividade se repita por semana e ter em conta os seus objetivos
