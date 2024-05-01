@@ -60,7 +60,7 @@ public class Abdominais extends Repeticoes {
     }
     
     public double calorias() { 
-      return this.getUtilizador().fatorMultiplicativo() * (this.amplitude/4) * this.getDuracao() * (this.getBpm()/100) * this.getSeries();
+      return this.getUtilizador().fatorMultiplicativo() * (this.amplitude/4) * this.getDuracao() * (this.bpm()/100) * this.getSeries();
     }
     
     public int bpm(){

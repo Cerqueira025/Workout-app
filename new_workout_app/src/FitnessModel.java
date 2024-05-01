@@ -11,10 +11,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import Atividade.Atividade;
@@ -171,7 +169,7 @@ public class FitnessModel implements Serializable {
     }
     
     public double caloriasGastasPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
-        return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Atividade), a -> a.getCalorias());
+        return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Atividade), a -> a.calorias());
     }
 
     public int repeticoesAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
@@ -206,9 +204,28 @@ public class FitnessModel implements Serializable {
     }
 
     // 3. qual o tipo de actividade mais realizada
+    public String atividadeMaisRealizada() {
+        Map<String,Integer> nomeAtividades = new HashMap<>();
+        for (Utilizador u : this.utilizadores.values()) {
+            for (Atividade a : u.getAtividades().values()) {
+                String nome = a.getClass().getSimpleName();
+                if (nomeAtividades.containsKey(nome)) nomeAtividades.replace(nome,nomeAtividades.get(nome)+1);
+                else nomeAtividades.put(nome, 1);
+            }
+        }
 
-    
-    
+        String atividadeMaisRealizada = "";
+        int max = -1;
+        for (Map.Entry<String,Integer> e : nomeAtividades.entrySet()) {
+            if (e.getValue() > max) {
+                max = e.getValue();
+                atividadeMaisRealizada = e.getKey();
+            }
+        }
+
+        return atividadeMaisRealizada;
+    }
+
     
     // 4. quantos kms é que um utilizdor realizou num período ou desde sempre
     public double distanciaPercorridaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
@@ -221,8 +238,13 @@ public class FitnessModel implements Serializable {
     }
     
     // 6. qual o plano de treino mais exigente em função do dispêndio de calorias proposto
-    
-    
+    public PlanoDeTreino planoDeTreinoMaisExigente() {
+        Comparator<Utilizador> comparator = (u1, u2) -> {
+                                                            double dif = u2.getPlanoDeTreino().mediaCaloriasSemanal() - u1.getPlanoDeTreino().mediaCaloriasSemanal();
+                                                            return Double.compare(dif, 0);
+                                                        };
+        return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null).getPlanoDeTreino();
+    }    
     
     // 7. listar as actividades de um utilizador
     public Map<String,Atividade> atividadesRealizadas(String codigoUtilizador) {

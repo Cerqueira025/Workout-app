@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 public class PlanoDeTreino implements Serializable {
     private LocalDate dataRealizacao;
-    private int duracao; //duração em semanas
+    private int duracao; // duração em semanas
+    private double caloriasTotais; // calorias de todas as atividades, incluindo daquelas que já foram removidas do plano de treino por terem sido realizadas
     private Map<String, Atividade> atividades;
 
 
@@ -19,24 +20,28 @@ public class PlanoDeTreino implements Serializable {
     public PlanoDeTreino() {
         this.dataRealizacao = LocalDate.EPOCH;
         this.duracao = 0;
+        this.caloriasTotais = 0;
         this.atividades = new HashMap<>();
     }
 
     public PlanoDeTreino(LocalDate dataRealizacao, int duracao, Map<String, Atividade> atividades) {
         this.dataRealizacao = dataRealizacao;
         this.duracao = duracao;
+        this.caloriasTotais = atividades.values().stream().mapToDouble(a -> a.calorias()).sum();
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
     }
 
     public PlanoDeTreino(LocalDate dataRealizacao, int duracao) {
       this.dataRealizacao = dataRealizacao;
       this.duracao = duracao;
+      this.caloriasTotais = 0;
       this.atividades = new HashMap<>();
     }
 
     public PlanoDeTreino(PlanoDeTreino outro) {
         this.dataRealizacao = outro.getDataRealizacao();
         this.duracao = outro.getDuracao();
+        this.caloriasTotais = outro.getCaloriasTotais();
         this.atividades = outro.getAtividades();
     }
 
@@ -59,6 +64,14 @@ public class PlanoDeTreino implements Serializable {
         this.duracao = duracao;
     }
 
+    public double getCaloriasTotais() {
+        return this.caloriasTotais;
+    }
+
+    public void setCaloriasTotais(double caloriasTotais) {
+        this.caloriasTotais = caloriasTotais;
+    }
+
     public Map<String, Atividade> getAtividades() {
 		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
 	}
@@ -69,10 +82,16 @@ public class PlanoDeTreino implements Serializable {
 
 	public void addAtividade(Atividade atividade) {
         this.atividades.put(atividade.getCodigo(), atividade.clone());
+        this.caloriasTotais += atividade.calorias();
     }
 
     public void removeAtividade(String codigo_atividade) {
         this.atividades.remove(codigo_atividade);
+    }
+
+    public void apagaAtividade(String codigo_atividade) {
+        this.atividades.remove(codigo_atividade);
+        this.caloriasTotais -= this.atividades.get(codigo_atividade).calorias();
     }
 
     public Atividade getAtividade(String codigo_atividade) {
@@ -84,12 +103,16 @@ public class PlanoDeTreino implements Serializable {
         return this.atividades.containsKey(codigoAtividade);
     }
 
+    public double mediaCaloriasSemanal() {
+        return this.caloriasTotais/this.duracao;
+    }
 
 
     public String toString() {
         String a = "Plano de Treino{" +
                 "data='" + this.dataRealizacao + '\'' +
                 ", duração=" + this.duracao + '\'' +
+                ", calorias totais=" + this.caloriasTotais + '\'' +
                 ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
            a += atividade.toString() + ",";
@@ -104,6 +127,7 @@ public class PlanoDeTreino implements Serializable {
         PlanoDeTreino plano = (PlanoDeTreino) o;
         return this.dataRealizacao.equals(plano.getDataRealizacao())
                 && this.duracao == plano.getDuracao()
+                && Double.compare(this.caloriasTotais, plano.getCaloriasTotais()) == 0
                 && this.atividades.equals(plano.getAtividades());
     }
 

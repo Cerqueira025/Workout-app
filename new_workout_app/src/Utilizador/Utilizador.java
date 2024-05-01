@@ -1,7 +1,6 @@
 package Utilizador;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,12 +235,12 @@ public abstract class Utilizador implements Serializable {
         this.plano = new PlanoDeTreino();
     }
 
-    public void atualizaCaloriasGastas(double caloriasGastas) {
-        this.caloriasGastas += caloriasGastas;
+    public void atualizaCaloriasGastas(double caloriasAtividade) {
+        this.caloriasGastas += caloriasAtividade;
     }
 
-    public void atualizaPeso(double caloriasGastas) {
-        this.peso -= caloriasGastas/7000;
+    public void atualizaPeso(double caloriasAtividade) {
+        this.peso -= caloriasAtividade/7000;
     }
 
 

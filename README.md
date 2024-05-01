@@ -1,11 +1,8 @@
 A fazer: 
 ```
-- Rever dateTime do controller
 - Rever nomenclatura
 - Implementar recordes por atividade, bem como quem os conseguiu
 - Implementar recordes por atividade, por utilizador
-
-- Implementar as queries gerais
 - Criar um plano de treino a partir do número de vezes que quer que uma atividade se repita por semana e ter em conta os seus objetivos
 
 
@@ -13,6 +10,12 @@ A fazer:
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
+
+
+
+controller:
+- Rever dateTime do controller
+
 
 view:
 - lidar com as exceções todas
@@ -32,6 +35,9 @@ Dúvida: Atividade é agregação de utilizador, mas não sabemos se o utilizado
 Reposta: 
 
 Dúvida: temos muitos métodos no model que apresentam exatamente o mesmo início (this.xxxxx.get(codigo).xx). O strategy resolve isso? Ou não há forma de resolver este problema?
+Resposta:
 
+Dúvida: Devemos eliminar os construtores não usados?
+Resposta:
 
 ```

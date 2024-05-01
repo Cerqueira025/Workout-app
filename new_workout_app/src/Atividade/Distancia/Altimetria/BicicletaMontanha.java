@@ -93,7 +93,7 @@ public class BicicletaMontanha extends Altimetria implements Hard {
       if(this.hasDiscoTravao()){
         mult = 0.5;
       }
-      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100) * this.getSeries();
+      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.bpm()/100) * this.getSeries();
     }
 
     public int bpm(){
