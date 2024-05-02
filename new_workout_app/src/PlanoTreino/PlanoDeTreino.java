@@ -23,19 +23,19 @@ public class PlanoDeTreino implements Serializable {
         this.caloriasTotais = 0;
         this.atividades = new HashMap<>();
     }
-
-    public PlanoDeTreino(LocalDate dataRealizacao, int duracao, Map<String, Atividade> atividades) {
-        this.dataRealizacao = dataRealizacao;
-        this.duracao = duracao;
-        this.caloriasTotais = atividades.values().stream().mapToDouble(a -> a.calorias()).sum();
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-    }
-
+    
     public PlanoDeTreino(LocalDate dataRealizacao, int duracao) {
       this.dataRealizacao = dataRealizacao;
       this.duracao = duracao;
       this.caloriasTotais = 0;
       this.atividades = new HashMap<>();
+    }
+
+    public PlanoDeTreino(LocalDate dataRealizacao, int duracao, Map<String, Atividade> atividades) {
+        this.dataRealizacao = dataRealizacao;
+        this.duracao = duracao;
+        this.caloriasTotais = atividades.values().stream().mapToDouble(a -> a.calorias()).sum();
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public PlanoDeTreino(PlanoDeTreino outro) {
@@ -73,15 +73,15 @@ public class PlanoDeTreino implements Serializable {
     }
 
     public Map<String, Atividade> getAtividades() {
-		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
 	public void setAtividades(Map<String, Atividade> atividades) {
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
 	public void addAtividade(Atividade atividade) {
-        this.atividades.put(atividade.getCodigo(), atividade.clone());
+        this.atividades.put(atividade.getCodigo(), atividade);
         this.caloriasTotais += atividade.calorias();
     }
 
@@ -96,7 +96,7 @@ public class PlanoDeTreino implements Serializable {
 
     public Atividade getAtividade(String codigo_atividade) {
         if(!this.atividades.containsKey(codigo_atividade)) return null;
-        return this.atividades.get(codigo_atividade).clone();
+        return this.atividades.get(codigo_atividade);
     }
 
     public boolean existeAtividade(String codigoAtividade) {

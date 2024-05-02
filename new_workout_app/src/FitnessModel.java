@@ -42,7 +42,7 @@ public class FitnessModel implements Serializable {
 
     public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores) {
         this.dataAtual = data;
-        this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public FitnessModel(FitnessModel outro) {
@@ -61,11 +61,11 @@ public class FitnessModel implements Serializable {
     }
     
     public Map<String, Utilizador> getUtilizadores() {
-        return this.utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        return this.utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public void setUtilizadores(Map<String, Utilizador> utilizadores) {
-        this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     // ----------------- Utilizador ---------------- //
@@ -82,15 +82,17 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codigo).getPassword().equals(password);
     }
 
-    private void addUtilizador(Utilizador utilizador) throws UtilizadorExisteException, EmailExisteException {
+    public void addUtilizador(Utilizador utilizador) throws UtilizadorExisteException, EmailExisteException {
         if (this.codigoUtilizadorExiste(utilizador.getCodigo())) throw new UtilizadorExisteException(utilizador.getCodigo());
         if (this.emailUtilizadorExiste(utilizador.getEmail())) throw new EmailExisteException(utilizador.getEmail());
-        this.utilizadores.put(utilizador.getCodigo(), utilizador.clone());
+        this.utilizadores.put(utilizador.getCodigo(), utilizador);
     }
 
     public void criaUtilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
                         String nome, Genero genero, String morada, String email, String password) throws UtilizadorExisteException, EmailExisteException {
-        Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, caloriasGastas, altura,
+        
+        
+                            Utilizador utilizador = new PraticanteOcasional(codigo, bpmMedio, peso, caloriasGastas, altura,
                                                         nome, genero, morada, email, password);
         this.addUtilizador(utilizador);
     }
@@ -100,8 +102,7 @@ public class FitnessModel implements Serializable {
     }
 
     public Utilizador getUtilizador(String codigo) {
-        if(!this.utilizadores.containsKey(codigo)) return null;
-        return this.utilizadores.get(codigo).clone();
+        return this.utilizadores.get(codigo);
     }
 
 
@@ -151,6 +152,10 @@ public class FitnessModel implements Serializable {
 
     public PlanoDeTreino getPlanoDeTreino(String codUtilizador) {
         return this.utilizadores.get(codUtilizador).getPlanoDeTreino();
+    }
+
+    public Map<String, Atividade> getAtividadesPlanoDeTreino(String codUtilizador) {
+        return this.utilizadores.get(codUtilizador).getAtividadesPlanoDeTreino();
     }
 
     // ----------------- Outras queries e auxiliares ---------------- //
@@ -317,7 +322,7 @@ public class FitnessModel implements Serializable {
         object_output.close();
     }
 
-    public static FitnessModel carregaEstado(String nomeFicheiro) throws IOException, ClassNotFoundException {
+    public FitnessModel carregaEstado(String nomeFicheiro) throws IOException, ClassNotFoundException {
         FileInputStream file_input = new FileInputStream(nomeFicheiro);
         ObjectInputStream object_input = new ObjectInputStream(file_input);
 

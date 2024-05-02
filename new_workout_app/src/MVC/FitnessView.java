@@ -1,9 +1,11 @@
+package MVC;
 import java.util.List;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import TipoMenu;
 import Excessoes.AtividadeExisteException;
 import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;

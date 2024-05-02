@@ -53,8 +53,8 @@ public abstract class Utilizador implements Serializable {
         this.morada = morada;
         this.email = email;
         this.password = password;
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-        this.plano = plano.clone(); //verificar clone
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.plano = plano; //verificar clone
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
@@ -172,28 +172,28 @@ public abstract class Utilizador implements Serializable {
 	}
   
     public PlanoDeTreino getPlanoDeTreino() {
-        return this.plano.clone();
+        return this.plano;
     }
 
     public void setPlanoDeTreino(PlanoDeTreino plano) {
-        this.plano = plano.clone();
+        this.plano = plano;
     }
 
 	public Map<String, Atividade> getAtividades() {
-		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
 	public void setAtividades(Map<String, Atividade> atividades) {
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
     public List<Atividade> getAtividadesList() {
-        return this.atividades.values().stream().map(a -> a.clone()).collect(Collectors.toList());
+        return this.atividades.values().stream().map(a -> a).collect(Collectors.toList());
     }
     
     public Atividade getAtividade(String codigo_atividade) {
         if(!existeAtividade(codigo_atividade)) return null;
-        return this.atividades.get(codigo_atividade).clone();
+        return this.atividades.get(codigo_atividade);
     }
     
     public Map<String, Atividade> getAtividadesPlanoDeTreino() {
@@ -208,7 +208,7 @@ public abstract class Utilizador implements Serializable {
 
 
 	public void addAtividade(Atividade atividade) {
-        this.atividades.put(atividade.getCodigo(), atividade.clone());
+        this.atividades.put(atividade.getCodigo(), atividade);
     }
 
     public void removeAtividade(String codigo_atividade) {

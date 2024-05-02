@@ -1,5 +1,7 @@
 A fazer: 
 ```
+
+- VERIFICAR CLONESSSS
 - Rever nomenclatura
 - Implementar recordes por atividade, bem como quem os conseguiu
 - Implementar recordes por atividade, por utilizador
@@ -9,18 +11,10 @@ A fazer:
 model: 
 - Melhorar toString, rever as calorias
 - Colocar throws no model
-- Métodos de criação de objetos (Atividade, Utilizador, PlanoDeTreino, ...(não sei se há mais)). Ver switch case de cada um.
-
-
-controller:
-- Rever dateTime do controller
 
 
 view:
 - lidar com as exceções todas
-- Melhorar a forma como se lê o género
-- ter verificações ao clicar em certas opções (Listas vazias, ...)
-- fazer switch para distinguir diferentes criações
 ```
 
     1. implementar testes para todas a classes
@@ -37,6 +31,20 @@ Dúvida: temos muitos métodos no model que apresentam exatamente o mesmo iníci
 Resposta:
 
 Dúvida: Devemos eliminar os construtores não usados?
+Resposta:
+
+Dúvida: Como prevenir carregamento de um ficheiro inexistente?
+Resposta:
+
+Dúvida: A criação e adição de um objeto tem de estar no menu ou no model + faz sentido fazer uso dos métodos do MENU para dar display das opções?
+Resposta:
+
+Dúvida: O que se passa com os buffers do scanner na leitura da opção?
+
+Dúvida: Aonde colocar os throws?
+Resposta:
+
+Dúvida: No caso de os swithces da criação de atividades forem para default, é suposto devolvermos o quê? (estamos a criar um sprint sem parâmetros)
 Resposta:
 
 ```
