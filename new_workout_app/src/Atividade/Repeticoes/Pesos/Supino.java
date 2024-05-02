@@ -17,7 +17,7 @@ public class Supino extends Pesos {
 
     public Supino(String codigo, String descricao, LocalDate data,int duracao, Utilizador user, int repeticoes, double peso, double inclinacao) {
         super(codigo, descricao, data, duracao, user, repeticoes, peso);
-        this.inclinacao = 0;
+        this.inclinacao = inclinacao;
     }
 
     public Supino(Supino outro) {
@@ -26,7 +26,7 @@ public class Supino extends Pesos {
     }
 
 
-    // ------------------- Construtores ------------------- //
+    // ------------------- Métodos getters e setters ------------------- //
 
 
     public double getInclinacao() {
