@@ -1,6 +1,5 @@
 package Utilizador.TiposUtilizador;
 
-import java.io.Serializable;
 import java.util.Map;
 import Atividade.Atividade;
 import PlanoTreino.PlanoDeTreino;
@@ -16,16 +15,15 @@ public class Profissional extends Utilizador {
         super();
     }
 
-    public Profissional(String codigo, int bpmMedio, double peso, int altura,
+    public Profissional(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
                         String nome, Genero genero, String morada, String email, String password,
                         Map<String, Atividade> atividades, PlanoDeTreino plano) {
-        super(codigo, bpmMedio, peso, altura, nome, genero, morada, email, password, atividades, plano);
+        super(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password, atividades, plano);
     }
 
-
-    public Profissional(String codigo, int bpmMedio, double peso, int altura,
+    public Profissional(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
                         String nome, Genero genero, String morada, String email, String password) {
-        super(codigo, bpmMedio, peso, altura, nome, genero, morada, email, password);
+        super(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
     }
 
 

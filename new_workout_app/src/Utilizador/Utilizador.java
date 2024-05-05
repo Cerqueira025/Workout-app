@@ -2,6 +2,7 @@ package Utilizador;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import Atividade.Atividade;
@@ -9,14 +10,15 @@ import PlanoTreino.PlanoDeTreino;
 
 public abstract class Utilizador implements Serializable {
     private int    bpmMedio;
-    private int    altura; // Sem informação no guião 
-    private double peso; // Sem informação no guião
+    private int    altura; 
+    private double peso;
+    private double caloriasGastas;
     private String codigo;
     private String nome;
     private Genero genero;
     private String morada;
     private String email;
-    private String password; // Sem informação no guião
+    private String password;
     private Map<String, Atividade> atividades;
     private PlanoDeTreino plano;
 
@@ -26,6 +28,7 @@ public abstract class Utilizador implements Serializable {
     public Utilizador() {
         this.bpmMedio = 0;
         this.peso = 0;
+        this.caloriasGastas = 0;
         this.altura = 0;
         this.codigo = "";
         this.nome = "";
@@ -37,27 +40,29 @@ public abstract class Utilizador implements Serializable {
         this.plano = new PlanoDeTreino();
     }
 
-    public Utilizador(String codigo, int bpmMedio, double peso, int altura,
+    public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
             String nome, Genero genero, String morada, String email, String password,
             Map<String, Atividade> atividades, PlanoDeTreino plano) {
         this.codigo = codigo;
         this.bpmMedio = bpmMedio;
         this.peso = peso;
+        this.caloriasGastas = caloriasGastas;
         this.altura = altura;
         this.nome = nome;
         this.genero = genero;
         this.morada = morada;
         this.email = email;
         this.password = password;
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
-        this.plano = plano.clone(); //verificar clone
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.plano = plano; //verificar clone
     }
 
-    public Utilizador(String codigo, int bpmMedio, double peso, int altura,
+    public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
             String nome, Genero genero, String morada, String email, String password) {
         this.codigo = codigo;
         this.bpmMedio = bpmMedio;
         this.peso = peso;
+        this.caloriasGastas = caloriasGastas;
         this.altura = altura;
         this.nome = nome;
         this.genero = genero;
@@ -72,6 +77,7 @@ public abstract class Utilizador implements Serializable {
         this.codigo = outro.getCodigo();
         this.bpmMedio = outro.getBpmMedio();
         this.peso = outro.getPeso();
+        this.caloriasGastas = outro.getCaloriasGastas();
         this.altura = outro.getAltura();
         this.nome = outro.getNome();
         this.genero = outro.getGenero();
@@ -108,6 +114,14 @@ public abstract class Utilizador implements Serializable {
 	public void setPeso(double peso) {
 		this.peso = peso;
 	}
+
+    public double getCaloriasGastas() {
+        return this.caloriasGastas;
+    }
+
+    public void setCaloriasGastas(double caloriasGastas) {
+        this.caloriasGastas = caloriasGastas;
+    }
 
 	public int getAltura() {
 		return this.altura;
@@ -158,41 +172,76 @@ public abstract class Utilizador implements Serializable {
 	}
   
     public PlanoDeTreino getPlanoDeTreino() {
-        return this.plano.clone();
+        return this.plano;
     }
 
     public void setPlanoDeTreino(PlanoDeTreino plano) {
-        this.plano = plano.clone();
+        this.plano = plano;
     }
 
-
 	public Map<String, Atividade> getAtividades() {
-		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+		return this.atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
 	public void setAtividades(Map<String, Atividade> atividades) {
-        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue().clone()));
+        this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
+    public List<Atividade> getAtividadesList() {
+        return this.atividades.values().stream().map(a -> a).collect(Collectors.toList());
+    }
+    
+    public Atividade getAtividade(String codigo_atividade) {
+        if(!existeAtividade(codigo_atividade)) return null;
+        return this.atividades.get(codigo_atividade);
+    }
+    
+    public Map<String, Atividade> getAtividadesPlanoDeTreino() {
+        return this.plano.getAtividades();
+    }
+
+    public Atividade getAtividadePlanoDeTreino(String codigoAtividade) {
+        return this.plano.getAtividade(codigoAtividade);
+    }
+
+    // ----------------- outros métodos ----------------- //
+
+
 	public void addAtividade(Atividade atividade) {
-        this.atividades.put(atividade.getCodigo(), atividade.clone());
+        this.atividades.put(atividade.getCodigo(), atividade);
     }
 
     public void removeAtividade(String codigo_atividade) {
         this.atividades.remove(codigo_atividade);
     }
 
-    public Atividade getAtividade(String codigo_atividade) {
-        if(!atividadeExiste(codigo_atividade)) return null;
-        return this.atividades.get(codigo_atividade).clone();
-    }
-
-    public boolean atividadeExiste(String codigo) {
+    public boolean existeAtividade(String codigo) {
         return this.atividades.containsKey(codigo);
     }
 
+    public void addAtividadePlanoDeTreino(Atividade atividade) {
+        this.plano.addAtividade(atividade);
+    }
 
+    public void removeAtividadePlanoDeTreino(String codAtividade) {
+        this.plano.removeAtividade(codAtividade);
+    }
 
+    public boolean existeAtividadePlanoDeTreino(String codigo) {
+        return this.plano.existeAtividade(codigo);
+    }
+
+    public void limparPlanoDeTreino() {
+        this.plano = new PlanoDeTreino();
+    }
+
+    public void atualizaCaloriasGastas(double caloriasAtividade) {
+        this.caloriasGastas += caloriasAtividade;
+    }
+
+    public void atualizaPeso(double caloriasAtividade) {
+        this.peso -= caloriasAtividade/7000;
+    }
 
 
 
@@ -207,6 +256,7 @@ public abstract class Utilizador implements Serializable {
                 ", bpm='" + this.bpmMedio + '\'' +
                 ", altura='" + this.altura + '\'' +
                 ", peso='" + this.peso + '\'' +
+                ", calorias gastas='" + this.caloriasGastas + '\'' +
                 ", plano de treino=' " + this.plano.toString() + '\'' +
                 ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
@@ -224,6 +274,7 @@ public abstract class Utilizador implements Serializable {
         return this.codigo.equals(outro.getCodigo())
                 && this.bpmMedio == outro.getBpmMedio()
                 && Double.compare(this.peso, outro.getPeso()) == 0
+                && Double.compare(this.caloriasGastas, outro.getCaloriasGastas()) == 0
                 && this.altura == outro.getAltura()
                 && this.nome.equals(outro.getNome())
                 && this.genero == outro.getGenero()

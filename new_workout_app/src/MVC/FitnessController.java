@@ -1,10 +1,9 @@
+package MVC;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-
+import FitnessModel;
 import Excessoes.AtividadeExisteException;
 import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
@@ -56,7 +55,7 @@ public class FitnessController {
             throw new ParametrosInvalidosException();
         }
 
-        this.model.criaUtilizador(codigo, bpmMedio, peso, altura, nome, g, morada, email, password);
+        this.model.criaUtilizador(codigo, bpmMedio, peso, 0, altura, nome, g, morada, email, password);
     }
 
     public void loginUtilizador(String codigo, String password) throws UtilizadorNaoExisteException, ParametrosInvalidosException, CredenciaisNaoCoincidem {
@@ -71,19 +70,19 @@ public class FitnessController {
     // ----------------- Atividades ---------------- //
 
     public void adicionarAtividade(String codigoUtilizador, String codigoAtividade, String descricao, String data, int duracao) throws DateTimeParseException, UtilizadorNaoExisteException, ParametrosInvalidosException, AtividadeExisteException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate data_aux = LocalDate.parse(data, formatter);
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        //LocalDate data_aux = LocalDate.parse(data, formatter);
 
         if (codigoUtilizador.length() == 0 || codigoAtividade.length() == 0 || descricao.length() == 0 || (duracao <= 0 || duracao >= 1440)) throw new ParametrosInvalidosException();
         if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (this.model.atividadeExiste(codigoUtilizador, codigoAtividade)) throw new AtividadeExisteException();
-        this.model.criaAtividade(codigoUtilizador, codigoAtividade, descricao, data_aux, duracao);
+        if (this.model.existeAtividade(codigoUtilizador, codigoAtividade)) throw new AtividadeExisteException();
+        //this.model.criaAtividade(codigoUtilizador, codigoAtividade, descricao, data_aux, duracao);
     }
 
     public void removerAtividade(String codigoUtilizador, String codigoAtividade) throws ParametrosInvalidosException, UtilizadorNaoExisteException, AtividadeNaoExisteException {
         if (codigoUtilizador.length() == 0 || codigoAtividade.length() == 0) throw new ParametrosInvalidosException();
         if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (!this.model.atividadeExiste(codigoUtilizador,codigoAtividade)) throw new AtividadeNaoExisteException();
+        if (!this.model.existeAtividade(codigoUtilizador,codigoAtividade)) throw new AtividadeNaoExisteException();
         this.model.removerAtividade(codigoUtilizador,codigoAtividade);
     }
 

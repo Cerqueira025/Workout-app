@@ -1,10 +1,11 @@
 package Atividade.Repeticoes.Pesos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import Atividade.Hard;
 import Utilizador.Utilizador;
 
-public class Supino extends Pesos {
+public class Supino extends Pesos implements Hard {
     
     private double inclinacao;
 
@@ -60,11 +61,11 @@ public class Supino extends Pesos {
     }
     
     public double calorias() {
-        return this.getUser().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.getBpm()/100);
+        return this.getUtilizador().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.bpm()/100) * this.getSeries();
     }
 
     public int bpm(){
-      return (int) (this.getUser().getBpmMedio() + 10 * this.getUser().fatorMultiplicativo());
+      return (int) (this.getUtilizador().getBpmMedio() + 10 * this.getUtilizador().fatorMultiplicativo());
     }
 }
 

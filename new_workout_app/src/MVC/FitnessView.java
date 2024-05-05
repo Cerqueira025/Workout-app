@@ -1,9 +1,11 @@
+package MVC;
 import java.util.List;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import TipoMenu;
 import Excessoes.AtividadeExisteException;
 import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;
@@ -18,6 +20,7 @@ public class FitnessView {
 
     private int op;
     private String codUtilizador;
+    private String ficheiroCarregado;
     private TipoMenu menu;
     private List<String> opcoes;
     private List<String> atividades;
@@ -26,12 +29,13 @@ public class FitnessView {
    
 
     public FitnessView(String[] opcoes, String[] atividades, FitnessController controller) {
-        this.opcoes = Arrays.asList(opcoes);
-        this.atividades = Arrays.asList(atividades);
-        this.menu = TipoMenu.Principal;
-        this.controller = controller;
         this.op = 0;
         this.codUtilizador = "";
+        this.ficheiroCarregado = "";
+        this.menu = TipoMenu.Principal;
+        this.opcoes = Arrays.asList(opcoes);
+        this.atividades = Arrays.asList(atividades);
+        this.controller = controller;
     }
 
 
@@ -48,16 +52,14 @@ public class FitnessView {
                     break;
             }
         } while (this.menu != TipoMenu.Sair);
-
-        guardaEstado();
     }
 
 
     public void runPrincipal() {
         do {
-            String[] opcoes = new String[] {"Registar", "Login", "Carregar estado"};
+            String[] opcoes = new String[] {"Registar", "Login", "Carregar estado", "Guardar e sair"};
             this.opcoes = Arrays.asList(opcoes);
-            executa();
+            executa(() -> showMenu(""), true);
             switch (this.op) {
                 case 1:
                     registarUtilizador();
@@ -67,6 +69,10 @@ public class FitnessView {
                     break;
                 case 3:
                     carregarEstado();
+                    break;
+                case 4:
+                    guardaEstado();
+                    break;
                 default:
                     break;
             }
@@ -79,7 +85,7 @@ public class FitnessView {
         do {
             String [] opcoes = new String[] {"Adicionar uma atividade solta (realizada)", "Remover uma atividade realizada", "Mostrar todas as atividades realizadas", "Adicionar um plano de treino", "Remover um plano de treino", "Adicionar uma atividade no plano de treino", "Remover uma atividade do plano de treino", "Mostrar o plano de treino detalhado", "Mostrar o plano de treino geral"};
             this.opcoes = Arrays.asList(opcoes);
-            executa();
+            executa(() -> showMenu(" UTILIZADOR"), true);
             switch (this.op) {
                 case 1:
                     adicionarAtividade();
@@ -88,25 +94,25 @@ public class FitnessView {
                     removerAtividade();
                     break;
                 case 3:
-                    // Mostrar todas as atividades realizadas;
+                    // Mostrar todas as atividades realizadas; (Feito)
                     break;
                 case 4:
-                    // Adicionar um plano de treino;
+                    // Adicionar um plano de treino; (Em processo...)
                     break;
                 case 5:
-                    // Remover um plano de treino;
+                    // Remover um plano de treino; (Feito)
                     break;
                 case 6:
-                    // Adicionar uma atividade no plano de treino;
+                    // Adicionar uma atividade no plano de treino; (Feito)
                     break;
                 case 7:
-                    // Remover uma atividade do plano de treino;
+                    // Remover uma atividade do plano de treino; (Feito)
                     break;
                 case 8:
-                    // Mostrar o plano de treino detalhado;
+                    // Mostrar o plano de treino detalhado; (Feito)
                     break;
                 case 9:
-                    // Mostrar o plano de treino geral;
+                    // Mostrar o plano de treino geral; (Provavelmente será ignorado)
                     break;
                 default:
                     break;
@@ -116,26 +122,26 @@ public class FitnessView {
     }
 
 
-    public void executa() {
+    public void executa(Runnable runnable, boolean ler0) {
         do {
-            showMenu();
-            this.op = lerOpcao(this.opcoes.size());
+            runnable.run();
+            this.op = lerOpcao(ler0);
         } while (this.op == -1);
     }
     
+    private void showMenu(String titulo) {
+        System.out.println("\n=======MENU" + titulo + "=======\n");
+        showOpcoes();
+        System.out.println("0 - Sair");
+    }
 
-
-    private void showMenu() {
-        System.out.println("\n=======MENU=======\n");
+    private void showOpcoes() {
         for (int i = 0; i < this.opcoes.size(); i++) {
             System.out.println(i+1 + " - " + this.opcoes.get(i));
         }
-        System.out.println("0 - Guardar e Sair");
     }
 
-
-
-    public int lerOpcao(int numeroOpcoes) {
+    public int lerOpcao(boolean ler0) {
         int op;
         Scanner scanner = new Scanner(System.in);
         
@@ -145,7 +151,7 @@ public class FitnessView {
         } catch (InputMismatchException e) {
             op = -1;
         }
-        if (op < 0 || op > numeroOpcoes) {
+        if (op < (ler0 ? 0 : 1) || op > this.opcoes.size()) {
             System.out.println("\n[ERRO] Opção Inválida!\n");
             op = -1;
         }
@@ -155,14 +161,27 @@ public class FitnessView {
     public void guardaEstado() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.print("\nIndique o nome do ficheiro a guardar: ");
-        String nomeFicheiro = scanner.nextLine();
+        String nomeFicheiroAGuardar = "";
+
+        if (this.ficheiroCarregado.length() > 0) {
+            System.out.print("\nCarregou este estado a partir de um ficheiro. Pretende guardar no mesmo ficheiro?\n");
+            String [] opcoes = new String[] {"Sim", "Não"};
+            this.opcoes = Arrays.asList(opcoes);
+            executa(() -> showOpcoes(), false);
+            if (this.op == 1)
+                nomeFicheiroAGuardar = this.ficheiroCarregado;
+        }
+        if (this.ficheiroCarregado.length() <= 0 || this.op == 2) {     
+            System.out.print("\nIndique o nome do novo ficheiro a guardar: ");
+            nomeFicheiroAGuardar = scanner.nextLine();
+        }
         try {
-            this.controller.guardaEstado(nomeFicheiro);
+            this.controller.guardaEstado(nomeFicheiroAGuardar);
             System.out.println("\n[SUCESSO] Ficheiro guardado\n");
         } catch (IOException e) {
             System.out.println("\n[ERRO] Falha ao guardar dados\n" + e);
         }
+        this.op = 0;
     }
 
 
@@ -239,10 +258,10 @@ public class FitnessView {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("\nFicheiro a carregar: ");
-        String nomeFicheiro = scanner.nextLine();
+        this.ficheiroCarregado = scanner.nextLine();
 
         try {
-            this.controller.carregaEstado(nomeFicheiro);
+            this.controller.carregaEstado(this.ficheiroCarregado);
             System.out.println("\n[SUCESSO] Ficheiro carregado\n");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("\n[ERRO] Falha ao ler dados\n" + e);
@@ -252,7 +271,7 @@ public class FitnessView {
 
     public void adicionarAtividade() {
         this.opcoes = this.atividades;
-        executa();
+        executa(() -> showOpcoes(), false);
 
         Scanner scanner = new Scanner(System.in);
 

@@ -1,7 +1,8 @@
 package Atividade;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
 
@@ -10,11 +11,12 @@ public abstract class Atividade implements Serializable {
     private String codigo;
     private String descricao;
     //private String local;
-    private LocalDate data;
+    private LocalDateTime data;
     private int duracao;
-    private int bpm; //------------ bpm = user.bpmMedio*user.peso*(fator de atividade)
+    private int bpm; //------------ bpm = utilizador.bpmMedio*utilizador.peso*(fator de atividade)
+    private int series;
     private double calorias;
-    private Utilizador user;
+    private Utilizador utilizador;
 
 
     // ------------------- Construtores ------------------- //
@@ -22,21 +24,23 @@ public abstract class Atividade implements Serializable {
     public Atividade() {
         this.codigo = "";
         this.descricao = "";
-        this.data = LocalDate.EPOCH;
+        this.data = LocalDateTime.of(1970, 01, 01, 00, 00 ,00);
         this.duracao = 0;
         this.bpm = 0;
+        this.series = 0;
         this.calorias = 0;
-        this.user = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
+        this.utilizador = new PraticanteOcasional(); /* UTILIZADOR PRATICANTE OCASIONAL*/
     }
 
-    public Atividade(String codigo, String descricao, LocalDate data, int duracao, Utilizador user) {
+    public Atividade(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador) {
         this.codigo = codigo;
         this.descricao = descricao;
         this.data = data;
         this.duracao = duracao;
         this.bpm = 0;
+        this.series = series;
         this.calorias = 0;
-        this.user = user.clone();
+        this.utilizador = utilizador;
     }
 
     public Atividade(Atividade outro){
@@ -45,8 +49,9 @@ public abstract class Atividade implements Serializable {
         this.data = outro.getData();
         this.duracao = outro.getDuracao();
         this.bpm = outro.getBpm();
+        this.series = outro.getSeries();
         this.calorias = outro.getCalorias();
-        this.user = outro.getUser();
+        this.utilizador = outro.getUtilizador();
     }
 
 
@@ -69,11 +74,11 @@ public abstract class Atividade implements Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDate getData(){
+    public LocalDateTime getData(){
         return this.data;
     }
 
-    public void setData(LocalDate data){
+    public void setData(LocalDateTime data){
         this.data = data;
     }
 
@@ -85,12 +90,12 @@ public abstract class Atividade implements Serializable {
         this.duracao = duracao;
     }
 
-    public Utilizador getUser() {
-        return this.user.clone();
+    public Utilizador getUtilizador() {
+        return this.utilizador;
     }
     
-    public void setUser(Utilizador user) {
-        this.user = user.clone();
+    public void setUtilizador(Utilizador utilizador) {
+        this.utilizador = utilizador;
     }
 
     public int getBpm() {
@@ -99,6 +104,14 @@ public abstract class Atividade implements Serializable {
 
     public void setBpm(int bpm) {
         this.bpm = bpm;
+    }
+    
+    public int getSeries() {
+        return this.series;
+    }
+
+    public void setSeries(int series) {
+        this.series = series;
     }
 
     public double getCalorias() {
@@ -116,6 +129,7 @@ public abstract class Atividade implements Serializable {
                 ", data='" + this.data + '\'' +
                 ", duração='" + this.duracao + '\'' +
                 ", bpm médio='" + this.bpm + '\'' +
+                ", séries='" + this.series + '\'' +
                 ", calorias='" + this.calorias +
                 "'}";
     }
@@ -129,8 +143,9 @@ public abstract class Atividade implements Serializable {
                 && this.descricao.equals(atividade.getDescricao())
                 && this.data.equals(atividade.getData())
                 && this.bpm == atividade.getBpm()
+                && this.series == atividade.getSeries()
                 && Double.compare(this.calorias, atividade.getCalorias()) == 0
-                && this.user.equals(atividade.getUser());
+                && this.utilizador.equals(atividade.getUtilizador());
     }
 
     public abstract Atividade clone();

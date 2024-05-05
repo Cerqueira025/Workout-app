@@ -1,10 +1,11 @@
 package Atividade.Distancia.Altimetria;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import Atividade.Hard;
 import Utilizador.Utilizador;
 
-public class BicicletaMontanha extends Altimetria {
+public class BicicletaMontanha extends Altimetria implements Hard {
     private double variacaoSuspensao; // mm
     private int numeroMudancas;
     private boolean discoTravao;
@@ -17,10 +18,10 @@ public class BicicletaMontanha extends Altimetria {
         this.discoTravao = false;
     }
 
-    public BicicletaMontanha(String codigo, String descricao, LocalDate data, int duracao, 
-            Utilizador user, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
+    public BicicletaMontanha(String codigo, String descricao, LocalDateTime data, int duracao, int series, 
+            Utilizador utilizador, double dist, int altimetria, double variacaoSuspensao, int numeroMudancas,
             boolean discoTravao) {
-        super(codigo, descricao, data, duracao, user, dist, altimetria);
+        super(codigo, descricao, data, duracao, series, utilizador, dist, altimetria);
         this.variacaoSuspensao = variacaoSuspensao;
         this.numeroMudancas = numeroMudancas;
         this.discoTravao = discoTravao;
@@ -92,10 +93,10 @@ public class BicicletaMontanha extends Altimetria {
       if(this.hasDiscoTravao()){
         mult = 0.5;
       }
-      return mult * this.getUser().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.getBpm()/100);
+      return mult * this.getUtilizador().fatorMultiplicativo() * (this.variacaoSuspensao/2) * this.numeroMudancas * (this.bpm()/100) * this.getSeries();
     }
 
     public int bpm(){
-      return (int) (this.getUser().getBpmMedio() + 20 * this.getUser().fatorMultiplicativo());
+      return (int) (this.getUtilizador().getBpmMedio() + 20 * this.getUtilizador().fatorMultiplicativo());
     }
 }

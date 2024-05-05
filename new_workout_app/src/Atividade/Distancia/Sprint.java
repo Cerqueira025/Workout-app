@@ -1,6 +1,6 @@
 package Atividade.Distancia;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Utilizador.Utilizador;
 
@@ -11,8 +11,8 @@ public class Sprint extends Distancia {
         super();
     }
 
-    public Sprint(String codigo, String descricao, LocalDate data, int duracao, Utilizador user, double dist) {
-        super(codigo, descricao, data, duracao, user, dist);
+    public Sprint(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador, double dist) {
+        super(codigo, descricao, data, duracao, series, utilizador, dist);
     }
 
     public Sprint(Sprint outro) {
@@ -39,10 +39,10 @@ public class Sprint extends Distancia {
     }
 
     public double calorias() {
-        return this.getUser().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.getBpm()/100);
+        return this.getUtilizador().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.bpm()/100) * this.getSeries();
     }
 
     public int bpm(){
-      return (int) (this.getUser().getBpmMedio() + 30 * this.getUser().fatorMultiplicativo());
+      return (int) (this.getUtilizador().getBpmMedio() + 30 * this.getUtilizador().fatorMultiplicativo());
     }
 }

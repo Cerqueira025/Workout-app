@@ -1,6 +1,6 @@
 package Atividade.Distancia.Altimetria;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Atividade.Distancia.Distancia;
 import Utilizador.Utilizador;
@@ -14,9 +14,9 @@ public abstract class Altimetria extends Distancia {
         this.altimetria = 0;
     }
 
-    public Altimetria(String codigo, String descricao, LocalDate data, int duracao, 
-            Utilizador user, double dist, int altimetria) {
-        super(codigo, descricao, data, duracao, user, dist);
+    public Altimetria(String codigo, String descricao, LocalDateTime data, int duracao, 
+            int series, Utilizador utilizador, double dist, int altimetria) {
+        super(codigo, descricao, data, duracao, series, utilizador, dist);
         this.altimetria = altimetria;
     }
 

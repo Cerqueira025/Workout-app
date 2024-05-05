@@ -1,6 +1,6 @@
 package Atividade.Distancia;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import Atividade.Atividade;
 import Utilizador.Utilizador;
@@ -16,9 +16,9 @@ public abstract class Distancia extends Atividade {
        velocidade = 0;
     }
 
-    public Distancia(String codigo, String descricao, LocalDate data, int duracao, 
-            Utilizador user, double dist) {
-       super(codigo, descricao, data, duracao, user); 
+    public Distancia(String codigo, String descricao, LocalDateTime data, int duracao, 
+            int series, Utilizador utilizador, double dist) {
+       super(codigo, descricao, data, duracao, series, utilizador); 
        this.distancia = dist;
        this.velocidade = dist/duracao;
     }
