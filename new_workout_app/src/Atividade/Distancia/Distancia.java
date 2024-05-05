@@ -63,7 +63,7 @@ public abstract class Distancia extends Atividade {
         return "Distancia{" +
             super.toString() + 
             "distancia='" + this.distancia + '\'' +
-            ", velocidade='" + this.velocidade + '}';
+            ", velocidade='" + this.velocidade + "'}";
     }
 
 
