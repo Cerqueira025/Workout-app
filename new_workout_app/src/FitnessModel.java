@@ -31,6 +31,7 @@ import Utilizador.TiposUtilizador.PraticanteOcasional;
 public class FitnessModel implements Serializable {
     private LocalDate dataAtual;
     private Map<String, Utilizador> utilizadores;
+    private Map<String, Utilizador> recordesGerais;
 
 
     // ----------------- Construtores ---------------- //
@@ -38,16 +39,19 @@ public class FitnessModel implements Serializable {
     public FitnessModel() {
         this.dataAtual = LocalDate.EPOCH;
         this.utilizadores = new HashMap<>();
+        this.recordesGerais = new HashMap<>();
     }
 
-    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores) {
+    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais) {
         this.dataAtual = data;
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public FitnessModel(FitnessModel outro) {
         this.dataAtual = outro.getData();
         this.utilizadores = outro.getUtilizadores();
+        this.recordesGerais = outro.getRecordesGerais();
     }
 
     // ----------------- Getters e Setters ---------------- //
@@ -68,6 +72,13 @@ public class FitnessModel implements Serializable {
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
+    public Map<String, Utilizador> getRecordesGerais() {
+        return this.recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    }
+
+    public void setRecordesGerais(Map<String, Utilizador> recordesGerais) {
+        this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    }
     // ----------------- Utilizador ---------------- //
 
     public boolean codigoUtilizadorExiste(String codigo) {
@@ -114,9 +125,22 @@ public class FitnessModel implements Serializable {
     }
 
     public void addAtividade(String codigoUtilizador, Atividade atividade) {
-        atividade.setBpm(atividade.bpm());
-        atividade.setCalorias(atividade.calorias());
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
+    }
+
+    public void addAtividadeRealizada(String codigoUtilizador, Atividade atividade) {
+        double caloriasAtividade = atividade.calorias();
+        Utilizador utilizador = this.getUtilizadores().get(codigoUtilizador);
+
+        atividade.setBpm(atividade.bpm());
+        atividade.setCalorias(caloriasAtividade);
+        
+        this.addAtividade(codigoUtilizador, atividade);
+        
+        utilizador.atualizaCaloriasGastas(caloriasAtividade);
+        utilizador.atualizaPeso(caloriasAtividade);
+        utilizador.atualizaRecordesCalorias(atividade);
+        this.atualizaRecordesGerais(utilizador);
     }
 
     // ESTE MÉTODO ESTÁ ERRADO
@@ -192,6 +216,22 @@ public class FitnessModel implements Serializable {
     public int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return (int) this.utilizadores.get(codigoUtilizador).getAtividades().values().stream().filter(predicate).count();
+    }
+
+    public double caloriasRecordeAtividade(String nomeAtividade) {
+        return this.recordesGerais.get(nomeAtividade).caloriasRecordeAtividade(nomeAtividade);
+    }
+
+    public void atualizaRecordesGerais(Utilizador utilizador) {
+        for(Map.Entry<String,Double> parRecordeCalorias : utilizador.getRecordesAtividades().entrySet()) {
+            String nomeAtividade = parRecordeCalorias.getKey();
+            Double caloriasAtividade = parRecordeCalorias.getValue();
+
+            if(!this.recordesGerais.containsKey(nomeAtividade)) 
+                this.recordesGerais.put(nomeAtividade, utilizador);
+            else if(caloriasAtividade > caloriasRecordeAtividade(nomeAtividade)) 
+                this.recordesGerais.replace(nomeAtividade, utilizador);
+        }
     }
     
     // ----------------- Queries ---------------- //
@@ -276,22 +316,27 @@ public class FitnessModel implements Serializable {
     public void saltoNoTempo(int dias) {
         LocalDate proximaData = this.dataAtual.plusDays(dias);
 
-        for(Utilizador u : this.utilizadores.values()) {
-            for(Atividade a : u.getAtividades().values()) {
-                if(a.getData().toLocalDate().isBefore(proximaData)) {
-                    double caloriasAtividade = a.calorias();
+        for(Utilizador utilizador : this.utilizadores.values()) {
+            for(Atividade atividade : utilizador.getAtividades().values()) {
+                if(atividade.getData().toLocalDate().isBefore(proximaData)) {
+                    double caloriasAtividade = atividade.calorias();
 
-                    u.removeAtividadePlanoDeTreino(a.getCodigo());
-                    u.addAtividade(a);
+                    // --------- "Realizar" atividade ---------- //
+                    utilizador.removeAtividadePlanoDeTreino(atividade.getCodigo());
+                    utilizador.addAtividade(atividade);
                     
-                    u.atualizaCaloriasGastas(caloriasAtividade);
-                    u.atualizaPeso(caloriasAtividade);
+                    // --------- Atualização de calorias e peso ---------- //
+                    utilizador.atualizaCaloriasGastas(caloriasAtividade);
+                    utilizador.atualizaPeso(caloriasAtividade);
                     
-                    // ATUALIZA RECORDES
-                    u.atualizaRecordesCalorias(a);
+                    // --------- Atualizar recordes pessoais ---------- //
+                    utilizador.atualizaRecordesCalorias(atividade);
                 }
             }
+            this.atualizaRecordesGerais(utilizador);
+            // --------- Atualiza recordes gerais ---------- //
         }
+
         this.dataAtual = proximaData;
     }
 
@@ -302,15 +347,14 @@ public class FitnessModel implements Serializable {
         if(o == null || this.getClass() != o.getClass()) return false;
         FitnessModel fm = (FitnessModel) o;
         return this.dataAtual.equals(fm.getData())
-            && this.utilizadores.equals(fm.getUtilizadores());
+            && this.utilizadores.equals(fm.getUtilizadores())
+            && this.recordesGerais.equals(fm.getRecordesGerais());
     }
 
     public String toString() {
-        String a = "Data atual='" + this.dataAtual + '\'';
-        for(Utilizador utilizador : this.utilizadores.values()) {
-            a += utilizador.toString() + " ";
-        }
-        return a;
+        return "Data atual='" + this.dataAtual + '\'' +
+               "Utilizadores ='" + this.utilizadores + '\'' + 
+               "Recordes='" + this.recordesGerais + '\'';
     }
 
     public FitnessModel clone() {

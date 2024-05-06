@@ -12,6 +12,7 @@ import Excessoes.EmailExisteException;
 import Excessoes.ParametrosInvalidosException;
 import Excessoes.UtilizadorExisteException;
 import PlanoTreino.PlanoDeTreino;
+import Users.eduardofaria..vim.undodir.FitnessModel;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.*;
@@ -84,11 +85,8 @@ public class TextUI {
             case 2:
                 genero = Genero.Feminino;
                 break;
-            case 3:
-                genero = Genero.Outro;
-                break;
             default:
-                genero = null;
+                genero = Genero.Outro;
                 break;
         }
 
@@ -218,7 +216,7 @@ public class TextUI {
 
     public void addAtividadeRealizada(String codigoUtilizador) {
         Atividade a = criarAtividade(codigoUtilizador);
-        this.model.addAtividade(codigoUtilizador, a);
+        this.model.addAtividadeRealizada(codigoUtilizador, a);
     }
 
     public void removerAtividadeRealizada(String codigoUtilizador) {

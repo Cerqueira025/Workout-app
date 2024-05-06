@@ -241,6 +241,10 @@ public abstract class Utilizador implements Serializable {
             this.recordesAtividades.replace(nomeAtividade, calorias);
     }
 
+    public double caloriasRecordeAtividade(String nomeAtividade) {
+        return this.recordesAtividades.get(nomeAtividade);
+    }
+
     public void addAtividadePlanoDeTreino(Atividade atividade) {
         this.plano.addAtividade(atividade);
     }
