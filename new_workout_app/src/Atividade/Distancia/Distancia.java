@@ -20,7 +20,7 @@ public abstract class Distancia extends Atividade {
             int series, Utilizador utilizador, double dist) {
        super(codigo, descricao, data, duracao, series, utilizador); 
        this.distancia = dist;
-       this.velocidade = dist/duracao;
+       this.velocidade = dist * 60/duracao;
     }
 
     public Distancia(Distancia outro) {

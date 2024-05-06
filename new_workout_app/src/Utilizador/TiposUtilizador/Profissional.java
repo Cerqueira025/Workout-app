@@ -17,8 +17,8 @@ public class Profissional extends Utilizador {
 
     public Profissional(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
                         String nome, Genero genero, String morada, String email, String password,
-                        Map<String, Atividade> atividades, PlanoDeTreino plano) {
-        super(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password, atividades, plano);
+                        Map<String, Atividade> atividades, Map<String, Double> recordes, PlanoDeTreino plano) {
+        super(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password, atividades, recordes, plano);
     }
 
     public Profissional(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,

@@ -114,6 +114,8 @@ public class FitnessModel implements Serializable {
     }
 
     public void addAtividade(String codigoUtilizador, Atividade atividade) {
+        atividade.setBpm(atividade.bpm());
+        atividade.setCalorias(atividade.calorias());
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
 
@@ -143,6 +145,8 @@ public class FitnessModel implements Serializable {
     }
 
     public void addAtividadePlanoDeTreino(String codUtilizador, Atividade atividade) {
+        atividade.setBpm(atividade.bpm());
+        atividade.setCalorias(atividade.calorias());
         this.utilizadores.get(codUtilizador).addAtividadePlanoDeTreino(atividade);
     }
 
@@ -256,6 +260,11 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codigoUtilizador).getAtividades();
     }
 
+    // (Bónus) listar os recordes de um utilizador
+    public Map<String,Double> recordesCalorias(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getRecordesAtividades();
+    }
+
     // (Bónus) listar as actividades do plano de treino de um utilizador
     public Map<String,Atividade> atividadesPlanoDeTreino(String codigoUtilizador) {
         return this.utilizadores.get(codigoUtilizador).getAtividadesPlanoDeTreino();
@@ -269,18 +278,17 @@ public class FitnessModel implements Serializable {
 
         for(Utilizador u : this.utilizadores.values()) {
             for(Atividade a : u.getAtividades().values()) {
-                if(a.getData().toLocalDate().compareTo(proximaData) == -1) {
+                if(a.getData().toLocalDate().isBefore(proximaData)) {
                     double caloriasAtividade = a.calorias();
-
-                    a.setBpm(a.bpm());
-                    a.setCalorias(caloriasAtividade);
 
                     u.removeAtividadePlanoDeTreino(a.getCodigo());
                     u.addAtividade(a);
                     
                     u.atualizaCaloriasGastas(caloriasAtividade);
                     u.atualizaPeso(caloriasAtividade);
+                    
                     // ATUALIZA RECORDES
+                    u.atualizaRecordesCalorias(a);
                 }
             }
         }

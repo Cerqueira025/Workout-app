@@ -20,6 +20,7 @@ public abstract class Utilizador implements Serializable {
     private String email;
     private String password;
     private Map<String, Atividade> atividades;
+    private Map<String, Double> recordesAtividades;
     private PlanoDeTreino plano;
 
 
@@ -37,12 +38,13 @@ public abstract class Utilizador implements Serializable {
         this.email = "";
         this.password = "";
         this.atividades = new HashMap<>();
+        this.recordesAtividades = new HashMap<>();
         this.plano = new PlanoDeTreino();
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
             String nome, Genero genero, String morada, String email, String password,
-            Map<String, Atividade> atividades, PlanoDeTreino plano) {
+            Map<String, Atividade> atividades, Map<String, Double> recordes, PlanoDeTreino plano) {
         this.codigo = codigo;
         this.bpmMedio = bpmMedio;
         this.peso = peso;
@@ -54,6 +56,7 @@ public abstract class Utilizador implements Serializable {
         this.email = email;
         this.password = password;
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.recordesAtividades = recordes.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.plano = plano; //verificar clone
     }
 
@@ -70,6 +73,7 @@ public abstract class Utilizador implements Serializable {
         this.email = email;
         this.password = password;
         this.atividades = new HashMap<>();
+        this.recordesAtividades = new HashMap<>();
         this.plano = new PlanoDeTreino();
     }
 
@@ -85,6 +89,7 @@ public abstract class Utilizador implements Serializable {
         this.email = outro.getEmail();
         this.password = outro.getPassword();
         this.atividades = outro.getAtividades();
+        this.recordesAtividades = outro.getRecordesAtividades();
         this.plano = outro.getPlanoDeTreino();
     }
 
@@ -195,6 +200,14 @@ public abstract class Utilizador implements Serializable {
         if(!existeAtividade(codigo_atividade)) return null;
         return this.atividades.get(codigo_atividade);
     }
+
+    public Map<String, Double> getRecordesAtividades() {
+        return this.recordesAtividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    }
+
+    public void setRecordesAtividades(Map<String, Double> recordes) {
+        this.recordesAtividades = recordes.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    }
     
     public Map<String, Atividade> getAtividadesPlanoDeTreino() {
         return this.plano.getAtividades();
@@ -217,6 +230,15 @@ public abstract class Utilizador implements Serializable {
 
     public boolean existeAtividade(String codigo) {
         return this.atividades.containsKey(codigo);
+    }
+
+    public void atualizaRecordesCalorias(Atividade a) {
+        String nomeAtividade = a.getClass().getSimpleName();
+        double calorias = a.calorias();
+        if (!this.recordesAtividades.containsKey(nomeAtividade))
+            this.recordesAtividades.put(nomeAtividade, calorias);
+        else if (this.recordesAtividades.get(nomeAtividade) < calorias) 
+            this.recordesAtividades.replace(nomeAtividade, calorias);
     }
 
     public void addAtividadePlanoDeTreino(Atividade atividade) {
@@ -257,6 +279,7 @@ public abstract class Utilizador implements Serializable {
                 ", altura='" + this.altura + '\'' +
                 ", peso='" + this.peso + '\'' +
                 ", calorias gastas='" + this.caloriasGastas + '\'' +
+                ", recordes de atividades='" + this.recordesAtividades + '\'' +
                 ", plano de treino=' " + this.plano.toString() + '\'' +
                 ", atividades={";
         for(Atividade atividade : this.atividades.values()) {
@@ -282,6 +305,7 @@ public abstract class Utilizador implements Serializable {
                 && this.email.equals(outro.getEmail())
                 && this.password.equals(outro.getPassword())
                 && this.atividades.equals(outro.getAtividades())
+                && this.recordesAtividades.equals(outro.getRecordesAtividades())
                 && this.plano.equals(outro.getPlanoDeTreino());
     }
 

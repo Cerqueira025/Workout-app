@@ -16,8 +16,8 @@ public class Supino extends Pesos implements Hard {
         this.inclinacao = 0;
     }
 
-    public Supino(String codigo, String descricao, LocalDate data,int duracao, Utilizador user, int repeticoes, double peso, double inclinacao) {
-        super(codigo, descricao, data, duracao, user, repeticoes, peso);
+    public Supino(String codigo, String descricao, LocalDateTime data, int duracao, int series, Utilizador utilizador, int repeticoes, double peso, double inclinacao) {
+        super(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso);
         this.inclinacao = inclinacao;
     }
 

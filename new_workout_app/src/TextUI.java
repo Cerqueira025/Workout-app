@@ -203,6 +203,7 @@ public class TextUI {
             menu.setCondicao(5, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
             menu.setHandler(5, () -> limparPlanoDeTreino(codigoUtilizador));
             
+            menu.setCondicao(6, () -> this.model.getPlanoDeTreino(codigoUtilizador).getDuracao() > 0);
             menu.setHandler(6, () -> addAtividadePlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(7, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
