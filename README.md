@@ -51,4 +51,7 @@ Resposta:
 Dúvida: no que é que uma atividade hard influencia? como calcular calorias numa atividade hard?
 Resposta:
 
+Dúvida: porque existem erros no TextUI?
+Resposta:
+
 ```
