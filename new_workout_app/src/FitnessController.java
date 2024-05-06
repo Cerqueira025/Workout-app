@@ -1,9 +1,8 @@
-package MVC;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 
-import FitnessModel;
 import Excessoes.AtividadeExisteException;
 import Excessoes.AtividadeNaoExisteException;
 import Excessoes.CredenciaisNaoCoincidem;

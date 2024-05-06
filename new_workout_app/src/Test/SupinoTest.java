@@ -2,7 +2,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,113 +29,115 @@ public class SupinoTest {
 
         // ------------------- Construtor parametrizado com Map e PlanoDeTreino ------------------- //
         // atleta Profissional
-        Map<String, Atividade> atividades11 = new HashMap<>();
-        PlanoDeTreino plano11 = new PlanoDeTreino();
-        Profissional profissional1 = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades11, plano11);
-        LocalDate data1 = LocalDate.now();
-        Supino supino1 = new Supino("001", "Descrição", data1, 30, profissional1, 10, 50, 45.0);
+        Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
+        PlanoDeTreino plano = new PlanoDeTreino();
+        LocalDateTime data = LocalDateTime.now();
+
+        Profissional profissional1 = new Profissional("profId", 75, 80, 75, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 4, profissional1, 10, 50, 45.0);
 
         assertEquals("001", supino1.getCodigo());
         assertEquals("Descrição", supino1.getDescricao());
-        assertEquals(data1, supino1.getData());
+        assertEquals(data, supino1.getData());
         assertEquals(30, supino1.getDuracao());
-        assertEquals(profissional1, supino1.getUser());
+        assertEquals(4, supino1.getUtilizador());
+        assertEquals(profissional1, supino1.getUtilizador());
         assertEquals(10, supino1.getRepeticoes());
         assertEquals(50, supino1.getPeso(), 0.01);
         assertEquals(45.0, supino1.getInclinacao(), 0.01);
 
         //atleta Amador
-        Map<String, Atividade> atividades12 = new HashMap<>();
-        PlanoDeTreino plano12 = new PlanoDeTreino();
-        Amador amador1 = new Amador("amadorId", 70, 75, 170,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades12, plano12);
-        LocalDate data = LocalDate.now();
-        Supino supino12 = new Supino("001", "Descrição", data, 30, amador1, 10, 50, 45.0);
+        Amador amador1 = new Amador("amadorId", 70, 75, 60, 170,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Supino supino2 = new Supino("001", "Descrição", data, 30, 2, amador1, 10, 50, 45.0);
 
-        assertEquals("001", supino12.getCodigo());
-        assertEquals("Descrição", supino12.getDescricao());
-        assertEquals(data, supino12.getData());
-        assertEquals(30, supino12.getDuracao());
-        assertEquals(amador1, supino12.getUser());
-        assertEquals(10, supino12.getRepeticoes());
-        assertEquals(50, supino12.getPeso(), 0.01);
-        assertEquals(45.0, supino12.getInclinacao(), 0.01);
+        assertEquals("001", supino2.getCodigo());
+        assertEquals("Descrição", supino2.getDescricao());
+        assertEquals(data, supino2.getData());
+        assertEquals(30, supino2.getDuracao());
+        assertEquals(2, supino1.getUtilizador());
+        assertEquals(amador1, supino2.getUtilizador());
+        assertEquals(10, supino2.getRepeticoes());
+        assertEquals(50, supino2.getPeso(), 0.01);
+        assertEquals(45.0, supino2.getInclinacao(), 0.01);
 
         // Praticante Ocasional
-        Map<String, Atividade> atividades = new HashMap<>();
-        PlanoDeTreino plano13 = new PlanoDeTreino();
-        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("praticanteId", 65, 70, 160,
-                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, plano13);
-        LocalDate data13 = LocalDate.now();
-        Supino supino13 = new Supino("001", "Descrição", data13, 30, praticanteOcasional1, 10, 50, 45.0);
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("praticanteId", 65, 70, 44, 160,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Supino supino3 = new Supino("001", "Descrição", data, 30, 4, praticanteOcasional1, 10, 50, 45.0);
 
-        assertEquals("001", supino13.getCodigo());
-        assertEquals("Descrição", supino13.getDescricao());
-        assertEquals(data13, supino13.getData());
-        assertEquals(30, supino13.getDuracao());
-        assertEquals(praticanteOcasional1, supino13.getUser());
-        assertEquals(10, supino13.getRepeticoes());
-        assertEquals(50, supino13.getPeso(), 0.01);
-        assertEquals(45.0, supino13.getInclinacao(), 0.01);
+        assertEquals("001", supino3.getCodigo());
+        assertEquals("Descrição", supino3.getDescricao());
+        assertEquals(data, supino3.getData());
+        assertEquals(30, supino3.getDuracao());
+        assertEquals(4, supino1.getUtilizador());
+        assertEquals(praticanteOcasional1, supino3.getUtilizador());
+        assertEquals(10, supino3.getRepeticoes());
+        assertEquals(50, supino3.getPeso(), 0.01);
+        assertEquals(45.0, supino3.getInclinacao(), 0.01);
 
         // ------------------- Construtor sem Map e PlanoDeTreino ------------------- //
         // atleta Profissional
-        Profissional profissional2 = new Profissional("profId", 75, 80, 180,
+        Profissional profissional2 = new Profissional("profId", 75, 80, 65, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
-        LocalDate data21 = LocalDate.now();
-        Supino supino21 = new Supino("001", "Descrição", data21, 30, profissional2, 10, 50, 45.0);
+        Supino supino4 = new Supino("001", "Descrição", data, 30, 4, profissional2, 10, 50, 45.0);
 
-        assertEquals("001", supino21.getCodigo());
-        assertEquals("Descrição", supino21.getDescricao());
-        assertEquals(data21, supino21.getData());
-        assertEquals(30, supino21.getDuracao());
-        assertEquals(profissional2, supino21.getUser());
-        assertEquals(10, supino21.getRepeticoes());
-        assertEquals(50, supino21.getPeso(), 0.01);
-        assertEquals(45.0, supino21.getInclinacao(), 0.01);
+        assertEquals("001", supino4.getCodigo());
+        assertEquals("Descrição", supino4.getDescricao());
+        assertEquals(data, supino4.getData());
+        assertEquals(30, supino4.getDuracao());
+        assertEquals(4, supino1.getUtilizador());
+        assertEquals(profissional2, supino4.getUtilizador());
+        assertEquals(10, supino4.getRepeticoes());
+        assertEquals(50, supino4.getPeso(), 0.01);
+        assertEquals(45.0, supino4.getInclinacao(), 0.01);
 
         //atleta Amador
-        Amador amador2 = new Amador("amadorId", 70, 75, 170,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades12, plano12);
-        LocalDate data22 = LocalDate.now();
-        Supino supino22 = new Supino("001", "Descrição", data22, 30, amador2, 10, 50, 45.0);
+        Amador amador2 = new Amador("amadorId", 70, 75, 44, 170,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Supino supino5 = new Supino("001", "Descrição", data, 30, 2, amador2, 10, 50, 45.0);
 
-        assertEquals("001", supino22.getCodigo());
-        assertEquals("Descrição", supino22.getDescricao());
-        assertEquals(data22, supino22.getData());
-        assertEquals(30, supino22.getDuracao());
-        assertEquals(amador2, supino22.getUser());
-        assertEquals(10, supino22.getRepeticoes());
-        assertEquals(50, supino22.getPeso(), 0.01);
-        assertEquals(45.0, supino22.getInclinacao(), 0.01);
+        assertEquals("001", supino5.getCodigo());
+        assertEquals("Descrição", supino5.getDescricao());
+        assertEquals(data, supino5.getData());
+        assertEquals(30, supino5.getDuracao());
+        assertEquals(2, supino1.getUtilizador());
+        assertEquals(amador2, supino5.getUtilizador());
+        assertEquals(10, supino5.getRepeticoes());
+        assertEquals(50, supino5.getPeso(), 0.01);
+        assertEquals(45.0, supino5.getInclinacao(), 0.01);
 
         // Praticante Ocasional
-        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("praticanteId", 65, 70, 160,
-                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, plano13);
-        LocalDate data23 = LocalDate.now();
-        Supino supino23 = new Supino("001", "Descrição", data13, 30, praticanteOcasional2, 10, 50, 45.0);
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("praticanteId", 65, 70, 30, 160,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Supino supino6 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional2, 10, 50, 45.0);
 
-        assertEquals("001", supino23.getCodigo());
-        assertEquals("Descrição", supino23.getDescricao());
-        assertEquals(data23, supino23.getData());
-        assertEquals(30, supino23.getDuracao());
-        assertEquals(praticanteOcasional2, supino23.getUser());
-        assertEquals(10, supino23.getRepeticoes());
-        assertEquals(50, supino23.getPeso(), 0.01);
-        assertEquals(45.0, supino23.getInclinacao(), 0.01);
+        assertEquals("001", supino6.getCodigo());
+        assertEquals("Descrição", supino6.getDescricao());
+        assertEquals(data, supino6.getData());
+        assertEquals(30, supino6.getDuracao());
+        assertEquals(2, supino1.getUtilizador());
+        assertEquals(praticanteOcasional2, supino6.getUtilizador());
+        assertEquals(10, supino6.getRepeticoes());
+        assertEquals(50, supino6.getPeso(), 0.01);
+        assertEquals(45.0, supino6.getInclinacao(), 0.01);
     }
 
     @Test
     public void testEquals() {
         Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
-        Profissional profissional = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, plano);
-        LocalDate data = LocalDate.now();
-        Supino supino1 = new Supino("001", "Descrição", data, 30, profissional, 10, 50, 45.0);
-        Supino supino2 = new Supino("001", "Descrição", data, 30, profissional, 10, 50, 45.0);
-        Supino supino3 = new Supino("002", "Descrição", data, 30, profissional, 10, 50, 45.0);
+        LocalDateTime data = LocalDateTime.now();
+
+        Profissional profissional = new Profissional("profId", 75, 80, 75, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
+        Supino supino2 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
+        Supino supino3 = new Supino("002", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
 
         assertTrue(supino1.equals(supino2));
         assertFalse(supino1.equals(supino3));
@@ -145,11 +147,14 @@ public class SupinoTest {
     @Test
     public void testClone() {
         Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
-        Profissional profissional = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, plano);
-        LocalDate data = LocalDate.now();
-        Supino supino1 = new Supino("001", "Descrição", data, 30, profissional, 10, 50, 45.0);
+        LocalDateTime data = LocalDateTime.now();
+
+        Profissional profissional = new Profissional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
         Supino supino2 = supino1.clone();
 
         assertEquals(supino1, supino2);
@@ -158,11 +163,14 @@ public class SupinoTest {
     @Test
     public void testCalorias() {
         Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
-        Profissional profissional = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, plano);
-        LocalDate data = LocalDate.now();
-        Supino supino = new Supino("001", "Descrição", data, 30, profissional, 10, 50, 45.0);
+        LocalDateTime data = LocalDateTime.now();
+
+        Profissional profissional = new Profissional("profId", 75, 80, 60, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+
+        Supino supino = new Supino("001", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
 
         double caloriasEsperadas = profissional.fatorMultiplicativo() * (45.0/3) * 30 * (profissional.getBpmMedio()/100);
 
@@ -172,11 +180,14 @@ public class SupinoTest {
     @Test
     public void testBpm() {
         Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
-        Profissional profissional = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, plano);
-        LocalDate data = LocalDate.now();
-        Supino supino = new Supino("001", "Descrição", data, 30, profissional, 10, 50, 45.0);
+        LocalDateTime data = LocalDateTime.now();
+
+        Profissional profissional = new Profissional("profId", 75, 80, 60, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+
+        Supino supino = new Supino("001", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
 
         int bpmEsperado = (int) (profissional.getBpmMedio() + 10 * profissional.fatorMultiplicativo());
 
