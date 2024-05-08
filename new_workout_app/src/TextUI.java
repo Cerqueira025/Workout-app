@@ -1,18 +1,25 @@
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.function.Predicate;
+import java.util.function.ToDoubleBiFunction;
+import java.util.function.ToDoubleFunction;
 
 import Atividade.Atividade;
+import Atividade.Distancia.Distancia;
 import Atividade.Distancia.Sprint;
+import Atividade.Distancia.Altimetria.Altimetria;
 import Atividade.Distancia.Altimetria.BicicletaMontanha;
+import Atividade.Repeticoes.Repeticoes;
 import Atividade.Repeticoes.Abdominais;
+import Atividade.Repeticoes.Pesos.Pesos;
 import Atividade.Repeticoes.Pesos.Supino;
 import Excessoes.EmailExisteException;
 import Excessoes.ParametrosInvalidosException;
 import Excessoes.UtilizadorExisteException;
 import PlanoTreino.PlanoDeTreino;
-import Users.eduardofaria..vim.undodir.FitnessModel;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
 import Utilizador.TiposUtilizador.*;
@@ -23,7 +30,31 @@ public class TextUI {
 
     public TextUI() {
         this.model = new FitnessModel(); // definir a data posteriormente
+        
+        Predicate<Atividade> ativ = a -> a instanceof Atividade;
+        this.model.addPredicate("éAtividade", ativ);
+        Predicate<Atividade> dist = a -> a instanceof Distancia;
+        this.model.addPredicate("éAtividadeDistância", dist);
+        Predicate<Atividade> alti = a -> a instanceof Altimetria;
+        this.model.addPredicate("éAtividadeDistânciaAltimetria", alti);
+        Predicate<Atividade> repe = a -> a instanceof Repeticoes;
+        this.model.addPredicate("éAtividadeRepetições", repe);
+        Predicate<Atividade> peso = a -> a instanceof Pesos;
+        this.model.addPredicate("éAtividadeRepetiçõesPesos", peso);
+        
+        ToDoubleFunction<Atividade> calculoCalorias = a -> a.calorias();
+        this.model.addToDoubleFunction("obtémCalorias", calculoCalorias);
+        ToDoubleFunction<Atividade> calculoRepeticoes = a -> ((Repeticoes) a).getRepeticoes();
+        this.model.addToDoubleFunction("obtémRepetições", calculoRepeticoes);
+        ToDoubleFunction<Atividade> calculoPeso = a -> ((Pesos) a).getPeso();
+        this.model.addToDoubleFunction("obtémPeso", calculoPeso);
+        ToDoubleFunction<Atividade> calculoDistancia = a -> ((Distancia) a).getDistancia();
+        this.model.addToDoubleFunction("obtémDistancia", calculoDistancia);
+        ToDoubleFunction<Atividade> calculoAltimetria = a -> ((Altimetria) a).getAltimetria();
+        this.model.addToDoubleFunction("obtémAltimetria", calculoAltimetria);
+        
         sc = new Scanner(System.in);
+
     }
 
     public void run() {

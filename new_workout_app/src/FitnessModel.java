@@ -5,17 +5,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
+
 import Atividade.Atividade;
+import Atividade.Hard;
 import Atividade.Distancia.Distancia;
 import Atividade.Distancia.Altimetria.Altimetria;
 import Atividade.Repeticoes.Abdominais;
@@ -32,7 +37,10 @@ public class FitnessModel implements Serializable {
     private LocalDate dataAtual;
     private Map<String, Utilizador> utilizadores;
     private Map<String, Utilizador> recordesGerais;
-
+    
+    private Map<String, Predicate<Atividade>> predicatesAtividade;
+    private Map<String, ToDoubleFunction<Atividade>> funcoesAtividade;
+    
 
     // ----------------- Construtores ---------------- //
 
@@ -40,18 +48,25 @@ public class FitnessModel implements Serializable {
         this.dataAtual = LocalDate.EPOCH;
         this.utilizadores = new HashMap<>();
         this.recordesGerais = new HashMap<>();
+        this.predicatesAtividade = new HashMap<>();
+        this.funcoesAtividade = new HashMap<>();
     }
 
-    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais) {
+    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais,
+                        Map<String, Predicate<Atividade>> predicatesAtividade, Map<String, ToDoubleFunction<Atividade>> funcoesAtividade) {
         this.dataAtual = data;
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.predicatesAtividade = predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.funcoesAtividade = funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public FitnessModel(FitnessModel outro) {
         this.dataAtual = outro.getData();
         this.utilizadores = outro.getUtilizadores();
         this.recordesGerais = outro.getRecordesGerais();
+        this.predicatesAtividade = outro.getPredicatesAtividade();
+        this.funcoesAtividade = outro.getFuncoesAtividade();
     }
 
     // ----------------- Getters e Setters ---------------- //
@@ -79,6 +94,41 @@ public class FitnessModel implements Serializable {
     public void setRecordesGerais(Map<String, Utilizador> recordesGerais) {
         this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
+    
+    public Map<String, Predicate<Atividade>> getPredicatesAtividade() {
+        return this.predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    } 
+
+    public void setPredicatesAtividade(Map<String, Predicate<Atividade>> predicatesAtividade) {
+        this.predicatesAtividade = predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    } 
+    
+    public Map<String, ToDoubleFunction<Atividade>> getFuncoesAtividade() {
+        return this.funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    }
+
+    public void setFuncoesAtividade(Map<String, ToDoubleFunction<Atividade>> funcoesAtividade) {
+        this.funcoesAtividade = funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+    } 
+     
+    // ----------------- Predicates e ToDoubleFunctions ---------------- //
+    public void addToDoubleFunction(String nomeFuncao, ToDoubleFunction<Atividade> tdf) {
+        this.funcoesAtividade.put(nomeFuncao, tdf);
+    } 
+    
+    public ToDoubleFunction<Atividade> getToDoubleFunction(String nomeFuncao) {
+        return this.funcoesAtividade.get(nomeFuncao);
+    } 
+
+    public void addPredicate(String nomePredicate, Predicate<Atividade> p) {
+        this.predicatesAtividade.put(nomePredicate, p);
+    } 
+    
+    public Predicate<Atividade> getPredicate(String nomePredicate) {
+        return this.predicatesAtividade.get(nomePredicate);
+    } 
+
+
     // ----------------- Utilizador ---------------- //
 
     public boolean codigoUtilizadorExiste(String codigo) {
@@ -201,10 +251,13 @@ public class FitnessModel implements Serializable {
                .sum();
     }
     
+    // usar predicates e toDoubleFunctions
+    /* 
     public double caloriasGastasPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Atividade), a -> a.calorias());
     }
 
+    
     public int repeticoesAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         return (int) this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Repeticoes), a -> ((Repeticoes) a).getRepeticoes());
     }
@@ -212,6 +265,7 @@ public class FitnessModel implements Serializable {
     public double pesoAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Pesos), a -> ((Pesos) a).getPeso());
     }
+    */
 
     public int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
@@ -239,7 +293,8 @@ public class FitnessModel implements Serializable {
     // 1. qual é o utilizador que mais calorias dispendeu num período ou desde sempre
     public Utilizador utilizadorMaisCalorias(LocalDate inicio, LocalDate fim) { // referência no relatório
         Comparator<Utilizador> comparator = (u1, u2) -> {
-                                                            double dif = this.caloriasGastasPeriodo(u2.getCodigo(), inicio, fim) - this.caloriasGastasPeriodo(u1.getCodigo(), inicio, fim);
+                                                            double dif = this.estatisticaAcumulacaoPeriodo(u2.getCodigo(), inicio, fim, a -> a instanceof Atividade, a -> a.calorias())
+                                                                       - this.estatisticaAcumulacaoPeriodo(u1.getCodigo(), inicio, fim, a -> a instanceof Atividade, a -> a.calorias());
                                                             return Double.compare(dif,0);
                                                         };
         
@@ -275,7 +330,8 @@ public class FitnessModel implements Serializable {
         return atividadeMaisRealizada;
     }
 
-    
+    // usar predicates e toDoubleFunctions
+    /* 
     // 4. quantos kms é que um utilizdor realizou num período ou desde sempre
     public double distanciaPercorridaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         return this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Distancia), a -> ((Distancia) a).getDistancia());
@@ -285,6 +341,7 @@ public class FitnessModel implements Serializable {
     public int altimetriaAcumuladaPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         return (int) this.estatisticaAcumulacaoPeriodo(codigoUtilizador, inicio, fim, (a -> a instanceof Altimetria), a -> ((Altimetria) a).getAltimetria());
     }
+    */
     
     // 6. qual o plano de treino mais exigente em função do dispêndio de calorias proposto
     public PlanoDeTreino planoDeTreinoMaisExigente() {
@@ -340,6 +397,78 @@ public class FitnessModel implements Serializable {
         this.dataAtual = proximaData;
     }
 
+
+    // ----------------- Criação de plano de treino com objetivos ---------------- // 
+    private boolean existeAtividadeHardLista(List<Atividade> atividadesDoDia) {
+        boolean temHard = false;
+        for (Atividade atividade : atividadesDoDia) 
+            if (atividade instanceof Hard) temHard = true;
+
+        return temHard;
+    }
+
+    
+    private void preencheSemana(String codUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, LocalDate dataInicioSemana, int nMaximoAtividadesDia) {
+        PlanoDeTreino plano = this.utilizadores.get(codUtilizador).getPlanoDeTreino();
+        Map<Atividade, Integer> atividadesRestantes = atividadesComRecorrenciaSemanal.entrySet().stream().collect(Collectors.toMap(k->k.getKey().clone(), v->v.getValue()));
+        
+        for (Map.Entry<Atividade, Integer> e : atividadesRestantes.entrySet()) {
+            Atividade atividade = e.getKey();
+
+            while (e.getValue() > 0) {    
+                boolean inseriuAtividade = false;
+                while (!inseriuAtividade) {
+                    boolean podeInserir = true;
+
+                    Random random = new Random(); 
+                    LocalDate dataAleatoria = dataInicioSemana.plusDays(random.nextInt(7));
+                    List<Atividade> atividadesDoDia = plano.atividadesDoDia(dataAleatoria);
+                    List<Atividade> atividadesDoDiaAnterior = plano.atividadesDoDia(dataAleatoria.minusDays(1));
+
+                    if (atividade instanceof Hard) {
+                        if (existeAtividadeHardLista(atividadesDoDia)) podeInserir = false;
+                        if (existeAtividadeHardLista(atividadesDoDiaAnterior)) podeInserir = false;
+                    }
+
+                    if (atividadesDoDia.size() >= nMaximoAtividadesDia) podeInserir = false;
+                    
+                    if (podeInserir) {
+                        atividade.setData(dataAleatoria.atTime(6*(atividadesDoDia.size() + 1), 0, 0));
+                        plano.addAtividade(atividade);
+                        inseriuAtividade = true;
+                    }
+                } 
+                e.setValue(e.getValue() - 1);
+            }
+        }
+    }
+
+
+    /**
+     * - consoante o tipo de atividades que o utilizador quer (controller)
+     * - no mesmo dia não pode haver mais do que uma atividade hard √
+     * - atividades hard não podem estar em dias seguidos √
+     * - número máximo de atividades por dia (nunca mais do que 3) √
+     * - número máximo de atividades distintas (controller)
+     * - recorrência semana das ativiades (ex. 3 vezes por semana) (controller)
+     * - consumo calório total que se pretende ter √
+     * - nMaximoAtividadesDia*7 >= nTotalAtividadesPossíveis (Map) && nAtivHard <= 3 (controller)
+     * 
+     * 
+     * A LISTA DE ATIVIDADES TEM DE ESTAR ORDENADA POR ATIVIDADES HARD PRIMEIRO
+    */
+    public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) {
+        LocalDate dataInicio = this.dataAtual.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        PlanoDeTreino plano = this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
+
+        nMaximoAtividadesDia = nMaximoAtividadesDia > 3 ? 3 : nMaximoAtividadesDia;
+        
+        while (plano.getCaloriasTotais() < caloriasObjetivo) {
+            preencheSemana(codigoUtilizador, atividadesComRecorrenciaSemanal, dataInicio, nMaximoAtividadesDia);    
+            dataInicio.plusDays(7);
+        }
+    }
+
     // ----------------- Gerais ---------------- //
     
     public boolean equals(Object o) {
@@ -348,7 +477,9 @@ public class FitnessModel implements Serializable {
         FitnessModel fm = (FitnessModel) o;
         return this.dataAtual.equals(fm.getData())
             && this.utilizadores.equals(fm.getUtilizadores())
-            && this.recordesGerais.equals(fm.getRecordesGerais());
+            && this.recordesGerais.equals(fm.getRecordesGerais())
+            && this.funcoesAtividade.equals(fm.getFuncoesAtividade())
+            && this.predicatesAtividade.equals(fm.getPredicatesAtividade());
     }
 
     public String toString() {

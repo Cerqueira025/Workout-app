@@ -269,8 +269,6 @@ public abstract class Utilizador implements Serializable {
         this.peso -= caloriasAtividade/7000;
     }
 
-
-
     public String toString() {
         String a = "Utiliador{" +
                 "código='" + this.codigo + '\'' +

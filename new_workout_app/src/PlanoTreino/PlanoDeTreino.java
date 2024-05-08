@@ -5,6 +5,7 @@ import Atividade.Atividade;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -80,6 +81,9 @@ public class PlanoDeTreino implements Serializable {
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
+
+    // ----------------- outros métodos ----------------- //
+
 	public void addAtividade(Atividade atividade) {
         this.atividades.put(atividade.getCodigo(), atividade);
         this.caloriasTotais += atividade.calorias();
@@ -107,6 +111,9 @@ public class PlanoDeTreino implements Serializable {
         return this.caloriasTotais/this.duracao;
     }
 
+    public List<Atividade> atividadesDoDia(LocalDate data) {
+        return this.atividades.values().stream().filter(a -> a.getData().toLocalDate().equals(data)).collect(Collectors.toList());
+    }
 
     public String toString() {
         String a = "Plano de Treino{" +
