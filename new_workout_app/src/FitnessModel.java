@@ -417,7 +417,6 @@ public class FitnessModel implements Serializable {
         this.dataAtual = proximaData;
     }
 
-//////////////// BREAKPOINT //////////////////////////////////////////////////////////////////////////////
     // ----------------- Criação de plano de treino com objetivos ---------------- // 
     private boolean existeAtividadeHardLista(List<Atividade> atividadesDoDia) {
         boolean temHard = false;
@@ -427,7 +426,7 @@ public class FitnessModel implements Serializable {
         return temHard;
     }
 
-    
+    // como é private acho que não precisa. colocar throws PlanoDeTreinoVazioException
     private void preencheSemana(String codUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, LocalDate dataInicioSemana, int nMaximoAtividadesDia) {
         PlanoDeTreino plano = this.utilizadores.get(codUtilizador).getPlanoDeTreino();
         Map<Atividade, Integer> atividadesRestantes = atividadesComRecorrenciaSemanal.entrySet().stream().collect(Collectors.toMap(k->k.getKey().clone(), v->v.getValue()));
@@ -477,6 +476,7 @@ public class FitnessModel implements Serializable {
      * 
      * A LISTA DE ATIVIDADES TEM DE ESTAR ORDENADA POR ATIVIDADES HARD PRIMEIRO
     */
+    // colocar throws UtilizadorNaoExisteException
     public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) {
         LocalDate dataInicio = this.dataAtual.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         PlanoDeTreino plano = this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
