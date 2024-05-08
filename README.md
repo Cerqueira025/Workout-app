@@ -1,21 +1,32 @@
-A fazer: 
+MODEL:
 ```
-
-- VERIFICAR CLONESSSS (Manter agragação em tudo?)
-- Rever nomenclatura
-- Criar um plano de treino a partir do número de vezes que quer que uma atividade se repita por semana e ter em conta os seus objetivos
-- criarAtividade(), na view, não pode devolver Atividade. Dever ser criada uma atividade e inserida logo de seguida, mesmo que o código se repita
-- colocar throws no model. tratamento de parametros é no controller com handlers.
-
-model: 
-- Melhorar toString, rever as calorias
+- Melhorar toString, rever as calorias e bpm
 - Colocar throws no model
-
-
-view:
-- lidar com as exceções todas
 ```
 
-- A criação e adição de um objeto deve estar no menu
+
+DELEGATE:
+```
+- Questionar data da aplicação
+- tratamento de parametros no controller com handlers.
+- criarAtividade(), na view, não pode devolver Atividade. Dever ser criada uma atividade e inserida logo de seguida, mesmo que o código se repita
+- implementar salto no tempo
+- implementar recordes gerais e de cada um
+- implementar criação de plano de treino com objetivos
+- implementar queries (ter em atenção as mudanças feitas pelos MAP de Predicates e ToDoubleFunctions)
+- implementar leitura e escrita em ficheiro
+- lidar com exceções vindas do model e fazer alguns controlos de erros próprios (parâmetros, ...)
+```
+
+
+A FAZER NO FINAL:
+```
+- CTRL+F de throws no Delegate (não podem existir)
+- retirar métodos não usados com o INTELIJ
+- Rever nomenclatura
+- VERIFICAR CLONESSSS (Manter agragação em tudo?)
+- corrigir ou retirar métodos do model que criam objetos de classes criadas (new xxxx(.....))
+```
+
 
 find . -name \*.class -type f -delete
