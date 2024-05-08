@@ -57,7 +57,7 @@ public abstract class Utilizador implements Serializable {
         this.password = password;
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.recordesAtividades = recordes.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-        this.plano = plano; //verificar clone
+        this.plano = plano;
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
@@ -197,7 +197,6 @@ public abstract class Utilizador implements Serializable {
     }
     
     public Atividade getAtividade(String codigo_atividade) {
-        if(!existeAtividade(codigo_atividade)) return null;
         return this.atividades.get(codigo_atividade);
     }
 

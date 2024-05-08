@@ -1,10 +1,8 @@
 import java.io.IOException;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.function.Predicate;
-import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;
 
 import Atividade.Atividade;
@@ -163,7 +161,7 @@ public class TextUI {
 
 
 
-
+    // RETIRAR THROWS *************
     public Utilizador criarUtilizador(int tipoUtilizador, String codigo, int bpmMedio, double peso, double caloriasGastas,
                                int altura, String nome, Genero genero, String morada, String email, String password) throws ParametrosInvalidosException,
                                UtilizadorExisteException, EmailExisteException {

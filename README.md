@@ -21,6 +21,7 @@ DELEGATE:
 
 A FAZER NO FINAL:
 ```
+- ver métodos para colocar em private e, par tal, retirar os throws caso não façam sentido
 - CTRL+F de throws no Delegate (não podem existir)
 - retirar métodos não usados com o INTELIJ
 - Rever nomenclatura

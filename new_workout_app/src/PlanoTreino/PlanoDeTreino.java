@@ -99,7 +99,6 @@ public class PlanoDeTreino implements Serializable {
     }
 
     public Atividade getAtividade(String codigo_atividade) {
-        if(!this.atividades.containsKey(codigo_atividade)) return null;
         return this.atividades.get(codigo_atividade);
     }
 
