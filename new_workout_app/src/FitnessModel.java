@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,13 +20,16 @@ import java.util.stream.Collectors;
 
 import Atividade.Atividade;
 import Atividade.Hard;
-import Atividade.Repeticoes.Abdominais;
+import Excessoes.AtividadeExisteException;
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.EmailExisteException;
+import Excessoes.NaoExistemAtividadesRealizadasException;
+import Excessoes.NaoExistemRecordesException;
+import Excessoes.NomeAtividadeNaoExisteException;
 import Excessoes.UtilizadorExisteException;
+import Excessoes.UtilizadorNaoExisteException;
 import PlanoTreino.PlanoDeTreino;
-import Utilizador.Genero;
 import Utilizador.Utilizador;
-import Utilizador.TiposUtilizador.PraticanteOcasional;
 
 public class FitnessModel implements Serializable {
     private LocalDate dataAtual;
@@ -41,7 +43,7 @@ public class FitnessModel implements Serializable {
     // ----------------- Construtores ---------------- //
 
     public FitnessModel() {
-        this.dataAtual = LocalDate.EPOCH;
+        this.dataAtual = LocalDate.now();
         this.utilizadores = new HashMap<>();
         this.recordesGerais = new HashMap<>();
         this.predicatesAtividade = new HashMap<>();
@@ -155,30 +157,31 @@ public class FitnessModel implements Serializable {
     }
     */
 
-    // colocar throw UtilizadorNaoExisteException
-    public void removeUtilizador(String codigo) {
+    public void removeUtilizador(String codigo) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
         this.utilizadores.remove(codigo);
     }
 
-    // colocar throw UtilizadorNaoExisteException
-    public Utilizador getUtilizador(String codigo) {
+    public Utilizador getUtilizador(String codigo) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
         return this.utilizadores.get(codigo);
     }
 
 
     // ----------------- Atividades ---------------- //
 
-    public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) {
+    public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
         return this.utilizadores.get(codigoUtilizador).existeAtividade(codigoAtividade);
     }
 
-    // colocar throw AtividadeExisteException e UtilizadorNaoExisteException
-    public void addAtividade(String codigoUtilizador, Atividade atividade) {
+    public void addAtividade(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        if (this.existeAtividade(codigoUtilizador, atividade.getCodigo()) || this.existeAtividadePlanoDeTreino(codigoUtilizador, atividade.getCodigo())) throw new AtividadeExisteException();
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
 
-    // colocar throw AtividadeExisteException e UtilizadorNaoExisteException
-    public void addAtividadeRealizada(String codigoUtilizador, Atividade atividade) {
+    public void addAtividadeRealizada(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException, NomeAtividadeNaoExisteException {
         double caloriasAtividade = atividade.calorias();
         Utilizador utilizador = this.getUtilizadores().get(codigoUtilizador);
 
@@ -200,54 +203,59 @@ public class FitnessModel implements Serializable {
     }
     */
 
-    // colocar throw AtividadeNaoExisteException e UtilizadorNaoExisteException
-    public void removerAtividade(String codigoUtilizador, String codigoAtividade) {
+    public void removerAtividade(String codigoUtilizador, String codigoAtividade) throws UtilizadorNaoExisteException, AtividadeNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        if (!this.existeAtividade(codigoUtilizador, codigoAtividade)) throw new AtividadeNaoExisteException();
         this.utilizadores.get(codigoUtilizador).removeAtividade(codigoAtividade);
     }
 
-    // colocar throw UtilizadorNaoExisteException e NaoExistemAtividadesRealizadasException
     public List<Atividade> getAtividadesRealizadas(String codUtilizador) {
         return this.utilizadores.get(codUtilizador).getAtividadesList();
     }
 
     // ----------------- Plano de treino ---------------- //
 
-    // colocar throw UtilizadorNaoExisteException
-    public void setPlanoDeTreino(String codUtilizador, PlanoDeTreino planoDeTreino) {
+    public boolean existeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
+        return this.utilizadores.get(codUtilizador).existeAtividadePlanoDeTreino(codAtividade);
+    }
+
+    public void setPlanoDeTreino(String codUtilizador, PlanoDeTreino planoDeTreino) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
         this.utilizadores.get(codUtilizador).setPlanoDeTreino(planoDeTreino);
     }
 
-    // colocar throw UtilizadorNaoExisteException
-    public void limparPlanoDeTreino(String codUtilizador) {
+    public void limparPlanoDeTreino(String codUtilizador) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
         this.utilizadores.get(codUtilizador).limparPlanoDeTreino();
     }
 
-    // colocar throw UtilizadorNaoExisteException e AtividadeExisteException
-    public void addAtividadePlanoDeTreino(String codUtilizador, Atividade atividade) {
+    public void addAtividadePlanoDeTreino(String codUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
+        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
+        if (this.existeAtividade(codUtilizador, atividade.getCodigo()) || this.existeAtividadePlanoDeTreino(codUtilizador, atividade.getCodigo())) throw new AtividadeExisteException();
         atividade.setBpm(atividade.bpm());
         atividade.setCalorias(atividade.calorias());
         this.utilizadores.get(codUtilizador).addAtividadePlanoDeTreino(atividade);
     }
 
-    // colocar throw UtilizadorNaoExisteException e AtividadeNaoExisteException
-    public void removeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) {
+    public void removeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) throws UtilizadorNaoExisteException, AtividadeNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
+        if (!this.existeAtividadePlanoDeTreino(codUtilizador, codAtividade)) throw new AtividadeNaoExisteException();
         this.utilizadores.get(codUtilizador).removeAtividadePlanoDeTreino(codAtividade);
     }
 
-    // colocar throw UtilizadorNaoExisteException
     public PlanoDeTreino getPlanoDeTreino(String codUtilizador) {
         return this.utilizadores.get(codUtilizador).getPlanoDeTreino();
     }
 
-    // colocar throw UtilizadorNaoExisteException e PlanoDeTreinoVazioException
     public Map<String, Atividade> getAtividadesPlanoDeTreino(String codUtilizador) {
         return this.utilizadores.get(codUtilizador).getAtividadesPlanoDeTreino();
     }
 
     // ----------------- Outras queries e auxiliares ---------------- //
 
-    // colocar throw UtilizadorNaoExisteException e NaoExistemAtividadesRealizadasException *****VALIDAR DATAS NO DELEGATE*****
-    private double estatisticaAcumulacaoPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim, Predicate<Atividade> insOf, ToDoubleFunction<Atividade> fun) { // verificar se datas sao válidas
+    // *****VALIDAR DATAS NO DELEGATE*****
+    private double estatisticaAcumulacaoPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim, Predicate<Atividade> insOf, ToDoubleFunction<Atividade> fun) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return this.utilizadores
                .get(codigoUtilizador)
@@ -276,19 +284,22 @@ public class FitnessModel implements Serializable {
     }
     */
 
-    // colocar throw UtilizadorNaoExisteException e NaoExistemAtividadesRealizadasException *****VALIDAR DATAS NO DELEGATE*****
+    // *****VALIDAR DATAS NO DELEGATE*****
     public int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return (int) this.utilizadores.get(codigoUtilizador).getAtividades().values().stream().filter(predicate).count();
     }
 
-    // colocar throw NomeAtividadeNaoExisteException
-    public double caloriasRecordeAtividade(String nomeAtividade) {
+    public boolean nomeAtividadeRecordeExiste(String nomeAtividade) {
+        return this.recordesGerais.containsKey(nomeAtividade);
+    }
+
+    public double caloriasRecordeAtividade(String nomeAtividade) throws NomeAtividadeNaoExisteException {
+        if (!nomeAtividadeRecordeExiste(nomeAtividade)) throw new NomeAtividadeNaoExisteException();
         return this.recordesGerais.get(nomeAtividade).caloriasRecordeAtividade(nomeAtividade);
     }
 
-    // colocar throw NomeAtividadeNaoExisteException e NaoExistemRecordesException
-    public void atualizaRecordesGerais(Utilizador utilizador) {
+    public void atualizaRecordesGerais(Utilizador utilizador) throws NomeAtividadeNaoExisteException {
         for(Map.Entry<String,Double> parRecordeCalorias : utilizador.getRecordesAtividades().entrySet()) {
             String nomeAtividade = parRecordeCalorias.getKey();
             Double caloriasAtividade = parRecordeCalorias.getValue();
@@ -322,7 +333,6 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null);
     }
 
-    // colocar throw NaoExistemAtividadesRealizadasException
     // 3. qual o tipo de actividade mais realizada
     public String atividadeMaisRealizada() {
         Map<String,Integer> nomeAtividades = new HashMap<>();
@@ -368,29 +378,25 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null).getPlanoDeTreino();
     }    
     
-    // colocar throw NaoExistemAtividadesRealizadasException e UtilizadorNaoExisteException
     // 7. listar as actividades de um utilizador
-    public Map<String,Atividade> atividadesRealizadas(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getAtividades();
+    public Map<String,Atividade> atividadesRealizadas(String codigoUtilizador) throws UtilizadorNaoExisteException, NaoExistemAtividadesRealizadasException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        Map<String, Atividade> atividades = this.utilizadores.get(codigoUtilizador).getAtividades();
+        if (atividades.size() <= 0) throw new NaoExistemAtividadesRealizadasException();
+        return atividades;
     }
 
-    // colocar throw NaoExistemRecordesException e UtilizadorNaoExisteException
     // (Bónus) listar os recordes de um utilizador
-    public Map<String,Double> recordesCalorias(String codigoUtilizador) {
+    public Map<String,Double> recordesCalorias(String codigoUtilizador) throws UtilizadorNaoExisteException, NaoExistemRecordesException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        Map<String, Double> recordes = this.utilizadores.get(codigoUtilizador).getRecordesAtividades();
+        if (recordes.size() <= 0) throw new NaoExistemRecordesException();
         return this.utilizadores.get(codigoUtilizador).getRecordesAtividades();
     }
 
-    // colocar throws PlanoDeTreinoVazioException e UtilizadorNaoExisteException
-    // (Bónus) listar as actividades do plano de treino de um utilizador
-    public Map<String,Atividade> atividadesPlanoDeTreino(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getAtividadesPlanoDeTreino();
-    }
-
-
     // ----------------- Salto no tempo ---------------- //
 
-    // colcar throw PlanoDeTreinoVazioException
-    public void saltoNoTempo(int dias) {
+    public void saltoNoTempo(int dias) throws NomeAtividadeNaoExisteException {
         LocalDate proximaData = this.dataAtual.plusDays(dias);
 
         for(Utilizador utilizador : this.utilizadores.values()) {
@@ -410,8 +416,8 @@ public class FitnessModel implements Serializable {
                     utilizador.atualizaRecordesCalorias(atividade);
                 }
             }
-            this.atualizaRecordesGerais(utilizador);
             // --------- Atualiza recordes gerais ---------- //
+            this.atualizaRecordesGerais(utilizador);
         }
 
         this.dataAtual = proximaData;
@@ -426,7 +432,6 @@ public class FitnessModel implements Serializable {
         return temHard;
     }
 
-    // como é private acho que não precisa. colocar throws PlanoDeTreinoVazioException
     private void preencheSemana(String codUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, LocalDate dataInicioSemana, int nMaximoAtividadesDia) {
         PlanoDeTreino plano = this.utilizadores.get(codUtilizador).getPlanoDeTreino();
         Map<Atividade, Integer> atividadesRestantes = atividadesComRecorrenciaSemanal.entrySet().stream().collect(Collectors.toMap(k->k.getKey().clone(), v->v.getValue()));
@@ -462,23 +467,15 @@ public class FitnessModel implements Serializable {
         }
     }
 
-
-    /**
-     * - consoante o tipo de atividades que o utilizador quer (controller)
-     * - no mesmo dia não pode haver mais do que uma atividade hard √
-     * - atividades hard não podem estar em dias seguidos √
-     * - número máximo de atividades por dia (nunca mais do que 3) √
-     * - número máximo de atividades distintas (controller)
-     * - recorrência semana das ativiades (ex. 3 vezes por semana) (controller)
-     * - consumo calório total que se pretende ter √
-     * - nMaximoAtividadesDia*7 >= nTotalAtividadesPossíveis (Map) && nAtivHard <= 3 (controller)
-     * 
-     * 
-     * A LISTA DE ATIVIDADES TEM DE ESTAR ORDENADA POR ATIVIDADES HARD PRIMEIRO
-    */
-    // colocar throws UtilizadorNaoExisteException
-    public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) {
+    // FAZER WHILE RANDOM NO DELEGATE PARA
+    // OBTER CÓDIGO DA ATIVIDADE, VERIFICANDO
+    // QUE O CÓDIGO NÃO EXISTE NEM NO PLANO NEM
+    // NAS ATIVIDADE REALIZADAS
+    public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) throws UtilizadorNaoExisteException {
+        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+        
         LocalDate dataInicio = this.dataAtual.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        this.limparPlanoDeTreino(codigoUtilizador);
         PlanoDeTreino plano = this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
 
         nMaximoAtividadesDia = nMaximoAtividadesDia > 3 ? 3 : nMaximoAtividadesDia;

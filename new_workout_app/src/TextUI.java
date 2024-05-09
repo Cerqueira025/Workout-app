@@ -14,9 +14,13 @@ import Atividade.Repeticoes.Repeticoes;
 import Atividade.Repeticoes.Abdominais;
 import Atividade.Repeticoes.Pesos.Pesos;
 import Atividade.Repeticoes.Pesos.Supino;
+import Excessoes.AtividadeExisteException;
+import Excessoes.AtividadeNaoExisteException;
 import Excessoes.EmailExisteException;
+import Excessoes.NomeAtividadeNaoExisteException;
 import Excessoes.ParametrosInvalidosException;
 import Excessoes.UtilizadorExisteException;
+import Excessoes.UtilizadorNaoExisteException;
 import PlanoTreino.PlanoDeTreino;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
@@ -214,45 +218,67 @@ public class TextUI {
                             "Remover um plano de treino", 
                             "Adicionar uma atividade ao plano de treino", 
                             "Remover uma atividade do plano de treino", 
-                            "Mostrar o plano de treino"
+                            "Mostrar o plano de treino",
+                            "Saltar no tempo"
                         });
             
             menu.setHandler(1, () -> addAtividadeRealizada(codigoUtilizador));
             
             menu.setCondicao(2, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-            menu.setHandler(2, () -> removerAtividadeRealizada(codigoUtilizador));
+            menu.setHandler(2, () -> this.removerAtividadeRealizada(codigoUtilizador));
             
             menu.setCondicao(3, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-            menu.setHandler(3, () -> mostrarAtividadesRealizadas(codigoUtilizador));
+            menu.setHandler(3, () -> this.mostrarAtividadesRealizadas(codigoUtilizador));
             
-            menu.setHandler(4, () -> criarPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(4, () -> this.criarPlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(5, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(5, () -> limparPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(5, () -> this.limparPlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(6, () -> this.model.getPlanoDeTreino(codigoUtilizador).getDuracao() > 0);
-            menu.setHandler(6, () -> addAtividadePlanoDeTreino(codigoUtilizador));
+            menu.setHandler(6, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(7, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(7, () -> removerAtividadePlanoDeTreino(codigoUtilizador));
+            menu.setHandler(7, () -> this.removerAtividadePlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(8, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(8, () -> mostrarPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(8, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
+
+            menu.setCondicao(9, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(9, () -> this.saltoNoTempo());
 
             menu.run();
         }
     }
 
     public void addAtividadeRealizada(String codigoUtilizador) {
-        Atividade a = criarAtividade(codigoUtilizador);
-        this.model.addAtividadeRealizada(codigoUtilizador, a);
+        try {
+            Atividade a = criarAtividade(codigoUtilizador);
+            this.model.addAtividadeRealizada(codigoUtilizador, a);
+        } catch (ParametrosInvalidosException e) {
+            System.out.println("[ERRO] Parâmetros inválidos\n");
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeExisteException e) {
+            System.out.println("[ERRO] Atividade já existe\n");
+        } catch (NomeAtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não tem recordes\n");
+        }
+   
     }
 
     public void removerAtividadeRealizada(String codigoUtilizador) {
         System.out.print("\nInsira o código da atividade que pretende remover: ");
         String codigoAtividade = sc.nextLine();
         
-        this.model.removerAtividade(codigoUtilizador, codigoAtividade);
+        try {
+            this.model.removerAtividade(codigoUtilizador, codigoAtividade);
+            System.out.println("[SUCESSO] Atividade removida\n");
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não existe\n");
+        } 
     }
 
     public void mostrarAtividadesRealizadas(String codigoUtilizador) {
@@ -280,33 +306,61 @@ public class TextUI {
         int duracao = sc.nextInt();
         sc.nextLine(); // limpar o buffer
 
-        this.model.setPlanoDeTreino(codigoUtilizador, new PlanoDeTreino(data, duracao));
-
-        System.out.print("Quantas atividades pretende inserir: ");
-        int nAtividades = sc.nextInt();
-        sc.nextLine(); // limpar o buffer
-
-        for(int i=0; i<nAtividades; i++) {
-            this.model.addAtividadePlanoDeTreino(codigoUtilizador, criarAtividade(codigoUtilizador));
+        try {
+            this.model.setPlanoDeTreino(codigoUtilizador, new PlanoDeTreino(data, duracao));
+    
+            System.out.print("Quantas atividades pretende inserir: ");
+            int nAtividades = sc.nextInt();
+            sc.nextLine(); // limpar o buffer
+    
+            for(int i=0; i<nAtividades; i++) {
+                try {
+                    this.model.addAtividadePlanoDeTreino(codigoUtilizador, criarAtividade(codigoUtilizador));
+                } catch (ParametrosInvalidosException e) {
+                    System.out.println("\n[ERRO] Parâmetros inválidos\n");
+                }
+            }
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeExisteException e) {
+            System.out.println("[ERRO] Atividade já existe\n");
         }
 
 
     }
 
     public void limparPlanoDeTreino(String codigoUtilizador) {
-        this.model.limparPlanoDeTreino(codigoUtilizador);
+        try {
+            this.model.limparPlanoDeTreino(codigoUtilizador);
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        }
     }
 
     public void addAtividadePlanoDeTreino(String codigoUtilizador) {
-        Atividade a = criarAtividade(codigoUtilizador);
-        this.model.addAtividadePlanoDeTreino(codigoUtilizador, a);
+        try {
+            Atividade a = criarAtividade(codigoUtilizador);
+            this.model.addAtividadePlanoDeTreino(codigoUtilizador, a); 
+        } catch (ParametrosInvalidosException e) {
+            System.out.println("\n[ERRO] Parâmetros inválidos\n");
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeExisteException e) {
+            System.out.println("[ERRO] Atividade já existe\n");
+        }
     }
 
     public void removerAtividadePlanoDeTreino(String codigoUtilizador) {
         System.out.print("\nInsira o código da atividade que pretende remover: ");
         String codigoAtividade = sc.nextLine();
         
-        this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);
+        try {
+            this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);      
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não existe\n");
+        }
     }
 
     public void mostrarPlanoDeTreino(String codigoUtilizador) {
@@ -314,8 +368,21 @@ public class TextUI {
         System.out.println(this.model.getPlanoDeTreino(codigoUtilizador));
     }
 
+    public void saltoNoTempo() {
+        System.out.println("\nNúmero de dias a avançar: ");
+        int dias = sc.nextInt();
+        sc.nextLine();
 
-    public Atividade criarAtividade(String codigoUtilizador) {
+        try {
+            this.model.saltoNoTempo(dias);
+            System.out.println("\n[SUCESSO] Avançou " + dias + " dias: ");
+        } catch (NomeAtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não tem recordes\n");
+        }
+    }
+
+
+    public Atividade criarAtividade(String codigoUtilizador) throws ParametrosInvalidosException, UtilizadorNaoExisteException {
         Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
 
         System.out.print("\nCodigo da atividade: ");
@@ -357,7 +424,7 @@ public class TextUI {
         int tipoAtividade = sc.nextInt();
         sc.nextLine(); // limpar o buffer
 
-        Atividade a = new Sprint(); // REVER
+        Atividade a = null; // tratamento com throw
         switch (tipoAtividade) {
             
             /*-------ATIVIDADES DE DISTÂNCIA-------*/
@@ -466,7 +533,8 @@ public class TextUI {
                 break;
         }
 
-        return a;
+        if (a == null) throw new ParametrosInvalidosException();
+        else return a;
     }
 
 }
