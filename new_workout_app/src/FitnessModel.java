@@ -32,22 +32,39 @@ import PlanoTreino.PlanoDeTreino;
 import Utilizador.Utilizador;
 
 public class FitnessModel implements Serializable {
+
+    private static Map<String, Predicate<Atividade>> predicatesAtividade = new HashMap<>();
+    private static Map<String, ToDoubleFunction<Atividade>> funcoesAtividade = new HashMap<>();
+    
+    // ----------------- Métodos para Predicates e ToDoubleFunctions ---------------- //
+
+    public static void addToDoubleFunction(String nomeFuncao, ToDoubleFunction<Atividade> tdf) {
+        FitnessModel.funcoesAtividade.put(nomeFuncao, tdf);
+    } 
+    
+    public static ToDoubleFunction<Atividade> getToDoubleFunction(String nomeFuncao) {
+        return FitnessModel.funcoesAtividade.get(nomeFuncao);
+    } 
+
+    public static void addPredicate(String nomePredicate, Predicate<Atividade> p) {
+        FitnessModel.predicatesAtividade.put(nomePredicate, p);
+    } 
+    
+    public static Predicate<Atividade> getPredicate(String nomePredicate) {
+        return FitnessModel.predicatesAtividade.get(nomePredicate);
+    } 
+
+
     private LocalDate dataAtual;
     private Map<String, Utilizador> utilizadores;
     private Map<String, Utilizador> recordesGerais;
     
-    private Map<String, Predicate<Atividade>> predicatesAtividade;
-    private Map<String, ToDoubleFunction<Atividade>> funcoesAtividade;
-    
-
     // ----------------- Construtores ---------------- //
 
     public FitnessModel() {
         this.dataAtual = LocalDate.now();
         this.utilizadores = new HashMap<>();
         this.recordesGerais = new HashMap<>();
-        this.predicatesAtividade = new HashMap<>();
-        this.funcoesAtividade = new HashMap<>();
     }
 
     public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais,
@@ -55,16 +72,12 @@ public class FitnessModel implements Serializable {
         this.dataAtual = data;
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-        this.predicatesAtividade = predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-        this.funcoesAtividade = funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     public FitnessModel(FitnessModel outro) {
         this.dataAtual = outro.getData();
         this.utilizadores = outro.getUtilizadores();
         this.recordesGerais = outro.getRecordesGerais();
-        this.predicatesAtividade = outro.getPredicatesAtividade();
-        this.funcoesAtividade = outro.getFuncoesAtividade();
     }
 
     // ----------------- Getters e Setters ---------------- //
@@ -92,40 +105,6 @@ public class FitnessModel implements Serializable {
     public void setRecordesGerais(Map<String, Utilizador> recordesGerais) {
         this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
     }
-    
-    public Map<String, Predicate<Atividade>> getPredicatesAtividade() {
-        return this.predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-    } 
-
-    public void setPredicatesAtividade(Map<String, Predicate<Atividade>> predicatesAtividade) {
-        this.predicatesAtividade = predicatesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-    } 
-    
-    public Map<String, ToDoubleFunction<Atividade>> getFuncoesAtividade() {
-        return this.funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-    }
-
-    public void setFuncoesAtividade(Map<String, ToDoubleFunction<Atividade>> funcoesAtividade) {
-        this.funcoesAtividade = funcoesAtividade.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-    } 
-     
-    // ----------------- Métodos para Predicates e ToDoubleFunctions ---------------- //
-
-    public void addToDoubleFunction(String nomeFuncao, ToDoubleFunction<Atividade> tdf) {
-        this.funcoesAtividade.put(nomeFuncao, tdf);
-    } 
-    
-    public ToDoubleFunction<Atividade> getToDoubleFunction(String nomeFuncao) {
-        return this.funcoesAtividade.get(nomeFuncao);
-    } 
-
-    public void addPredicate(String nomePredicate, Predicate<Atividade> p) {
-        this.predicatesAtividade.put(nomePredicate, p);
-    } 
-    
-    public Predicate<Atividade> getPredicate(String nomePredicate) {
-        return this.predicatesAtividade.get(nomePredicate);
-    } 
 
     // ----------------- Utilizador ---------------- //
 
@@ -515,9 +494,7 @@ public class FitnessModel implements Serializable {
         FitnessModel fm = (FitnessModel) o;
         return this.dataAtual.equals(fm.getData())
             && this.utilizadores.equals(fm.getUtilizadores())
-            && this.recordesGerais.equals(fm.getRecordesGerais())
-            && this.funcoesAtividade.equals(fm.getFuncoesAtividade())
-            && this.predicatesAtividade.equals(fm.getPredicatesAtividade());
+            && this.recordesGerais.equals(fm.getRecordesGerais());
     }
 
     public String toString() {
@@ -537,6 +514,8 @@ public class FitnessModel implements Serializable {
         FileOutputStream file_output = new FileOutputStream(nomeFicheiro);
         ObjectOutputStream object_output = new ObjectOutputStream(file_output);
 
+        object_output.writeObject(FitnessModel.predicatesAtividade);
+        object_output.writeObject(FitnessModel.funcoesAtividade);
         object_output.writeObject(this);
 
         object_output.flush();
@@ -547,6 +526,8 @@ public class FitnessModel implements Serializable {
         FileInputStream file_input = new FileInputStream(nomeFicheiro);
         ObjectInputStream object_input = new ObjectInputStream(file_input);
 
+        FitnessModel.predicatesAtividade = (Map<String, Predicate<Atividade>>) object_input.readObject();
+        FitnessModel.funcoesAtividade = (Map<String, ToDoubleFunction<Atividade>>) object_input.readObject();
         FitnessModel novoModel = (FitnessModel) object_input.readObject();
 
         object_input.close();

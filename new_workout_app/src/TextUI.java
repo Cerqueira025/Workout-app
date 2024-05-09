@@ -1,9 +1,11 @@
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -38,27 +40,27 @@ public class TextUI {
     public TextUI() {
         this.model = new FitnessModel(); // definir a data posteriormente
         
-        Predicate<Atividade> ativ = a -> a instanceof Atividade;
-        this.model.addPredicate("éAtividade", ativ);
-        Predicate<Atividade> dist = a -> a instanceof Distancia;
-        this.model.addPredicate("éAtividadeDistância", dist);
-        Predicate<Atividade> alti = a -> a instanceof Altimetria;
-        this.model.addPredicate("éAtividadeDistânciaAltimetria", alti);
-        Predicate<Atividade> repe = a -> a instanceof Repeticoes;
-        this.model.addPredicate("éAtividadeRepetições", repe);
-        Predicate<Atividade> peso = a -> a instanceof Pesos;
-        this.model.addPredicate("éAtividadeRepetiçõesPesos", peso);
+        Predicate<Atividade> ativ = (Predicate<Atividade> & Serializable) a -> a instanceof Atividade;
+        FitnessModel.addPredicate("éAtividade", ativ);
+        Predicate<Atividade> dist = (Predicate<Atividade> & Serializable) a -> a instanceof Distancia;
+        FitnessModel.addPredicate("éAtividadeDistância", dist);
+        Predicate<Atividade> alti = (Predicate<Atividade> & Serializable) a -> a instanceof Altimetria;
+        FitnessModel.addPredicate("éAtividadeDistânciaAltimetria", alti);
+        Predicate<Atividade> repe = (Predicate<Atividade> & Serializable) a -> a instanceof Repeticoes;
+        FitnessModel.addPredicate("éAtividadeRepetições", repe);
+        Predicate<Atividade> peso = (Predicate<Atividade> & Serializable) a -> a instanceof Pesos;
+        FitnessModel.addPredicate("éAtividadeRepetiçõesPesos", peso);
         
-        ToDoubleFunction<Atividade> calculoCalorias = a -> a.calorias();
-        this.model.addToDoubleFunction("obtémCalorias", calculoCalorias);
-        ToDoubleFunction<Atividade> calculoRepeticoes = a -> ((Repeticoes) a).getRepeticoes();
-        this.model.addToDoubleFunction("obtémRepetições", calculoRepeticoes);
-        ToDoubleFunction<Atividade> calculoPeso = a -> ((Pesos) a).getPeso();
-        this.model.addToDoubleFunction("obtémPeso", calculoPeso);
-        ToDoubleFunction<Atividade> calculoDistancia = a -> ((Distancia) a).getDistancia();
-        this.model.addToDoubleFunction("obtémDistancia", calculoDistancia);
-        ToDoubleFunction<Atividade> calculoAltimetria = a -> ((Altimetria) a).getAltimetria();
-        this.model.addToDoubleFunction("obtémAltimetria", calculoAltimetria);
+        ToDoubleFunction<Atividade> calculoCalorias = (ToDoubleFunction<Atividade> & Serializable) a -> a.calorias();
+        FitnessModel.addToDoubleFunction("obtémCalorias", calculoCalorias);
+        ToDoubleFunction<Atividade> calculoRepeticoes = (ToDoubleFunction<Atividade> & Serializable) a -> ((Repeticoes) a).getRepeticoes();
+        FitnessModel.addToDoubleFunction("obtémRepetições", calculoRepeticoes);
+        ToDoubleFunction<Atividade> calculoPeso = (ToDoubleFunction<Atividade> & Serializable) a -> ((Pesos) a).getPeso();
+        FitnessModel.addToDoubleFunction("obtémPeso", calculoPeso);
+        ToDoubleFunction<Atividade> calculoDistancia = (ToDoubleFunction<Atividade> & Serializable) a -> ((Distancia) a).getDistancia();
+        FitnessModel.addToDoubleFunction("obtémDistancia", calculoDistancia);
+        ToDoubleFunction<Atividade> calculoAltimetria = (ToDoubleFunction<Atividade> & Serializable) a -> ((Altimetria) a).getAltimetria();
+        FitnessModel.addToDoubleFunction("obtémAltimetria", calculoAltimetria);
         
         sc = new Scanner(System.in);
 
@@ -67,25 +69,39 @@ public class TextUI {
     public void run() {
         Menu menu = new Menu(new String[] {
                         "Carregar Estado",
-                        "Nova Simulação"
+                        "Nova Simulação",
+                        "Guardar Estado"
                         });
 
         menu.setHandler(1, () -> carregaEstado());
         menu.setHandler(2, () -> paginaInicial());
+        menu.setHandler(3, () -> guardaEstado());
 
         menu.run();
     }
 
     public void carregaEstado() {
         System.out.print("\nFicheiro a carregar: ");
-        String ficheiroCarregado = sc.nextLine();
+        String ficheiroACarregar = sc.nextLine();
 
         try {
-            this.model.carregaEstado(ficheiroCarregado);
+            this.model.carregaEstado(ficheiroACarregar);
             System.out.println("\n[SUCESSO] Ficheiro carregado\n");
             paginaInicial();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("\n[ERRO] Falha ao ler dados\n" + e);
+            System.out.println("\n[ERRO] Falha ao carregar dados\n");
+        } 
+    }
+
+    public void guardaEstado() {
+        System.out.print("\nNome do ficheiro a guardar: ");
+        String ficheiroAGuardar = sc.nextLine();
+
+        try {
+            this.model.guardaEstado(ficheiroAGuardar);
+            System.out.println("\n[SUCESSO] Ficheiro guardado\n");
+        } catch (IOException e) {
+            System.out.println("\n[ERRO] Falha ao guardar dados\n");
         } 
     }
 

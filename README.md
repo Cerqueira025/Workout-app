@@ -3,8 +3,11 @@ DELEGATE:
 ```
 ✓✓✓ criarAtividade(), na view, não pode devolver Atividade. Dever ser criada uma atividade e inserida logo de seguida, mesmo que o código se repita (Feito - por verificar pelo professor)
 ✓✓✓ implementar salto no tempo
+✓✓✓ implementar criação de plano de treino com objetivos
 
-- implementar criação de plano de treino com objetivos
+
+
+
 
 - fazer validação de parametros como nas linhas 204 a 210
 - implementar recordes gerais e de cada um
