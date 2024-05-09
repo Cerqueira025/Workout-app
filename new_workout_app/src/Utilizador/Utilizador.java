@@ -196,8 +196,8 @@ public abstract class Utilizador implements Serializable {
         return this.atividades.values().stream().map(a -> a).collect(Collectors.toList());
     }
     
-    public Atividade getAtividade(String codigo_atividade) {
-        return this.atividades.get(codigo_atividade);
+    public Atividade getAtividade(String codigoAtividade) {
+        return this.atividades.get(codigoAtividade);
     }
 
     public Map<String, Double> getRecordesAtividades() {
@@ -223,8 +223,8 @@ public abstract class Utilizador implements Serializable {
         this.atividades.put(atividade.getCodigo(), atividade);
     }
 
-    public void removeAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
+    public void removeAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
     }
 
     public boolean existeAtividade(String codigo) {

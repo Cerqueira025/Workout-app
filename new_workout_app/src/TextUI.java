@@ -4,8 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Random;
 
 import Atividade.Atividade;
+import Atividade.Hard;
 import Atividade.Distancia.Distancia;
 import Atividade.Distancia.Sprint;
 import Atividade.Distancia.Altimetria.Altimetria;
@@ -165,7 +171,6 @@ public class TextUI {
 
 
 
-    // RETIRAR THROWS *************
     public Utilizador criarUtilizador(int tipoUtilizador, String codigo, int bpmMedio, double peso, double caloriasGastas,
                                int altura, String nome, Genero genero, String morada, String email, String password) throws ParametrosInvalidosException,
                                UtilizadorExisteException, EmailExisteException {
@@ -214,7 +219,8 @@ public class TextUI {
             Menu menu = new Menu(new String[] { "Adicionar uma atividade realizada", 
                             "Remover uma atividade realizada", 
                             "Mostrar todas as atividades realizadas", 
-                            "Adicionar um plano de treino", 
+                            "Adicionar um plano de treino",
+                            "Criar plano de treino Automático",
                             "Remover um plano de treino", 
                             "Adicionar uma atividade ao plano de treino", 
                             "Remover uma atividade do plano de treino", 
@@ -232,20 +238,22 @@ public class TextUI {
             
             menu.setHandler(4, () -> this.criarPlanoDeTreino(codigoUtilizador));
             
-            menu.setCondicao(5, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(5, () -> this.limparPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(5, () -> this.criarPlanoDeTreinoComObjetivos(codigoUtilizador));
+
+            menu.setCondicao(6, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(6, () -> this.model.limparPlanoDeTreino(codigoUtilizador));
             
-            menu.setCondicao(6, () -> this.model.getPlanoDeTreino(codigoUtilizador).getDuracao() > 0);
-            menu.setHandler(6, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
-            
-            menu.setCondicao(7, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(7, () -> this.removerAtividadePlanoDeTreino(codigoUtilizador));
+            menu.setCondicao(7, () -> this.model.getDuracaoPlanoDeTreino(codigoUtilizador) > 0);
+            menu.setHandler(7, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(8, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(8, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
-
+            menu.setHandler(8, () -> this.removerAtividadePlanoDeTreino(codigoUtilizador));
+            
             menu.setCondicao(9, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(9, () -> this.saltoNoTempo());
+            menu.setHandler(9, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
+
+            menu.setCondicao(10, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(10, () -> this.saltoNoTempo());
 
             menu.run();
         }
@@ -329,13 +337,111 @@ public class TextUI {
 
     }
 
-    public void limparPlanoDeTreino(String codigoUtilizador) {
-        try {
-            this.model.limparPlanoDeTreino(codigoUtilizador);
-        } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
+
+    public void criarPlanoDeTreinoComObjetivos(String codigoUtilizador) {
+        Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
+        // Map<Atividade, Integer> atividadesComRecorrenciaSemanal
+
+        System.out.print("\nCalorias objetivo: ");
+        double caloriasObjetivo = sc.nextDouble();
+        sc.nextLine(); // limpar o buffer
+        System.out.print("Número máximo de atividades por dia: ");
+        int numMaxAtividadesPorDia = sc.nextInt();
+        sc.nextLine(); // limpar o buffer
+                
+        Menu menu = new Menu(new String[] { "Plano de treino de distância",
+                            "Plano de treino de distância e altimetria",
+                            "Plano de treino de repetições",
+                            "Plano de treino de repetições com pesos",
+                            "Plano de treino de distância com atividades hard",
+                            "Plano de treino de distância e altimetria com atividades hard",
+                            "Plano de treino de repetições com atividades hard",
+                            "Plano de treino de repetições com pesos com atividades hard"
+                        });
+
+
+        Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
+        Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
+        Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 10, 3, utilizador, 40, 60);
+        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 97, 93, utilizador, 920, 940, 925);
+
+        List<Atividade> atividadesDistancia = new ArrayList<>();
+        atividadesDistancia.add(sprint);
+
+        List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
+        atividadesDistanciaComHard.add(sprint);
+        atividadesDistanciaComHard.add(bicicletaMontanha);
+
+
+        List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
+        // falta uma atividade não hard
+
+        List<Atividade> atividadesDistanciaEAltimetriaComHard = new ArrayList<>();
+        atividadesDistanciaEAltimetriaComHard.add(bicicletaMontanha);
+
+        
+        List<Atividade> atividadesRepeticoes = new ArrayList<>();
+        atividadesRepeticoes.add(abdominais);
+
+        List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
+        atividadesRepeticoesComHard.add(abdominais);
+        atividadesRepeticoesComHard.add(supino);
+
+
+        List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();
+        // falta uma atividade não hard
+
+        List<Atividade> atividadesRepeticoesComPesosComHard = new ArrayList<>();
+        atividadesRepeticoesComPesosComHard.add(supino);
+
+
+        menu.setHandler(1, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistancia, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+        menu.setHandler(2, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetria, numMaxAtividadesPorDia, caloriasObjetivo));
+                        
+        menu.setHandler(3, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoes, numMaxAtividadesPorDia, caloriasObjetivo));
+                        
+        menu.setHandler(4, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesos, numMaxAtividadesPorDia, caloriasObjetivo));
+
+        menu.setHandler(5, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+        menu.setHandler(6, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetriaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+                        
+        menu.setHandler(7, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+                        
+        menu.setHandler(8, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesosComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+        menu.run();
+
+    }
+
+
+    public void preencherPlanoDeTreinoComObjetivos(String codigoUtilizador, List<Atividade> atividades, int numMaxAtividadesPorDia, double caloriasObjetivo) {
+        if (numMaxAtividadesPorDia > 3) numMaxAtividadesPorDia = 3; // máximo de 3 atividades diárias
+        int acumuladorAtividades = 999; // atribuir um valor suficientemente grande para entrar no ciclo while
+        int acumuladorAtividadesHard = 999;
+        int numMaxAtividadesPorSemana = 7*numMaxAtividadesPorDia;
+        while (numMaxAtividadesPorSemana < acumuladorAtividades || acumuladorAtividadesHard > 3) {
+            acumuladorAtividades = 0; // reset
+            acumuladorAtividadesHard = 0;
+
+            Map<Atividade, Integer> atividadesComRecorrenciaSemanal = new HashMap<>();
+            
+            for (Atividade atividade : atividades) {
+                System.out.print("Quantas vezes deseja repetir a atividade " + atividade.getClass().getSimpleName() + " por semana? ");
+                int vezesPorSemana = sc.nextInt();
+                atividadesComRecorrenciaSemanal.put(atividade, vezesPorSemana);
+                acumuladorAtividades += vezesPorSemana;
+                if (atividade instanceof Hard) acumuladorAtividadesHard += vezesPorSemana;
+            }
+
+            if (numMaxAtividadesPorSemana < acumuladorAtividades) System.out.println("[ERRO] Ultrapassou o limite máximo de atividades numa semana (" + numMaxAtividadesPorSemana + " atividades) ");
+            else if (acumuladorAtividadesHard > 3) System.out.println("[ERRO] Ultrapassou o limite máximo de atividades hard numa semana (3 atividades hard) ");
+            else this.model.planoDeTreinoComObjetivos(codigoUtilizador, atividadesComRecorrenciaSemanal, numMaxAtividadesPorDia, caloriasObjetivo);
         }
     }
+
+
 
     public void addAtividadePlanoDeTreino(String codigoUtilizador) {
         try {
@@ -365,11 +471,11 @@ public class TextUI {
 
     public void mostrarPlanoDeTreino(String codigoUtilizador) {
         System.out.println("\nPlano de Treino: ");
-        System.out.println(this.model.getPlanoDeTreino(codigoUtilizador));
+        System.out.println(this.model.getAtividadesPlanoDeTreinoCrescente(codigoUtilizador));
     }
 
     public void saltoNoTempo() {
-        System.out.println("\nNúmero de dias a avançar: ");
+        System.out.print("\nNúmero de dias a avançar: ");
         int dias = sc.nextInt();
         sc.nextLine();
 
@@ -424,7 +530,7 @@ public class TextUI {
         int tipoAtividade = sc.nextInt();
         sc.nextLine(); // limpar o buffer
 
-        Atividade a = null; // tratamento com throw
+        Atividade a; // tratamento com throw
         switch (tipoAtividade) {
             
             /*-------ATIVIDADES DE DISTÂNCIA-------*/
@@ -471,13 +577,13 @@ public class TextUI {
                                 a = new BicicletaMontanha(codigo, descricao, data, duracao, series, utilizador, distancia, altimetria, variacaoSuspencao, numeroMudancas, discoTravao);
                                 break;
                             default:
-                            // todo
-                                break;
+                                throw new ParametrosInvalidosException();
+
                         }
                         break;
                     default:
-                    // todo
-                        break;
+                        throw new ParametrosInvalidosException();
+
                 }
                 break;
 
@@ -519,22 +625,20 @@ public class TextUI {
                                 a = new Supino(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso, inclinacao);
                                 break;
                             default:
-                                // todo
-                                break;
+                                throw new ParametrosInvalidosException();
+
                         }
                         break;
                     default:
-                        // todo
-                        break;
+                        throw new ParametrosInvalidosException();
+
                 }
                 break;
             default:
-                // todo
-                break;
-        }
+                throw new ParametrosInvalidosException();
 
-        if (a == null) throw new ParametrosInvalidosException();
-        else return a;
+        }
+        return a;
     }
 
 }

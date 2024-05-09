@@ -19,7 +19,7 @@ public class PlanoDeTreino implements Serializable {
     // ----------------- Construtores ---------------- //
 
     public PlanoDeTreino() {
-        this.dataRealizacao = LocalDate.EPOCH;
+        this.dataRealizacao = LocalDate.now();
         this.duracao = 0;
         this.caloriasTotais = 0;
         this.atividades = new HashMap<>();
@@ -89,17 +89,17 @@ public class PlanoDeTreino implements Serializable {
         this.caloriasTotais += atividade.calorias();
     }
 
-    public void removeAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
+    public void removeAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
     }
 
-    public void apagaAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
-        this.caloriasTotais -= this.atividades.get(codigo_atividade).calorias();
+    public void apagaAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
+        this.caloriasTotais -= this.atividades.get(codigoAtividade).calorias();
     }
 
-    public Atividade getAtividade(String codigo_atividade) {
-        return this.atividades.get(codigo_atividade);
+    public Atividade getAtividade(String codigoAtividade) {
+        return this.atividades.get(codigoAtividade);
     }
 
     public boolean existeAtividade(String codigoAtividade) {

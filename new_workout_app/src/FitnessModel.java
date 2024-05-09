@@ -162,16 +162,14 @@ public class FitnessModel implements Serializable {
         this.utilizadores.remove(codigo);
     }
 
-    public Utilizador getUtilizador(String codigo) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
+    public Utilizador getUtilizador(String codigo) {
         return this.utilizadores.get(codigo);
     }
 
 
     // ----------------- Atividades ---------------- //
 
-    public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+    public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) {
         return this.utilizadores.get(codigoUtilizador).existeAtividade(codigoAtividade);
     }
 
@@ -215,8 +213,7 @@ public class FitnessModel implements Serializable {
 
     // ----------------- Plano de treino ---------------- //
 
-    public boolean existeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
+    public boolean existeAtividadePlanoDeTreino(String codUtilizador, String codAtividade) {
         return this.utilizadores.get(codUtilizador).existeAtividadePlanoDeTreino(codAtividade);
     }
 
@@ -225,8 +222,7 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codUtilizador).setPlanoDeTreino(planoDeTreino);
     }
 
-    public void limparPlanoDeTreino(String codUtilizador) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codUtilizador)) throw new UtilizadorNaoExisteException();
+    public void limparPlanoDeTreino(String codUtilizador) {
         this.utilizadores.get(codUtilizador).limparPlanoDeTreino();
     }
 
@@ -248,8 +244,18 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codUtilizador).getPlanoDeTreino();
     }
 
+    public int getDuracaoPlanoDeTreino(String codUtilizador) {
+        return this.getPlanoDeTreino(codUtilizador).getDuracao();
+    }
+
     public Map<String, Atividade> getAtividadesPlanoDeTreino(String codUtilizador) {
         return this.utilizadores.get(codUtilizador).getAtividadesPlanoDeTreino();
+    }
+
+    public List<Atividade> getAtividadesPlanoDeTreinoCrescente(String codUtilizador) {
+        Comparator<Atividade> comparator = (a1,a2) -> a1.getData().compareTo(a2.getData());
+                                                      
+        return this.getAtividadesPlanoDeTreino(codUtilizador).values().stream().sorted(comparator).collect(Collectors.toList());
     }
 
     // ----------------- Outras queries e auxiliares ---------------- //
@@ -437,15 +443,15 @@ public class FitnessModel implements Serializable {
         Map<Atividade, Integer> atividadesRestantes = atividadesComRecorrenciaSemanal.entrySet().stream().collect(Collectors.toMap(k->k.getKey().clone(), v->v.getValue()));
         
         for (Map.Entry<Atividade, Integer> e : atividadesRestantes.entrySet()) {
-            Atividade atividade = e.getKey();
-
-            while (e.getValue() > 0) {    
+            while (e.getValue() > 0) {
+                Atividade atividade = e.getKey().clone();
+                
                 boolean inseriuAtividade = false;
                 while (!inseriuAtividade) {
                     boolean podeInserir = true;
 
-                    Random random = new Random(); 
-                    LocalDate dataAleatoria = dataInicioSemana.plusDays(random.nextInt(7));
+                    Random randomDias = new Random(); 
+                    LocalDate dataAleatoria = dataInicioSemana.plusDays(randomDias.nextInt(7));
                     List<Atividade> atividadesDoDia = plano.atividadesDoDia(dataAleatoria);
                     List<Atividade> atividadesDoDiaAnterior = plano.atividadesDoDia(dataAleatoria.minusDays(1));
 
@@ -457,6 +463,16 @@ public class FitnessModel implements Serializable {
                     if (atividadesDoDia.size() >= nMaximoAtividadesDia) podeInserir = false;
                     
                     if (podeInserir) {
+                        
+                        String codigoNovo = atividade.getCodigo();
+                        do {
+                            Random randomNumCodigo = new Random();
+                            codigoNovo += randomNumCodigo.nextInt(10);
+                        } while (this.existeAtividadePlanoDeTreino(codUtilizador, codigoNovo) || this.existeAtividade(codUtilizador, codigoNovo));
+
+                        atividade.setBpm(atividade.bpm());
+                        atividade.setCalorias(atividade.calorias());
+                        atividade.setCodigo(codigoNovo);
                         atividade.setData(dataAleatoria.atTime(6*(atividadesDoDia.size() + 1), 0, 0));
                         plano.addAtividade(atividade);
                         inseriuAtividade = true;
@@ -467,22 +483,27 @@ public class FitnessModel implements Serializable {
         }
     }
 
+
+    /*
+     * /**
+     * - nMaximoAtividadesDia*7 >= nTotalAtividadesPossíveis (Map) && nAtivHard <= 3 (controller)
+     * 
+     * 
+     * A LISTA DE ATIVIDADES TEM DE ESTAR ORDENADA POR ATIVIDADES HARD PRIMEIRO
+    */
     // FAZER WHILE RANDOM NO DELEGATE PARA
     // OBTER CÓDIGO DA ATIVIDADE, VERIFICANDO
     // QUE O CÓDIGO NÃO EXISTE NEM NO PLANO NEM
     // NAS ATIVIDADE REALIZADAS
-    public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+    public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) {
         
         LocalDate dataInicio = this.dataAtual.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         this.limparPlanoDeTreino(codigoUtilizador);
         PlanoDeTreino plano = this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
-
-        nMaximoAtividadesDia = nMaximoAtividadesDia > 3 ? 3 : nMaximoAtividadesDia;
         
         while (plano.getCaloriasTotais() < caloriasObjetivo) {
             preencheSemana(codigoUtilizador, atividadesComRecorrenciaSemanal, dataInicio, nMaximoAtividadesDia);    
-            dataInicio.plusDays(7);
+            dataInicio = dataInicio.plusDays(7);
         }
     }
 
