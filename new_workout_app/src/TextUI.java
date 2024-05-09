@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Random;
 
 import Atividade.Atividade;
 import Atividade.Hard;
@@ -363,14 +362,14 @@ public class TextUI {
         Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
         Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
         Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 10, 3, utilizador, 40, 60);
-        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 97, 93, utilizador, 920, 940, 925);
+        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 7, 3, utilizador, 20, 40, 25);
 
         List<Atividade> atividadesDistancia = new ArrayList<>();
         atividadesDistancia.add(sprint);
 
         List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
-        atividadesDistanciaComHard.add(sprint);
         atividadesDistanciaComHard.add(bicicletaMontanha);
+        atividadesDistanciaComHard.add(sprint);
 
 
         List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
@@ -384,8 +383,8 @@ public class TextUI {
         atividadesRepeticoes.add(abdominais);
 
         List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
-        atividadesRepeticoesComHard.add(abdominais);
         atividadesRepeticoesComHard.add(supino);
+        atividadesRepeticoesComHard.add(abdominais);
 
 
         List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();

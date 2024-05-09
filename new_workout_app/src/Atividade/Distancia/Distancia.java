@@ -39,11 +39,11 @@ public abstract class Distancia extends Atividade {
 		this.distancia = distancia;
 	}
 
-    double getVelocidade() {
+    public double getVelocidade() {
         return this.velocidade;
     }
 
-    void setVelocidade(double velocidade) {
+    public void setVelocidade(double velocidade) {
         this.velocidade = velocidade;
     }
 
