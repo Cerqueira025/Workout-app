@@ -295,7 +295,6 @@ public class FitnessModel implements Serializable {
     
     // ----------------- Queries ---------------- //
 
-
     // *****VALIDAR DATAS NO DELEGATE*****
     // 1. qual é o utilizador que mais calorias dispendeu num período ou desde sempre
     public Utilizador utilizadorMaisCalorias(LocalDate inicio, LocalDate fim) { // referência no relatório
@@ -488,7 +487,7 @@ public class FitnessModel implements Serializable {
         object_output.close();
     }
 
-    public FitnessModel carregaEstado(String nomeFicheiro) throws IOException, ClassNotFoundException {
+    public static FitnessModel carregaEstado(String nomeFicheiro) throws IOException, ClassNotFoundException {
         FileInputStream file_input = new FileInputStream(nomeFicheiro);
         ObjectInputStream object_input = new ObjectInputStream(file_input);
 
