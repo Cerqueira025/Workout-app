@@ -21,17 +21,17 @@ public class BicicletaMontanhaTest {
 
     @Test
     public void testConstructor() {
-        //Construtor vazio
+        // ------------------- Construtor vazio ------------------- //
         BicicletaMontanha bicicleta = new BicicletaMontanha();
         assertNotNull(bicicleta);
 
-        // ------------------- Construtor parametrizado com Map e PlanoDeTreino ------------------- //
+        // ------------------- Construtor parametrizado (tipos de utilizador)  ------------------- //
         Map<String, Atividade> atividades = new HashMap<>();
         Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
 
-        // atleta Profissional
+        // Atleta Profissional
         Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 4,
@@ -49,7 +49,7 @@ public class BicicletaMontanhaTest {
         assertEquals(12, bicicleta1.getNumeroMudancas());
         assertTrue(bicicleta1.hasDiscoTravao());
 
-        // atleta Amador
+        // Atleta Amador
         Amador amador1 = new Amador("amadorId", 65, 70, 55, 160,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         BicicletaMontanha bicicleta2 = new BicicletaMontanha("002", "Descrição", data, 30, 3,
@@ -85,8 +85,8 @@ public class BicicletaMontanhaTest {
         assertEquals(12, bicicleta3.getNumeroMudancas());
         assertTrue(bicicleta3.hasDiscoTravao());
 
-        // ------------------- Construtor sem Map e PlanoDeTreino ------------------- //
-        // atleta Profissional
+        // ------------------- Construtor ------------------- //
+        // Atleta Profissional
         Profissional profissional2 = new Profissional("profId", 75, 80, 22, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta4 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
@@ -104,7 +104,7 @@ public class BicicletaMontanhaTest {
         assertEquals(12, bicicleta4.getNumeroMudancas());
         assertTrue(bicicleta4.hasDiscoTravao());
 
-        // atleta Amador
+        // Atleta Amador
         Amador amador2 = new Amador("amadorId", 65, 70, 35, 160,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta5 = new BicicletaMontanha("005", "Descrição", data, 30, 3,
@@ -148,59 +148,166 @@ public class BicicletaMontanhaTest {
         LocalDateTime data = LocalDateTime.now();
         BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 2,
                 profissional, 10.0, 500, 100.0, 12, true);
-        BicicletaMontanha bicicleta2 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+        BicicletaMontanha bicicleta2 = new BicicletaMontanha("001", "Descrição", data, 30, 2,
                 profissional, 10.0, 500, 100.0, 12, true);
         BicicletaMontanha bicicleta3 = new BicicletaMontanha("002", "Descrição", data, 30, 2,
                 profissional, 10.0, 500, 100.0, 12, true);
+        BicicletaMontanha bicicleta4 = new BicicletaMontanha("002", "Descrição", data, 30, 2,
+                profissional, 10.0, 500, 100.0, 10, true);
 
-        assertEquals(bicicleta1, bicicleta2);
-        assertNotEquals(bicicleta1, bicicleta3);
-        assertNotEquals(bicicleta2, bicicleta3);
+        
+        // --- Verificar igualdade ---
+        //parâmetros iguais
+        assertTrue(bicicleta1.equals(bicicleta2));
+        //parâmetros diferentes
+        assertFalse(bicicleta1.equals(bicicleta3)); // descricao diferente
+        assertFalse(bicicleta2.equals(bicicleta4)); // descricao e numeroMudancas diferente
+        assertFalse(bicicleta3.equals(bicicleta4)); // numeroMudancas diferente
     }
 
     /*@Test
     public void testClone() {
-        Profissional profissional = new Profissional("profId", 75, 80, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
-        LocalDate data = LocalDate.now();
-        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30,
-                profissional, 10.0, 500, 100.0, 12, true);
+        // Criar objeto para teste
+        Map<String, Atividade> atividades = new HashMap<>();
+        Map<String, Double> recordes = new HashMap<>();
+        PlanoDeTreino plano = new PlanoDeTreino();
+        LocalDateTime data = LocalDateTime.now();
 
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 4,
+                profissional1, 10.0, 500, 100.0, 12, true);
+
+        // Clonar e verificar igualdade
         BicicletaMontanha bicicleta2 = bicicleta1.clone();
         assertEquals(bicicleta1, bicicleta2);
     }*/
 
     @Test
     public void testCalorias() {
-        Profissional profissional = new Profissional("profId", 75, 80, 45, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         LocalDateTime data = LocalDateTime.now();
-        BicicletaMontanha bicicleta = new BicicletaMontanha("001", "Descrição", data, 30, 3,
-                profissional, 10.0, 500, 100.0, 12, true);
 
-        double caloriasEsperadas;
-        if (bicicleta.hasDiscoTravao()) {
-            caloriasEsperadas = 0.5 * profissional.fatorMultiplicativo() * (100.0 / 2) * 12 * (profissional.getBpmMedio() / 100);
-        } else {
-            caloriasEsperadas = profissional.fatorMultiplicativo() * (100.0 / 2) * 12 * (profissional.getBpmMedio() / 100);
-        }
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                profissional1, 10.0, 500, 100.0, 12, true);
 
-        assertEquals(caloriasEsperadas, bicicleta.calorias(), 0.01);
+        double caloriasEsperadas1 = 0.5 * profissional1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas1, bicicleta1.calorias(), 0.01);
+
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta2 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                profissional2, 10.0, 500, 100.0, 12, false);
+
+        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta2.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas2, bicicleta2.calorias(), 0.01);
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta3 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                praticanteOcasional1, 10.0, 500, 100.0, 12, true);
+
+        double caloriasEsperadas3 = 0.5 * praticanteOcasional1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas3, bicicleta3.calorias(), 0.01);
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta4 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                praticanteOcasional2, 10.0, 500, 100.0, 12, false);
+
+        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas4, bicicleta4.calorias(), 0.01);
+
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta5 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                amador1, 10.0, 500, 100.0, 12, true);
+        Amador amador2 = null;
+
+        double caloriasEsperadas5 = 0.5 * amador1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas5, bicicleta5.calorias(), 0.01);
+
+        //teste 2
+        amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta6 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                amador2, 10.0, 500, 100.0, 12, false);
+
+        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        assertEquals(caloriasEsperadas6, bicicleta6.calorias(), 0.01);
     }
 
     @Test
     public void testBpm() {
-        // Criar objeto para teste
-        Profissional profissional = new Profissional("profId", 75, 80, 10, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         LocalDateTime data = LocalDateTime.now();
-        BicicletaMontanha bicicleta = new BicicletaMontanha("001", "Descrição", data, 30, 1,
-                profissional, 10.0, 500, 100.0, 12, true);
 
-        // Calcular BPM esperado
-        int bpmEsperado = (int) (profissional.getBpmMedio() + 20 * profissional.fatorMultiplicativo());
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                profissional1, 10.0, 500, 100.0, 12, true);
 
-        // Verificar igualdade
-        assertEquals(bpmEsperado, bicicleta.bpm());
+        int bpmEsperado1 = (int) (profissional1.getBpmMedio() + 20 * profissional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado1, bicicleta1.bpm());
+
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta2 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                profissional2, 10.0, 500, 100.0, 12, false);
+
+        int bpmEsperado2 = (int) (profissional2.getBpmMedio() + 20 * profissional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado2, bicicleta2.bpm());
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta3 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                praticanteOcasional1, 10.0, 500, 100.0, 12, true);
+
+        int bpmEsperado3 = (int) (praticanteOcasional1.getBpmMedio() + 20 * praticanteOcasional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado3, bicicleta3.bpm());
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta4 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                praticanteOcasional2, 10.0, 500, 100.0, 12, false);
+
+        int bpmEsperado4 = (int) (praticanteOcasional2.getBpmMedio() + 20 * praticanteOcasional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado4, bicicleta4.bpm());
+
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta5 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                amador1, 10.0, 500, 100.0, 12, true);
+        Amador amador2 = null;
+
+        int bpmEsperado5 = (int) (amador1.getBpmMedio() + 20 * amador1.fatorMultiplicativo());
+        assertEquals(bpmEsperado5, bicicleta5.bpm());
+
+        //teste 2
+        amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        BicicletaMontanha bicicleta6 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
+                amador2, 10.0, 500, 100.0, 12, false);
+
+        int bpmEsperado6 = (int) (amador2.getBpmMedio() + 20 * amador2.fatorMultiplicativo());
+        assertEquals(bpmEsperado6, bicicleta6.bpm());
     }
 }

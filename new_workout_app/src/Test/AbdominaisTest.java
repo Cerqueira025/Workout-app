@@ -26,7 +26,7 @@ public class AbdominaisTest {
         Abdominais abdominais = new Abdominais();
         assertTrue(abdominais != null);
 
-        // ------------------- Construtor parametrizado com Maps e PlanoDeTreino -------------------//
+        // ------------------- Construtor parametrizado (tipos de utilizador) -------------------//
         Map<String, Atividade> atividades = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
         Map<String, Double> recordes = new HashMap<>();
@@ -87,12 +87,18 @@ public class AbdominaisTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais1 = new Abdominais("001", "Descrição", data, 30, 2, profissional, 10, 45.0);
         Abdominais abdominais2 = new Abdominais("001", "Descrição", data, 30, 2, profissional, 10, 45.0);
-        Abdominais abdominais3 = new Abdominais("002", "Descrição", data, 30, 3, profissional, 10, 45.0);
 
-        // Verificar igualdade
+        Abdominais abdominais3 = new Abdominais("002", "Descrição", data, 30, 2, profissional, 10, 45.0);
+        Abdominais abdominais4 = new Abdominais("002", "Descrição", data, 30, 2, profissional, 9, 45.0);
+
+
+        // --- Verificar igualdade ---
+        //parâmetros iguais
         assertTrue(abdominais1.equals(abdominais2));
+        //parâmetros diferentes
         assertFalse(abdominais1.equals(abdominais3));
-        assertFalse(abdominais2.equals(abdominais3));
+        assertFalse(abdominais2.equals(abdominais4));
+        assertFalse(abdominais3.equals(abdominais4));
     }
 
     @Test
@@ -118,13 +124,58 @@ public class AbdominaisTest {
         Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
-        Profissional profissional = new Profissional("profId", 75, 80, 180, 170,
+
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 180, 170,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
-        Abdominais abdominais = new Abdominais("001", "Descrição", data, 30, 2, profissional, 10, 45.0);
+        Abdominais abdominais1 = new Abdominais("001", "Descrição", data, 30, 2, profissional1, 10, 45.0);
 
-        double caloriasEsperadas = profissional.fatorMultiplicativo() * (45.0 / 4) * 30 * (profissional.getBpmMedio() / 100);
+        double caloriasEsperadas = profissional1.fatorMultiplicativo() * (45.0 / 4) * 30 * (profissional1.getBpmMedio() / 100);
+        assertEquals(caloriasEsperadas, abdominais1.calorias(), 0.01);
 
-        assertEquals(caloriasEsperadas, abdominais.calorias(), 0.01);
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 180, 170,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais2 = new Abdominais("002", "Descrição", data, 20, 2, profissional1, 10, 30.0);
+
+        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (30.0 / 4) * 20 * (profissional2.getBpmMedio() / 100);
+        assertEquals(caloriasEsperadas2, abdominais2.calorias(), 0.01);
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais3 = new Abdominais("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 45.0);
+
+        int bpmEsperado3 = (int) (praticanteOcasional1.getBpmMedio() + 10 * praticanteOcasional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado3, abdominais3.bpm());
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais4 = new Abdominais("002", "Descrição", data, 15, 2, praticanteOcasional2, 5, 25.0);
+
+        int bpmEsperado4 = (int) (praticanteOcasional2.getBpmMedio() + 10 * praticanteOcasional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado4, abdominais4.bpm());
+
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais5 = new Abdominais("001", "Descrição", data, 30, 2, amador1, 10, 45.0);
+
+        int bpmEsperado5 = (int) (amador1.getBpmMedio() + 10 * amador1.fatorMultiplicativo());
+        assertEquals(bpmEsperado5, abdominais5.bpm());
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais6 = new Abdominais("002", "Descrição", data, 15, 2, amador2, 5, 25.0);
+
+        int bpmEsperado6 = (int) (amador2.getBpmMedio() + 10 * amador2.fatorMultiplicativo());
+        assertEquals(bpmEsperado6, abdominais6.bpm());
     }
 
     @Test
@@ -133,12 +184,58 @@ public class AbdominaisTest {
         Map<String, Double> recordes = new HashMap<>();
         PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
-        Profissional profissional = new Profissional("profId", 75, 80, 44, 180,
+
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 44, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
-        Abdominais abdominais = new Abdominais("001", "Descrição", data, 30, 2, profissional, 10, 45.0);
+        Abdominais abdominais1 = new Abdominais("001", "Descrição", data, 30, 2, profissional1, 10, 45.0);
 
-        int bpmEsperado = (int) (profissional.getBpmMedio() + 10 * profissional.fatorMultiplicativo());
+        int bpmEsperado1 = (int) (profissional1.getBpmMedio() + 10 * profissional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado1, abdominais1.bpm());
 
-        assertEquals(bpmEsperado, abdominais.bpm());
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais2 = new Abdominais("002", "Descrição", data, 15, 2, profissional2, 5, 25.0);
+
+        int bpmEsperado2 = (int) (profissional2.getBpmMedio() + 10 * profissional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado2, abdominais2.bpm());
+
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais3 = new Abdominais("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 45.0);
+
+        int bpmEsperado3 = (int) (praticanteOcasional1.getBpmMedio() + 10 * praticanteOcasional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado3, abdominais3.bpm());
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais4 = new Abdominais("002", "Descrição", data, 15, 2, praticanteOcasional2, 5, 25.0);
+
+        int bpmEsperado4 = (int) (praticanteOcasional2.getBpmMedio() + 10 * praticanteOcasional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado4, abdominais4.bpm());
+
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais5 = new Abdominais("001", "Descrição", data, 30, 2, amador1, 10, 45.0);
+
+        int bpmEsperado5 = (int) (amador1.getBpmMedio() + 10 * amador1.fatorMultiplicativo());
+        assertEquals(bpmEsperado5, abdominais5.bpm());
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        Abdominais abdominais6 = new Abdominais("002", "Descrição", data, 15, 2, amador2, 5, 25.0);
+
+        int bpmEsperado6 = (int) (amador2.getBpmMedio() + 10 * amador2.fatorMultiplicativo());
+        assertEquals(bpmEsperado6, abdominais6.bpm());
     }
 }

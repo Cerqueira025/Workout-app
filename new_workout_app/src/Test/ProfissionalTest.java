@@ -31,7 +31,7 @@ public class ProfissionalTest {
         assertEquals("001", profissional2.getCodigo());
         assertEquals(70, profissional2.getBpmMedio());
         assertEquals(75.5, profissional2.getPeso(), 0.001);
-        assertEquals(45, profissional2.getCaloriasGastas());
+        assertEquals(45, profissional2.getCaloriasGastas(), 0.001);
         assertEquals(175, profissional2.getAltura());
         assertEquals("João", profissional2.getNome());
         assertEquals(Genero.Masculino, profissional2.getGenero());
@@ -49,7 +49,7 @@ public class ProfissionalTest {
         assertEquals("001", profissional3.getCodigo());
         assertEquals(70, profissional3.getBpmMedio());
         assertEquals(75.5, profissional3.getPeso(), 0.001);
-        assertEquals(60, profissional2.getCaloriasGastas());
+        assertEquals(60, profissional2.getCaloriasGastas(), 0.001);
         assertEquals(175, profissional3.getAltura());
         assertEquals("João", profissional3.getNome());
         assertEquals(Genero.Masculino, profissional3.getGenero());
