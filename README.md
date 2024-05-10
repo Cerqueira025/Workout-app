@@ -32,6 +32,7 @@ A FAZER NO FINAL:
 ```
 
 nextInt tem de ter nextLine;
++1 em calorias() do sprint
 
 
 find . -name \*.class -type f -delete
