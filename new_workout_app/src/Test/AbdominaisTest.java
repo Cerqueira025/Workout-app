@@ -144,15 +144,17 @@ public class AbdominaisTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais1 = new Abdominais("001", "Descrição", data, 30, 2, profissional1, 10, 45.0);
 
-        double caloriasEsperadas = profissional1.fatorMultiplicativo() * (45.0 / 4) * 30 * (profissional1.getBpmMedio() / 100);
-        assertEquals(caloriasEsperadas, abdominais1.calorias(), 0.01);
+        double caloriasEsperadas1 = profissional1.fatorMultiplicativo() * (abdominais1.getAmplitude() / 40 + 1)
+                * (abdominais1.getDuracao()/2 + 1) * (abdominais1.bpm()/ 100 + 1) * abdominais1.getSeries() + abdominais1.getRepeticoes();
+        assertEquals(caloriasEsperadas1, abdominais1.calorias(), 0.01);
 
         //teste 2
         Profissional profissional2 = new Profissional("profId", 75, 80, 180, 170,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
-        Abdominais abdominais2 = new Abdominais("002", "Descrição", data, 20, 2, profissional1, 10, 30.0);
+        Abdominais abdominais2 = new Abdominais("002", "Descrição", data, 20, 2, profissional2, 10, 30.0);
 
-        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (30.0 / 4) * 20 * (profissional2.getBpmMedio() / 100);
+        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (abdominais2.getAmplitude() / 40 + 1)
+                * (abdominais2.getDuracao()/2 + 1) * (abdominais2.bpm()/ 100 + 1) * abdominais2.getSeries() + abdominais2.getRepeticoes();
         assertEquals(caloriasEsperadas2, abdominais2.calorias(), 0.01);
 
         //Praticante Ocasional
@@ -161,16 +163,18 @@ public class AbdominaisTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais3 = new Abdominais("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 45.0);
 
-        int bpmEsperado3 = (int) (praticanteOcasional1.getBpmMedio() + 10 * praticanteOcasional1.fatorMultiplicativo());
-        assertEquals(bpmEsperado3, abdominais3.bpm());
+        double caloriasEsperadas3 = praticanteOcasional1.fatorMultiplicativo() * (abdominais3.getAmplitude() / 40 + 1)
+                * (abdominais3.getDuracao()/2 + 1) * (abdominais3.bpm()/ 100 + 1) * abdominais3.getSeries() + abdominais3.getRepeticoes();
+        assertEquals(caloriasEsperadas3, abdominais3.calorias(), 0.01);
 
         //teste 2
         PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais4 = new Abdominais("002", "Descrição", data, 15, 2, praticanteOcasional2, 5, 25.0);
 
-        int bpmEsperado4 = (int) (praticanteOcasional2.getBpmMedio() + 10 * praticanteOcasional2.fatorMultiplicativo());
-        assertEquals(bpmEsperado4, abdominais4.bpm());
+        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (abdominais4.getAmplitude() / 40 + 1)
+                * (abdominais4.getDuracao()/2 + 1) * (abdominais4.bpm()/ 100 + 1) * abdominais4.getSeries() + abdominais4.getRepeticoes();
+        assertEquals(caloriasEsperadas4, abdominais4.calorias(), 0.01);
 
 
         //Amador
@@ -179,16 +183,19 @@ public class AbdominaisTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais5 = new Abdominais("001", "Descrição", data, 30, 2, amador1, 10, 45.0);
 
-        int bpmEsperado5 = (int) (amador1.getBpmMedio() + 10 * amador1.fatorMultiplicativo());
-        assertEquals(bpmEsperado5, abdominais5.bpm());
+        double caloriasEsperadas5 = amador1.fatorMultiplicativo() * (abdominais5.getAmplitude() / 40 + 1)
+                * (abdominais5.getDuracao()/2 + 1) * (abdominais5.bpm()/ 100 + 1) * abdominais5.getSeries() + abdominais5.getRepeticoes();
+        assertEquals(caloriasEsperadas5, abdominais5.calorias(), 0.01);
+
 
         //teste 2
         Amador amador2 = new Amador("profId", 75, 80, 44, 180,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
         Abdominais abdominais6 = new Abdominais("002", "Descrição", data, 15, 2, amador2, 5, 25.0);
 
-        int bpmEsperado6 = (int) (amador2.getBpmMedio() + 10 * amador2.fatorMultiplicativo());
-        assertEquals(bpmEsperado6, abdominais6.bpm());
+        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (abdominais6.getAmplitude() / 40 + 1)
+                * (abdominais6.getDuracao()/2 + 1) * (abdominais6.bpm()/ 100 + 1) * abdominais6.getSeries() + abdominais6.getRepeticoes();
+        assertEquals(caloriasEsperadas6, abdominais6.calorias(), 0.01);
     }
 
     @Test

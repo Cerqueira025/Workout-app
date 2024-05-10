@@ -188,7 +188,8 @@ public class SupinoTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         Supino supino1 = new Supino("001", "Descrição", data, 30, 2, profissional1, 10, 50, 45.0);
 
-        double caloriasEsperadas1 = profissional1.fatorMultiplicativo() * (45.0/3) * 30 * (profissional1.getBpmMedio()/100);
+        double caloriasEsperadas1 = profissional1.fatorMultiplicativo() * (supino1.getInclinacao()/30+1)
+                * (supino1.getPeso()/20 + 1) * supino1.getDuracao() * ((supino1.bpm()/100) + 1) * supino1.getSeries() + supino1.getRepeticoes();
         assertEquals(caloriasEsperadas1, supino1.calorias(), 0.01);
 
         //teste 2
@@ -196,7 +197,8 @@ public class SupinoTest {
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         Supino supino2 = new Supino("001", "Descrição", data, 30, 2, profissional2, 10, 50, 45.0);
 
-        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (45.0/3) * 30 * (profissional2.getBpmMedio()/100);
+        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (supino2.getInclinacao()/30+1)
+                * (supino2.getPeso()/20 + 1) * supino2.getDuracao() * ((supino2.bpm()/100) + 1) * supino2.getSeries() + supino2.getRepeticoes();
         assertEquals(caloriasEsperadas2, supino2.calorias(), 0.01);
 
         //Praticante Ocasional
@@ -205,7 +207,8 @@ public class SupinoTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         Supino supino3 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 50, 45.0);
 
-        double caloriasEsperadas3 = praticanteOcasional1.fatorMultiplicativo() * (45.0/3) * 30 * (praticanteOcasional1.getBpmMedio()/100);
+        double caloriasEsperadas3 = praticanteOcasional1.fatorMultiplicativo() * (supino3.getInclinacao()/30+1)
+                * (supino3.getPeso()/20 + 1) * supino3.getDuracao() * ((supino3.bpm()/100) + 1) * supino3.getSeries() + supino3.getRepeticoes();
         assertEquals(caloriasEsperadas3, supino3.calorias(), 0.01);
 
         //teste 2
@@ -213,7 +216,8 @@ public class SupinoTest {
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         Supino supino4 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional2, 10, 50, 45.0);
 
-        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (45.0/3) * 30 * (praticanteOcasional2.getBpmMedio()/100);
+        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (supino4.getInclinacao()/30+1)
+                * (supino4.getPeso()/20 + 1) * supino4.getDuracao() * ((supino4.bpm()/100) + 1) * supino4.getSeries() + supino4.getRepeticoes();
         assertEquals(caloriasEsperadas4, supino4.calorias(), 0.01);
 
         //Amador
@@ -222,7 +226,8 @@ public class SupinoTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         Supino supino5 = new Supino("001", "Descrição", data, 30, 2, amador1, 10, 50, 45.0);
 
-        double caloriasEsperadas5 = amador1.fatorMultiplicativo() * (45.0/3) * 30 * (amador1.getBpmMedio()/100);
+        double caloriasEsperadas5 = amador1.fatorMultiplicativo() * (supino5.getInclinacao()/30+1)
+                * (supino5.getPeso()/20 + 1) * supino5.getDuracao() * ((supino5.bpm()/100) + 1) * supino5.getSeries() + supino5.getRepeticoes();
         assertEquals(caloriasEsperadas5, supino5.calorias(), 0.01);
 
         //teste 2
@@ -230,7 +235,8 @@ public class SupinoTest {
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         Supino supino6 = new Supino("001", "Descrição", data, 30, 2, amador2, 10, 50, 45.0);
 
-        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (45.0/3) * 30 * (amador2.getBpmMedio()/100);
+        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (supino6.getInclinacao()/30+1)
+                * (supino6.getPeso()/20 + 1) * supino6.getDuracao() * ((supino6.bpm()/100) + 1) * supino6.getSeries() + supino6.getRepeticoes();
         assertEquals(caloriasEsperadas6, supino6.calorias(), 0.01);
     }
 

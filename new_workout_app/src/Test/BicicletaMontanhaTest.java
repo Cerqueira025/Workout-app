@@ -212,7 +212,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 profissional1, 10.0, 500, 100.0, 12, true);
 
-        double caloriasEsperadas1 = 0.5 * profissional1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        double caloriasEsperadas1 = profissional1.fatorMultiplicativo() * (bicicleta1.getVelocidade() / 2 + 1) * (bicicleta1.getDuracao()/10+1)
+                * (bicicleta1.getAltimetria()/10+1) * (bicicleta1.getVariacaoSuspensao()/20 + 1) * (bicicleta1.getNumeroMudancas()/4 + 1)
+                * (bicicleta1.bpm() / 100 + 1) * bicicleta1.getSeries();
         assertEquals(caloriasEsperadas1, bicicleta1.calorias(), 0.01);
 
         //teste 2
@@ -221,7 +223,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta2 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 profissional2, 10.0, 500, 100.0, 12, false);
 
-        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta2.bpm() / 100) * 3;
+        double caloriasEsperadas2 = 0.8 * profissional2.fatorMultiplicativo() * (bicicleta2.getVelocidade() / 2 + 1) * (bicicleta2.getDuracao()/10+1)
+                * (bicicleta2.getAltimetria()/10+1) * (bicicleta2.getVariacaoSuspensao()/20 + 1) * (bicicleta2.getNumeroMudancas()/4 + 1)
+                * (bicicleta2.bpm() / 100 + 1) * bicicleta2.getSeries();
         assertEquals(caloriasEsperadas2, bicicleta2.calorias(), 0.01);
 
         //Praticante Ocasional
@@ -231,7 +235,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta3 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 praticanteOcasional1, 10.0, 500, 100.0, 12, true);
 
-        double caloriasEsperadas3 = 0.5 * praticanteOcasional1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        double caloriasEsperadas3 = praticanteOcasional1.fatorMultiplicativo() * (bicicleta3.getVelocidade() / 2 + 1) * (bicicleta3.getDuracao()/10+1)
+                * (bicicleta3.getAltimetria()/10+1) * (bicicleta3.getVariacaoSuspensao()/20 + 1) * (bicicleta3.getNumeroMudancas()/4 + 1)
+                * (bicicleta3.bpm() / 100 + 1) * bicicleta3.getSeries();
         assertEquals(caloriasEsperadas3, bicicleta3.calorias(), 0.01);
 
         //teste 2
@@ -240,7 +246,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta4 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 praticanteOcasional2, 10.0, 500, 100.0, 12, false);
 
-        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        double caloriasEsperadas4 = 0.8 * praticanteOcasional2.fatorMultiplicativo() * (bicicleta4.getVelocidade() / 2 + 1) * (bicicleta4.getDuracao()/10+1)
+                * (bicicleta4.getAltimetria()/10+1) * (bicicleta4.getVariacaoSuspensao()/20 + 1) * (bicicleta4.getNumeroMudancas()/4 + 1)
+                * (bicicleta4.bpm() / 100 + 1) * bicicleta4.getSeries();
         assertEquals(caloriasEsperadas4, bicicleta4.calorias(), 0.01);
 
 
@@ -251,7 +259,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta5 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador1, 10.0, 500, 100.0, 12, true);
 
-        double caloriasEsperadas5 = 0.5 * amador1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        double caloriasEsperadas5 = amador1.fatorMultiplicativo() * (bicicleta5.getVelocidade() / 2 + 1) * (bicicleta5.getDuracao()/10+1)
+                * (bicicleta5.getAltimetria()/10+1) * (bicicleta5.getVariacaoSuspensao()/20 + 1) * (bicicleta5.getNumeroMudancas()/4 + 1)
+                * (bicicleta5.bpm() / 100 + 1) * bicicleta5.getSeries();
         assertEquals(caloriasEsperadas5, bicicleta5.calorias(), 0.01);
 
         //teste 2
@@ -260,7 +270,9 @@ public class BicicletaMontanhaTest {
         BicicletaMontanha bicicleta6 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador2, 10.0, 500, 100.0, 12, false);
 
-        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
+        double caloriasEsperadas6 = 0.8 * amador2.fatorMultiplicativo() * (bicicleta6.getVelocidade() / 2 + 1) * (bicicleta6.getDuracao()/10+1)
+                * (bicicleta6.getAltimetria()/10+1) * (bicicleta6.getVariacaoSuspensao()/20 + 1) * (bicicleta6.getNumeroMudancas()/4 + 1)
+                * (bicicleta6.bpm() / 100 + 1) * bicicleta6.getSeries();
         assertEquals(caloriasEsperadas6, bicicleta6.calorias(), 0.01);
     }
 
