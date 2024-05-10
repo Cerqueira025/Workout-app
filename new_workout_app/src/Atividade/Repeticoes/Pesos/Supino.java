@@ -61,7 +61,7 @@ public class Supino extends Pesos implements Hard {
     }
     
     public double calorias() {
-        return this.getUtilizador().fatorMultiplicativo() * (this.inclinacao/3) * this.getDuracao() * (this.bpm()/100) * this.getSeries();
+        return this.getUtilizador().fatorMultiplicativo() * ((this.inclinacao/30 + 1)) * (this.getPeso()/20 + 1) * this.getDuracao() * ((this.bpm()/100) + 1) * this.getSeries() + this.getRepeticoes();
     }
 
     public int bpm(){

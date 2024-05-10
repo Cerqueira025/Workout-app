@@ -1,17 +1,17 @@
 
 DELEGATE:
 ```
-✓✓✓ criarAtividade(), na view, não pode devolver Atividade. Dever ser criada uma atividade e inserida logo de seguida, mesmo que o código se repita (Feito - por verificar pelo professor)
+✓✓✓ corrigir criarAtividade()
 ✓✓✓ implementar salto no tempo
 ✓✓✓ implementar criação de plano de treino com objetivos
 
 
 
 
-
-- fazer validação de parametros como nas linhas 204 a 210
 - implementar recordes gerais e de cada um
 - implementar queries (ter em atenção as mudanças feitas pelos MAP de Predicates e ToDoubleFunctions)
+
+- fazer validação de parametros como nas linhas 204 a 210
 - implementar leitura e escrita em ficheiro
 - colocar data na aplicação (Feito - por verificar com salto no tempo)
 - lidar com exceções vindas do model e fazer tratamento de parametros no controller com handlers
@@ -30,6 +30,8 @@ A FAZER NO FINAL:
 - ver se exceptions ficam no diagrama de classes
 - Retirar ficheiro TipoMenu.java
 ```
+
+nextInt tem de ter nextLine;
 
 
 find . -name \*.class -type f -delete

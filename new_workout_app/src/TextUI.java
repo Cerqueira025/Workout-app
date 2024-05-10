@@ -186,28 +186,31 @@ public class TextUI {
 
 
 
-    public Utilizador criarUtilizador(int tipoUtilizador, String codigo, int bpmMedio, double peso, double caloriasGastas,
+    public Utilizador criarUtilizador(int tipoUtilizador, String codigoUtilizador, int bpmMedio, double peso, double caloriasGastas,
                                int altura, String nome, Genero genero, String morada, String email, String password) throws ParametrosInvalidosException,
                                UtilizadorExisteException, EmailExisteException {
+        if (codigoUtilizador.length() == 0 || (bpmMedio <= 35 || bpmMedio >= 200)|| (Double.compare(peso,30) <= 0
+                                 || Double.compare(peso,500) >= 0) || (altura <= 100 || altura >= 300)
+                                 || nome.length() == 0 || morada.length() == 0 || email.length() == 0
+                                 || password.length() == 0) 
+            throw new ParametrosInvalidosException();
+        if (this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorExisteException();
+        if (this.model.emailUtilizadorExiste(email)) throw new EmailExisteException();
+
         Utilizador u;
         switch (tipoUtilizador) {
             case 1:
-                u = new PraticanteOcasional(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
+                u = new PraticanteOcasional(codigoUtilizador, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
                 break;
             case 2:
-                u = new Amador(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
+                u = new Amador(codigoUtilizador, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
                 break;
             case 3:
-                u = new Profissional(codigo, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
+                u = new Profissional(codigoUtilizador, bpmMedio, peso, caloriasGastas, altura, nome, genero, morada, email, password);
                 break;
             default:
                 throw new ParametrosInvalidosException();
         }
-        if (codigo.length() == 0 || (bpmMedio <= 0 || bpmMedio >= 200)|| (Double.compare(peso,0) <= 0
-                                 || Double.compare(peso,500) >= 0) || (altura <= 0 || altura >= 300)
-                                 || nome.length() == 0 || morada.length() == 0 || email.length() == 0
-                                 || password.length() == 0) 
-            throw new ParametrosInvalidosException();
          
         return u;
     }
@@ -240,6 +243,7 @@ public class TextUI {
                             "Adicionar uma atividade ao plano de treino", 
                             "Remover uma atividade do plano de treino", 
                             "Mostrar o plano de treino",
+                            "Ver estatísticas gerais",
                             "Saltar no tempo"
                         });
             
@@ -267,8 +271,11 @@ public class TextUI {
             menu.setCondicao(9, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
             menu.setHandler(9, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
 
-            menu.setCondicao(10, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(10, () -> this.saltoNoTempo());
+            menu.setCondicao(10, () -> this.model.existemAtividadesRealizadas());
+            menu.setHandler(10, () -> this.estatisticasGerias(codigoUtilizador));
+
+            menu.setCondicao(11, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(11, () -> this.saltoNoTempo());
 
             menu.run();
         }
@@ -348,8 +355,6 @@ public class TextUI {
         } catch (AtividadeExisteException e) {
             System.out.println("[ERRO] Atividade já existe\n");
         }
-
-
     }
 
 
@@ -377,8 +382,13 @@ public class TextUI {
 
         Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
         Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
-        Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 10, 3, utilizador, 40, 60);
-        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 7, 3, utilizador, 20, 40, 25);
+        Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 3, 3, utilizador, 40, 60);
+        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 1, 3, utilizador, 20, 40, 25);
+
+        System.out.println(sprint.calorias());
+        System.out.println(bicicletaMontanha.calorias());
+        System.out.println(abdominais.calorias());
+        System.out.println(supino.calorias());
 
         List<Atividade> atividadesDistancia = new ArrayList<>();
         atividadesDistancia.add(sprint);
@@ -410,20 +420,28 @@ public class TextUI {
         atividadesRepeticoesComPesosComHard.add(supino);
 
 
+        menu.setCondicao(1, () -> atividadesDistancia.size() > 0);
         menu.setHandler(1, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistancia, numMaxAtividadesPorDia, caloriasObjetivo));
             
+        menu.setCondicao(2, () -> atividadesDistanciaEAltimetria.size() > 0);
         menu.setHandler(2, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetria, numMaxAtividadesPorDia, caloriasObjetivo));
                         
+        menu.setCondicao(3, () -> atividadesRepeticoes.size() > 0);                
         menu.setHandler(3, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoes, numMaxAtividadesPorDia, caloriasObjetivo));
-                        
+        
+        menu.setCondicao(4, () -> atividadesRepeticoesComPesos.size() > 0);                
         menu.setHandler(4, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesos, numMaxAtividadesPorDia, caloriasObjetivo));
-
+        
+        menu.setCondicao(5, () -> atividadesDistanciaComHard.size() > 0);
         menu.setHandler(5, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-            
+        
+        menu.setCondicao(6, () -> atividadesDistanciaEAltimetriaComHard.size() > 0);    
         menu.setHandler(6, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetriaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-                        
+        
+        menu.setCondicao(7, () -> atividadesRepeticoesComHard.size() > 0);                
         menu.setHandler(7, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-                        
+        
+        menu.setCondicao(8, () -> atividadesRepeticoesComPesosComHard.size() > 0);                
         menu.setHandler(8, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesosComHard, numMaxAtividadesPorDia, caloriasObjetivo));
             
         menu.run();
@@ -445,6 +463,8 @@ public class TextUI {
             for (Atividade atividade : atividades) {
                 System.out.print("Quantas vezes deseja repetir a atividade " + atividade.getClass().getSimpleName() + " por semana? ");
                 int vezesPorSemana = sc.nextInt();
+                sc.nextLine(); // limpar buffer
+
                 atividadesComRecorrenciaSemanal.put(atividade, vezesPorSemana);
                 acumuladorAtividades += vezesPorSemana;
                 if (atividade instanceof Hard) acumuladorAtividadesHard += vezesPorSemana;
@@ -470,38 +490,6 @@ public class TextUI {
             System.out.println("[ERRO] Atividade já existe\n");
         }
     }
-
-    public void removerAtividadePlanoDeTreino(String codigoUtilizador) {
-        System.out.print("\nInsira o código da atividade que pretende remover: ");
-        String codigoAtividade = sc.nextLine();
-        
-        try {
-            this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);      
-        } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
-        } catch (AtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não existe\n");
-        }
-    }
-
-    public void mostrarPlanoDeTreino(String codigoUtilizador) {
-        System.out.println("\nPlano de Treino: ");
-        System.out.println(this.model.getAtividadesPlanoDeTreinoCrescente(codigoUtilizador));
-    }
-
-    public void saltoNoTempo() {
-        System.out.print("\nNúmero de dias a avançar: ");
-        int dias = sc.nextInt();
-        sc.nextLine();
-
-        try {
-            this.model.saltoNoTempo(dias);
-            System.out.println("\n[SUCESSO] Avançou " + dias + " dias: ");
-        } catch (NomeAtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não tem recordes\n");
-        }
-    }
-
 
     public Atividade criarAtividade(String codigoUtilizador) throws ParametrosInvalidosException, UtilizadorNaoExisteException {
         Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
@@ -654,6 +642,133 @@ public class TextUI {
 
         }
         return a;
+    }
+
+
+
+    public void removerAtividadePlanoDeTreino(String codigoUtilizador) {
+        System.out.print("\nInsira o código da atividade que pretende remover: ");
+        String codigoAtividade = sc.nextLine();
+        
+        try {
+            this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);      
+        } catch (UtilizadorNaoExisteException e) {
+            System.out.println("[ERRO] Utilizador não existe\n");
+        } catch (AtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não existe\n");
+        }
+    }
+
+    public void mostrarPlanoDeTreino(String codigoUtilizador) {
+        System.out.println("\nPlano de Treino: ");
+        System.out.println(this.model.getAtividadesPlanoDeTreinoCrescente(codigoUtilizador));
+    }
+
+    public void saltoNoTempo() {
+        System.out.print("\nNúmero de dias a avançar: ");
+        int dias = sc.nextInt();
+        sc.nextLine();
+
+        try {
+            this.model.saltoNoTempo(dias);
+            System.out.println("\n[SUCESSO] Avançou " + dias + " dias: ");
+        } catch (NomeAtividadeNaoExisteException e) {
+            System.out.println("[ERRO] Atividade não tem recordes\n");
+        }
+    }
+
+    public void estatisticasGerias(String codigoUtilizador) {
+        System.out.print("Pretende ver num dado período ou desde sempre? (1 - período, 2 - sempre): ");
+        int op = sc.nextInt();
+        sc.nextLine(); // limpar o buffer
+        
+        LocalDate dataInicio = LocalDate.EPOCH;
+        LocalDate dataFim = this.model.getData();
+
+        if (op == 1) {
+            do {
+                System.out.print("Insira o ano da data inicial: ");
+                int dataInicioAno = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                System.out.print("Insira o mês da data inicial: ");
+                int dataInicioMes = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                System.out.print("Insira o dia da data inicial: ");
+                int dataInicioDia = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                dataInicio = LocalDate.of(dataInicioAno, dataInicioMes, dataInicioDia);
+
+                System.out.print("Insira o ano da data final: ");
+                int dataFimAno = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                System.out.print("Insira o mês da data final: ");
+                int dataFimMes = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                System.out.print("Insira o dia da data final: ");
+                int dataFimDia = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+
+                dataFim = LocalDate.of(dataFimAno, dataFimMes, dataFimDia);
+
+                if (dataFim.isBefore(dataInicio)) {
+                    System.out.println("[ERRO] Datas inválidas\n");
+                }
+            } while (dataFim.isBefore(dataInicio));
+        }
+        
+        final LocalDate constDataInicio = dataInicio; 
+        final LocalDate constDataFim = dataFim;
+
+        Menu menu = new Menu(new String[] {"Qual é o utilizador que mais calorias dispendeu num período ou desde sempre",
+                            "Quantas calorias é que dispendeu num período ou desde sempre",
+                            "Qual é o utilizador que mais actividades realizou num período ou desde sempre",
+                            "Quantos kms é que realizou num período ou desde sempre",
+                            "Quantos metros de altimetria é que totalizou num período ou desde sempre",
+                            "Quantos kg de peso é que levantou num período ou desde sempre",
+                            "Quantas repetições é que totalizou num período ou desde sempre",
+                            "Qual é o tipo de actividade mais realizada",
+                            "Qual é o plano de treino mais exigente em função do dispêndio de calorias proposto (Média semanal)"
+                            //"Recordes individuais",
+                            //"Recordes da aplicação"
+                        });
+
+        menu.setHandler(1, () -> System.out.println(this.model.utilizadorMaisCalorias(constDataInicio, constDataFim)));
+            
+        menu.setCondicao(2, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+        menu.setHandler(2, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividade"), FitnessModel.getToDoubleFunction("obtémCalorias")) + " calorias"));
+
+        menu.setHandler(3, () -> System.out.println(this.model.utilizadorComMaisAtividades(constDataInicio, constDataFim)));
+                        
+        menu.setCondicao(4, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+        menu.setHandler(4, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeDistância"), FitnessModel.getToDoubleFunction("obtémDistancia")) + " kms"));
+        
+        menu.setCondicao(5, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+        menu.setHandler(5, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeDistânciaAltimetria"), FitnessModel.getToDoubleFunction("obtémAltimetria")) + " m"));
+
+        menu.setCondicao(6, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+        menu.setHandler(6, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeRepetiçõesPesos"), FitnessModel.getToDoubleFunction("obtémPeso")) + " kg"));
+
+        menu.setCondicao(7, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+        menu.setHandler(7, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeRepetições"), FitnessModel.getToDoubleFunction("obtémRepetições")) + " repetições"));
+
+        menu.setHandler(8, () -> System.out.println(this.model.atividadeMaisRealizada()));
+            
+        menu.setHandler(9, () -> System.out.println(this.model.planoDeTreinoMaisExigente()));                        
+
+        //menu.setHandler(10, () -> );
+
+        //menu.setHandler(11, () -> );
+
+        menu.run();
+    }
+
+
+    public void utilizadorMaisCalorias() {
     }
 
 }
