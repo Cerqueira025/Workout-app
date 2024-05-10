@@ -57,7 +57,7 @@ public abstract class Utilizador implements Serializable {
         this.password = password;
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.recordesAtividades = recordes.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
-        this.plano = plano; //verificar clone
+        this.plano = plano;
     }
 
     public Utilizador(String codigo, int bpmMedio, double peso, double caloriasGastas, int altura,
@@ -196,9 +196,8 @@ public abstract class Utilizador implements Serializable {
         return this.atividades.values().stream().map(a -> a).collect(Collectors.toList());
     }
     
-    public Atividade getAtividade(String codigo_atividade) {
-        if(!existeAtividade(codigo_atividade)) return null;
-        return this.atividades.get(codigo_atividade);
+    public Atividade getAtividade(String codigoAtividade) {
+        return this.atividades.get(codigoAtividade);
     }
 
     public Map<String, Double> getRecordesAtividades() {
@@ -224,8 +223,8 @@ public abstract class Utilizador implements Serializable {
         this.atividades.put(atividade.getCodigo(), atividade);
     }
 
-    public void removeAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
+    public void removeAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
     }
 
     public boolean existeAtividade(String codigo) {
@@ -239,6 +238,10 @@ public abstract class Utilizador implements Serializable {
             this.recordesAtividades.put(nomeAtividade, calorias);
         else if (this.recordesAtividades.get(nomeAtividade) < calorias) 
             this.recordesAtividades.replace(nomeAtividade, calorias);
+    }
+
+    public double caloriasRecordeAtividade(String nomeAtividade) {
+        return this.recordesAtividades.get(nomeAtividade);
     }
 
     public void addAtividadePlanoDeTreino(Atividade atividade) {
@@ -264,8 +267,6 @@ public abstract class Utilizador implements Serializable {
     public void atualizaPeso(double caloriasAtividade) {
         this.peso -= caloriasAtividade/7000;
     }
-
-
 
     public String toString() {
         String a = "Utiliador{" +

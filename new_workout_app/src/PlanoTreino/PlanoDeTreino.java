@@ -5,6 +5,7 @@ import Atividade.Atividade;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class PlanoDeTreino implements Serializable {
     // ----------------- Construtores ---------------- //
 
     public PlanoDeTreino() {
-        this.dataRealizacao = LocalDate.EPOCH;
+        this.dataRealizacao = LocalDate.now();
         this.duracao = 0;
         this.caloriasTotais = 0;
         this.atividades = new HashMap<>();
@@ -80,23 +81,25 @@ public class PlanoDeTreino implements Serializable {
         this.atividades = atividades.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
 	}
 
+
+    // ----------------- outros métodos ----------------- //
+
 	public void addAtividade(Atividade atividade) {
         this.atividades.put(atividade.getCodigo(), atividade);
         this.caloriasTotais += atividade.calorias();
     }
 
-    public void removeAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
+    public void removeAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
     }
 
-    public void apagaAtividade(String codigo_atividade) {
-        this.atividades.remove(codigo_atividade);
-        this.caloriasTotais -= this.atividades.get(codigo_atividade).calorias();
+    public void apagaAtividade(String codigoAtividade) {
+        this.atividades.remove(codigoAtividade);
+        this.caloriasTotais -= this.atividades.get(codigoAtividade).calorias();
     }
 
-    public Atividade getAtividade(String codigo_atividade) {
-        if(!this.atividades.containsKey(codigo_atividade)) return null;
-        return this.atividades.get(codigo_atividade);
+    public Atividade getAtividade(String codigoAtividade) {
+        return this.atividades.get(codigoAtividade);
     }
 
     public boolean existeAtividade(String codigoAtividade) {
@@ -107,6 +110,9 @@ public class PlanoDeTreino implements Serializable {
         return this.caloriasTotais/this.duracao;
     }
 
+    public List<Atividade> atividadesDoDia(LocalDate data) {
+        return this.atividades.values().stream().filter(a -> a.getData().toLocalDate().equals(data)).collect(Collectors.toList());
+    }
 
     public String toString() {
         String a = "Plano de Treino{" +

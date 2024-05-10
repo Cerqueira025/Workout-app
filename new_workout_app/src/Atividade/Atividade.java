@@ -149,7 +149,7 @@ public abstract class Atividade implements Serializable {
     }
 
     public abstract Atividade clone();
-    public abstract double calorias(); // verificar se há necessiade de incluir o bpm médio da atividade no cálculo das calorias
+    public abstract double calorias();
     public abstract int bpm();
 }
 

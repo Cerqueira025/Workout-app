@@ -61,7 +61,7 @@ public class PlanoDeTreinoTest {
         plano.setDuracao(10);
         assertEquals(10, plano.getDuracao());
 
-        // Teste getAtividade
+        // Teste getAtividade (ESTE TESTE JÁ NÃO SERÁ NECESSÁRIO)
         assertNull(plano.getAtividade("001")); // Verifica se a atividade foi removida corretamente
     }
 

@@ -1,7 +1,6 @@
 package Excessoes;
 
 public class AtividadeNaoExisteException extends Exception {
-
     public AtividadeNaoExisteException() {
         super();
     }
