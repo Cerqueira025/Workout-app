@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,11 +123,17 @@ public class SprintTest {
         // Teste de igualdade entre duas instâncias idênticas
         Sprint sprint1 = new Sprint("001", "Descrição", data, 30, 2, new Profissional(), 10.0);
         Sprint sprint2 = new Sprint("001", "Descrição", data, 30, 2, new Profissional(), 10.0);
-        assertTrue(sprint1.equals(sprint2));
 
-        // Teste de igualdade entre instâncias diferentes
         Sprint sprint3 = new Sprint("002", "Outra Descrição", data, 30, 3, new Profissional(), 10.0);
+        Sprint sprint4 = new Sprint("002", "Outra Descrição", data, 25, 3, new Profissional(), 10.0);
+
+        // --- Verificar igualdade ---
+        //parâmetros iguais
+        assertTrue(sprint1.equals(sprint2));
+        //parâmetros diferentes
         assertFalse(sprint1.equals(sprint3));
+        assertFalse(sprint2.equals(sprint4));
+        assertFalse(sprint3.equals(sprint4));
     }
 
     @Test
@@ -137,9 +142,9 @@ public class SprintTest {
         LocalDateTime data = LocalDateTime.now();
         Sprint sprint = new Sprint("001", "Descrição", data, 30, 4, profissional, 10.0);
         String expectedToString = "Sprint{Distancia{Atividade{" +
-                "código='001', descrição='Descrição', data='" + LocalDate.now() +
-                "', duração='4', bpm médio='0', calorias='0.0'}"
-+                "distancia='10.0', velocidade='2.5'}}";
+                "código='001', descrição='Descrição', data='" + data +
+                "', duração='30', bpm médio='0', séries='4', calorias='0.0'}"
++                "distancia='10.0', velocidade='20.0'}}";
         assertEquals(expectedToString, sprint.toString());
     }
 
@@ -154,23 +159,112 @@ public class SprintTest {
     @Test
     public void testCalorias() {
         LocalDateTime data = LocalDateTime.now();
-        Profissional profissional = new Profissional("profId", 75, 80, 75, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
-        Sprint sprint = new Sprint("001", "Descrição", data, 30, 4, profissional, 10.0);
 
-        double expectedCalorias = profissional.fatorMultiplicativo() * (10.0 / 2) * 30 * (profissional.getBpmMedio() / 100);
-        assertEquals(expectedCalorias, sprint.calorias(), 0.01);
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Sprint sprint1 = new Sprint("001", "Descrição", data, 30, 4, profissional1, 10.0);
+
+        double expectedCalorias1 = profissional1.fatorMultiplicativo() * ((10*60/30) / 2) * 30 * (sprint1.bpm() / 100) * 4;
+        assertEquals(expectedCalorias1, sprint1.calorias(), 0.01);
+
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint2 = new Sprint("001", "Descrição", data, 30, 4, profissional2, 12.0);
+
+        double expectedCalorias2 = profissional2.fatorMultiplicativo() * ((12*60/30) / 2) * 30 * (sprint2.bpm() / 100) * 4;
+        assertEquals(expectedCalorias2, sprint2.calorias(), 0.01);
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Sprint sprint3 = new Sprint("001", "Descrição", data, 30, 4, praticanteOcasional1, 12.0);
+
+        double expectedCalorias3 = praticanteOcasional1.fatorMultiplicativo() * ((12*60/30) / 2) * 30 * (sprint3.bpm() / 100) * 4;
+        assertEquals(expectedCalorias3, sprint3.calorias(), 0.01);
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint4 = new Sprint("001", "Descrição", data, 30, 5, praticanteOcasional1, 12.0);
+
+        double expectedCalorias4 = praticanteOcasional1.fatorMultiplicativo() * ((12*60/30) / 2) * 30 * (sprint4.bpm() / 100) * 5;
+        assertEquals(expectedCalorias4, sprint4.calorias(), 0.01);
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Sprint sprint5 = new Sprint("001", "Descrição", data, 30, 5, amador1, 12.0);
+
+        double expectedCalorias5 = amador1.fatorMultiplicativo() * ((12*60/30) / 2) * 30 * (sprint5.bpm() / 100) * 5;
+        assertEquals(expectedCalorias5, sprint5.calorias(), 0.01);
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint6 = new Sprint("001", "Descrição", data, 20, 5, amador2, 12.0);
+
+        double expectedCalorias6 = amador2.fatorMultiplicativo() * ((12*60/20) / 2) * 20 * (sprint6.bpm() / 100) * 5;
+        assertEquals(expectedCalorias6, sprint6.calorias(), 0.01);
     }
 
     @Test
     public void testBpm() {
         LocalDateTime data = LocalDateTime.now();
-        Profissional profissional = new Profissional("profId", 75, 80, 44, 180,
+
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
-        Sprint sprint = new Sprint("001", "Descrição", data, 30, 3, profissional, 10.0);
+        Sprint sprint1 = new Sprint("001", "Descrição", data, 30, 3, profissional1, 10.0);
 
-        int expectedBpm = (int) (profissional.getBpmMedio() + 30 * profissional.fatorMultiplicativo());
-        assertEquals(expectedBpm, sprint.bpm());
+        int expectedBpm1 = (int) (profissional1.getBpmMedio() + 30 * profissional1.fatorMultiplicativo());
+        assertEquals(expectedBpm1, sprint1.bpm());
+
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint2 = new Sprint("001", "Descrição", data, 30, 3, profissional2, 10.0);
+
+        int expectedBpm2 = (int) (profissional2.getBpmMedio() + 30 * profissional2.fatorMultiplicativo());
+        assertEquals(expectedBpm2, sprint2.bpm());
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Sprint sprint3 = new Sprint("001", "Descrição", data, 30, 3, praticanteOcasional1, 10.0);
+
+        int expectedBpm3 = (int) (praticanteOcasional1.getBpmMedio() + 30 * praticanteOcasional1.fatorMultiplicativo());
+        assertEquals(expectedBpm3, sprint3.bpm());
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint4 = new Sprint("001", "Descrição", data, 30, 3, praticanteOcasional2, 10.0);
+
+        int expectedBpm4 = (int) (praticanteOcasional2.getBpmMedio() + 30 * praticanteOcasional2.fatorMultiplicativo());
+        assertEquals(expectedBpm4, sprint4.bpm());
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Sprint sprint5 = new Sprint("001", "Descrição", data, 30, 3, amador1, 10.0);
+
+        int expectedBpm5 = (int) (amador1.getBpmMedio() + 30 * amador1.fatorMultiplicativo());
+        assertEquals(expectedBpm5, sprint5.bpm());
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Sprint sprint6 = new Sprint("001", "Descrição", data, 30, 3, amador2, 10.0);
+
+        int expectedBpm6 = (int) (amador2.getBpmMedio() + 30 * amador2.fatorMultiplicativo());
+        assertEquals(expectedBpm6, sprint6.bpm());
     }
-
 }

@@ -84,10 +84,9 @@ public class BicicletaMontanha extends Altimetria implements Hard {
 
      
     public BicicletaMontanha clone() {
-        return new BicicletaMontanha(this);
+      return new BicicletaMontanha(this);
     }
 
-     
     public double calorias() {
       double mult = 1;
       if(this.hasDiscoTravao()){

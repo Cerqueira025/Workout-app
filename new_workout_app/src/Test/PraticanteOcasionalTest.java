@@ -50,11 +50,11 @@ public class PraticanteOcasionalTest {
         assertEquals("001", praticante3.getCodigo());
         assertEquals(70, praticante3.getBpmMedio());
         assertEquals(75.5, praticante3.getPeso(), 0.001);
-        assertEquals(175, praticante3.getAltura());
+        assertEquals(160, praticante3.getAltura());
         assertEquals("Ana", praticante3.getNome());
         assertEquals(Genero.Feminino, praticante3.getGenero());
         assertEquals("Rua X", praticante3.getMorada());
-        assertEquals("joao@example.com", praticante3.getEmail());
+        assertEquals("ana@example.com", praticante3.getEmail());
         assertEquals("senha", praticante3.getPassword());
 
         //Construtor de cópia

@@ -42,7 +42,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino1.getDescricao());
         assertEquals(data, supino1.getData());
         assertEquals(30, supino1.getDuracao());
-        assertEquals(4, supino1.getUtilizador());
+        assertEquals(4, supino1.getSeries());
         assertEquals(profissional1, supino1.getUtilizador());
         assertEquals(10, supino1.getRepeticoes());
         assertEquals(50, supino1.getPeso(), 0.01);
@@ -57,7 +57,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino2.getDescricao());
         assertEquals(data, supino2.getData());
         assertEquals(30, supino2.getDuracao());
-        assertEquals(2, supino1.getUtilizador());
+        assertEquals(2, supino2.getSeries());
         assertEquals(amador1, supino2.getUtilizador());
         assertEquals(10, supino2.getRepeticoes());
         assertEquals(50, supino2.getPeso(), 0.01);
@@ -72,7 +72,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino3.getDescricao());
         assertEquals(data, supino3.getData());
         assertEquals(30, supino3.getDuracao());
-        assertEquals(4, supino1.getUtilizador());
+        assertEquals(4, supino3.getSeries());
         assertEquals(praticanteOcasional1, supino3.getUtilizador());
         assertEquals(10, supino3.getRepeticoes());
         assertEquals(50, supino3.getPeso(), 0.01);
@@ -88,7 +88,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino4.getDescricao());
         assertEquals(data, supino4.getData());
         assertEquals(30, supino4.getDuracao());
-        assertEquals(4, supino1.getUtilizador());
+        assertEquals(4, supino1.getSeries());
         assertEquals(profissional2, supino4.getUtilizador());
         assertEquals(10, supino4.getRepeticoes());
         assertEquals(50, supino4.getPeso(), 0.01);
@@ -103,7 +103,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino5.getDescricao());
         assertEquals(data, supino5.getData());
         assertEquals(30, supino5.getDuracao());
-        assertEquals(2, supino1.getUtilizador());
+        assertEquals(2, supino5.getSeries());
         assertEquals(amador2, supino5.getUtilizador());
         assertEquals(10, supino5.getRepeticoes());
         assertEquals(50, supino5.getPeso(), 0.01);
@@ -118,7 +118,7 @@ public class SupinoTest {
         assertEquals("Descrição", supino6.getDescricao());
         assertEquals(data, supino6.getData());
         assertEquals(30, supino6.getDuracao());
-        assertEquals(2, supino1.getUtilizador());
+        assertEquals(2, supino6.getSeries());
         assertEquals(praticanteOcasional2, supino6.getUtilizador());
         assertEquals(10, supino6.getRepeticoes());
         assertEquals(50, supino6.getPeso(), 0.01);
@@ -138,12 +138,30 @@ public class SupinoTest {
         Supino supino1 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
         Supino supino2 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
         Supino supino3 = new Supino("002", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
+        Supino supino4 = new Supino("002", "Descrição", data, 30, 5, profissional, 10, 50, 45.0);
 
+        // --- Verificar igualdade ---
+        //parâmetros iguais
         assertTrue(supino1.equals(supino2));
+        //parâmetros diferentes
         assertFalse(supino1.equals(supino3));
-        assertFalse(supino2.equals(supino3));
+        assertFalse(supino2.equals(supino4));
+        assertFalse(supino3.equals(supino4));
     }
 
+    @Test
+    public void testToString() {
+        Profissional profissional = new Profissional();
+        LocalDateTime data = LocalDateTime.now();
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
+        String expectedToString = "Supino{" +
+                "Pesos{Repetições{Atividade{código='001', descrição='Descrição', data='"+
+                data + "', duração='30', bpm médio='0', séries='4', calorias='0.0'}"+
+                "repetições=10}peso=50.0}"+
+                "inclinação=" + supino1.getInclinacao() +
+                '}';
+        assertEquals(expectedToString, supino1.toString());
+    }
     @Test
     public void testClone() {
         Map<String, Atividade> atividades = new HashMap<>();
@@ -162,36 +180,114 @@ public class SupinoTest {
 
     @Test
     public void testCalorias() {
-        Map<String, Atividade> atividades = new HashMap<>();
-        Map<String, Double> recordes = new HashMap<>();
-        PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
 
-        Profissional profissional = new Profissional("profId", 75, 80, 60, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 2, profissional1, 10, 50, 45.0);
 
-        Supino supino = new Supino("001", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
+        double caloriasEsperadas1 = profissional1.fatorMultiplicativo() * (45.0/3) * 30 * (profissional1.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas1, supino1.calorias(), 0.01);
 
-        double caloriasEsperadas = profissional.fatorMultiplicativo() * (45.0/3) * 30 * (profissional.getBpmMedio()/100);
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino2 = new Supino("001", "Descrição", data, 30, 2, profissional2, 10, 50, 45.0);
 
-        assertEquals(caloriasEsperadas, supino.calorias(), 0.01);
+        double caloriasEsperadas2 = profissional2.fatorMultiplicativo() * (45.0/3) * 30 * (profissional2.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas2, supino2.calorias(), 0.01);
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino3 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 50, 45.0);
+
+        double caloriasEsperadas3 = praticanteOcasional1.fatorMultiplicativo() * (45.0/3) * 30 * (praticanteOcasional1.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas3, supino3.calorias(), 0.01);
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino4 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional2, 10, 50, 45.0);
+
+        double caloriasEsperadas4 = praticanteOcasional2.fatorMultiplicativo() * (45.0/3) * 30 * (praticanteOcasional2.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas4, supino4.calorias(), 0.01);
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino5 = new Supino("001", "Descrição", data, 30, 2, amador1, 10, 50, 45.0);
+
+        double caloriasEsperadas5 = amador1.fatorMultiplicativo() * (45.0/3) * 30 * (amador1.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas5, supino5.calorias(), 0.01);
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino6 = new Supino("001", "Descrição", data, 30, 2, amador2, 10, 50, 45.0);
+
+        double caloriasEsperadas6 = amador2.fatorMultiplicativo() * (45.0/3) * 30 * (amador2.getBpmMedio()/100);
+        assertEquals(caloriasEsperadas6, supino6.calorias(), 0.01);
     }
 
     @Test
     public void testBpm() {
-        Map<String, Atividade> atividades = new HashMap<>();
-        Map<String, Double> recordes = new HashMap<>();
-        PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
 
-        Profissional profissional = new Profissional("profId", 75, 80, 60, 180,
-                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
+        // Profissional
+        //teste 1
+        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino1 = new Supino("001", "Descrição", data, 30, 2, profissional1, 10, 50, 45.0);
 
-        Supino supino = new Supino("001", "Descrição", data, 30, 2, profissional, 10, 50, 45.0);
+        int bpmEsperado1 = (int) (profissional1.getBpmMedio() + 10 * profissional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado1, supino1.bpm());
 
-        int bpmEsperado = (int) (profissional.getBpmMedio() + 10 * profissional.fatorMultiplicativo());
+        //teste 2
+        Profissional profissional2 = new Profissional("profId", 75, 80, 45, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino2 = new Supino("001", "Descrição", data, 30, 2, profissional2, 10, 50, 45.0);
 
-        assertEquals(bpmEsperado, supino.bpm());
+        int bpmEsperado2 = (int) (profissional2.getBpmMedio() + 10 * profissional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado2, supino2.bpm());
+
+        //Praticante Ocasional
+        //teste 1
+        PraticanteOcasional praticanteOcasional1 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino3 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional1, 10, 50, 45.0);
+
+        int bpmEsperado3 = (int) (praticanteOcasional1.getBpmMedio() + 10 * praticanteOcasional1.fatorMultiplicativo());
+        assertEquals(bpmEsperado3, supino3.bpm());
+
+        //teste 2
+        PraticanteOcasional praticanteOcasional2 = new PraticanteOcasional("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino4 = new Supino("001", "Descrição", data, 30, 2, praticanteOcasional2, 10, 50, 45.0);
+
+        int bpmEsperado4 = (int) (praticanteOcasional2.getBpmMedio() + 10 * praticanteOcasional2.fatorMultiplicativo());
+        assertEquals(bpmEsperado4, supino4.bpm());
+
+        //Amador
+        //teste 1
+        Amador amador1 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
+        Supino supino5 = new Supino("001", "Descrição", data, 30, 2, amador1, 10, 50, 45.0);
+
+        int bpmEsperado5 = (int) (amador1.getBpmMedio() + 10 * amador1.fatorMultiplicativo());
+        assertEquals(bpmEsperado5, supino5.bpm());
+
+        //teste 2
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
+                "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
+        Supino supino6 = new Supino("001", "Descrição", data, 30, 2, amador2, 10, 50, 45.0);
+
+        int bpmEsperado6 = (int) (amador2.getBpmMedio() + 10 * amador2.fatorMultiplicativo());
+        assertEquals(bpmEsperado6, supino6.bpm());
     }
 
 }

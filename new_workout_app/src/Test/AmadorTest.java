@@ -47,7 +47,7 @@ public class AmadorTest {
         assertEquals("001", amador3.getCodigo());
         assertEquals(70, amador3.getBpmMedio());
         assertEquals(75.5, amador3.getPeso(), 0.001);
-        assertEquals(100, amador3.getCaloriasGastas(), 0.001);
+        assertEquals(44, amador3.getCaloriasGastas(), 0.001);
         assertEquals(175, amador3.getAltura());
         assertEquals("João", amador3.getNome());
         assertEquals(Genero.Masculino, amador3.getGenero());

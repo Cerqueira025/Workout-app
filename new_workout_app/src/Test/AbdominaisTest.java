@@ -76,6 +76,19 @@ public class AbdominaisTest {
     }
 
     @Test
+    public void TestToString() {
+        Profissional profissional = new Profissional();
+        LocalDateTime data = LocalDateTime.now();
+        Abdominais abdominais1 = new Abdominais("001", "Descrição", data, 30, 2, profissional, 10, 45.0);
+        String expectedToString = "Abdominais{" +
+                "Repetições{Atividade{código='001', descrição='Descrição', data='"+ data +
+                "', duração='30', bpm médio='0', séries='2', calorias='0.0'}repetições=10}"+
+                "amplitude=" + abdominais1.getAmplitude() +
+                '}';
+        assertEquals(expectedToString, abdominais1.toString());
+    }
+
+    @Test
     public void testEquals() {
         // Criar objetos para teste
         Map<String, Atividade> atividades = new HashMap<>();

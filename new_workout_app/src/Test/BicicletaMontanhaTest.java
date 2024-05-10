@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta1.getDescricao());
         assertEquals(data, bicicleta1.getData());
         assertEquals(30, bicicleta1.getDuracao());
-        assertEquals(4, bicicleta1.getUtilizador());
+        assertEquals(4, bicicleta1.getSeries());
         assertEquals(profissional1, bicicleta1.getUtilizador());
         assertEquals(10.0, bicicleta1.getDistancia(), 0.01);
         assertEquals(500, bicicleta1.getAltimetria());
@@ -59,7 +60,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta2.getDescricao());
         assertEquals(data, bicicleta2.getData());
         assertEquals(30, bicicleta2.getDuracao());
-        assertEquals(3, bicicleta2.getUtilizador());
+        assertEquals(3, bicicleta2.getSeries());
         assertEquals(amador1, bicicleta2.getUtilizador());
         assertEquals(10.0, bicicleta2.getDistancia(), 0.01);
         assertEquals(500, bicicleta2.getAltimetria());
@@ -77,7 +78,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta3.getDescricao());
         assertEquals(data, bicicleta3.getData());
         assertEquals(30, bicicleta3.getDuracao());
-        assertEquals(2, bicicleta3.getUtilizador());
+        assertEquals(2, bicicleta3.getSeries());
         assertEquals(praticanteOcasional, bicicleta3.getUtilizador());
         assertEquals(10.0, bicicleta3.getDistancia(), 0.01);
         assertEquals(500, bicicleta3.getAltimetria());
@@ -96,7 +97,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta4.getDescricao());
         assertEquals(data, bicicleta4.getData());
         assertEquals(30, bicicleta4.getDuracao());
-        assertEquals(3, bicicleta4.getUtilizador());
+        assertEquals(3, bicicleta4.getSeries());
         assertEquals(profissional2, bicicleta4.getUtilizador());
         assertEquals(10.0, bicicleta4.getDistancia(), 0.01);
         assertEquals(500, bicicleta4.getAltimetria());
@@ -114,7 +115,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta5.getDescricao());
         assertEquals(data, bicicleta5.getData());
         assertEquals(30, bicicleta5.getDuracao());
-        assertEquals(3, bicicleta5.getUtilizador());
+        assertEquals(3, bicicleta5.getSeries());
         assertEquals(amador2, bicicleta5.getUtilizador());
         assertEquals(10.0, bicicleta5.getDistancia(), 0.01);
         assertEquals(500, bicicleta5.getAltimetria());
@@ -132,7 +133,7 @@ public class BicicletaMontanhaTest {
         assertEquals("Descrição", bicicleta6.getDescricao());
         assertEquals(data, bicicleta6.getData());
         assertEquals(30, bicicleta6.getDuracao());
-        assertEquals(3, bicicleta6.getUtilizador());
+        assertEquals(2, bicicleta6.getSeries());
         assertEquals(praticanteOcasional2, bicicleta6.getUtilizador());
         assertEquals(10.0, bicicleta6.getDistancia(), 0.01);
         assertEquals(500, bicicleta6.getAltimetria());
@@ -165,6 +166,23 @@ public class BicicletaMontanhaTest {
         assertFalse(bicicleta3.equals(bicicleta4)); // numeroMudancas diferente
     }
 
+    @Test
+    public void testToString() {
+        Profissional profissional = new Profissional();
+        LocalDateTime data = LocalDateTime.now();
+        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 2,
+                profissional, 10.0, 500, 100.0, 12, true);
+        String expectedToString = "BicicletaMontanha{" +
+                "Altimetria{Distancia{Atividade{código='001', descrição='Descrição', data='"+
+                data + "', duração='30', bpm médio='0', séries='2', calorias='0.0'}"+
+                "distancia='10.0', velocidade='20.0'}, altimetria='500}"+
+                "variacaoSuspencao='" + bicicleta1.getVariacaoSuspensao() + '\'' +
+                ", numeroMudancas='" + bicicleta1.getNumeroMudancas() + '\'' +
+                ", discoTravao='" + bicicleta1.hasDiscoTravao() + '\'' +
+                '}';
+        assertEquals(expectedToString, bicicleta1.toString());
+    }
+
     /*@Test
     public void testClone() {
         // Criar objeto para teste
@@ -173,13 +191,13 @@ public class BicicletaMontanhaTest {
         PlanoDeTreino plano = new PlanoDeTreino();
         LocalDateTime data = LocalDateTime.now();
 
-        Profissional profissional1 = new Profissional("profId", 75, 80, 45, 180,
+        Profissional profissional = new Profissional("profId", 75, 80, 45, 180,
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha", atividades, recordes, plano);
-        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 4,
-                profissional1, 10.0, 500, 100.0, 12, true);
 
-        // Clonar e verificar igualdade
+        BicicletaMontanha bicicleta1 = new BicicletaMontanha("001", "Descrição", data, 30, 4,
+                profissional, 10.0, 500, 100.0, 12, true);
         BicicletaMontanha bicicleta2 = bicicleta1.clone();
+
         assertEquals(bicicleta1, bicicleta2);
     }*/
 
@@ -232,13 +250,12 @@ public class BicicletaMontanhaTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta5 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador1, 10.0, 500, 100.0, 12, true);
-        Amador amador2 = null;
 
         double caloriasEsperadas5 = 0.5 * amador1.fatorMultiplicativo() * (100.0 / 2) * 12 * (bicicleta1.bpm() / 100) * 3;
         assertEquals(caloriasEsperadas5, bicicleta5.calorias(), 0.01);
 
         //teste 2
-        amador2 = new Amador("profId", 75, 80, 44, 180,
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta6 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador2, 10.0, 500, 100.0, 12, false);
@@ -296,13 +313,12 @@ public class BicicletaMontanhaTest {
                 "Nome", Genero.Masculino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta5 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador1, 10.0, 500, 100.0, 12, true);
-        Amador amador2 = null;
 
         int bpmEsperado5 = (int) (amador1.getBpmMedio() + 20 * amador1.fatorMultiplicativo());
         assertEquals(bpmEsperado5, bicicleta5.bpm());
 
         //teste 2
-        amador2 = new Amador("profId", 75, 80, 44, 180,
+        Amador amador2 = new Amador("profId", 75, 80, 44, 180,
                 "Nome", Genero.Feminino, "Morada", "email@example.com", "senha");
         BicicletaMontanha bicicleta6 = new BicicletaMontanha("001", "Descrição", data, 30, 3,
                 amador2, 10.0, 500, 100.0, 12, false);
