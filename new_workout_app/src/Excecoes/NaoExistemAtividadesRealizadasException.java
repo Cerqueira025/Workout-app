@@ -1,4 +1,4 @@
-package Excessoes;
+package Excecoes;
 
 public class NaoExistemAtividadesRealizadasException extends Exception {
     

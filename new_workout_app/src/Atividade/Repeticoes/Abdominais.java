@@ -40,10 +40,9 @@ public class Abdominais extends Repeticoes {
 
      
     public String toString() {
-        return "Abdominais{" +
+        return "Abdominais - " +
                 super.toString() +
-                "amplitude=" + this.amplitude +
-                '}';
+                ", amplitude = '" + this.amplitude + '\'';
     }
 
      

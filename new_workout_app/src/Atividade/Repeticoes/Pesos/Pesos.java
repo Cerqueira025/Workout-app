@@ -41,10 +41,8 @@ public abstract class Pesos extends Repeticoes {
 
      
     public String toString() {
-        return "Pesos{" +
-                super.toString() +
-                "peso=" + this.peso +
-                '}';
+        return  super.toString() +
+                ", peso = '" + this.peso + '\'';
     }
 
      

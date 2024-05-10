@@ -45,6 +45,6 @@ public class Profissional extends Utilizador {
       } else {
         tmb = 655 + (9.6 * this.getPeso()) + (1.8 * this.getAltura()) - (4.7 * 20);
       }
-      return tmb/1000;
+      return (tmb/1000)*1.5;
     }
 }

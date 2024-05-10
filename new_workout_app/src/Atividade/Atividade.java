@@ -123,15 +123,13 @@ public abstract class Atividade implements Serializable {
     }
     
     public String toString() {
-        return "Atividade{" +
-                "código='" + this.codigo + '\'' +
-                ", descrição='" + this.descricao + '\'' +
-                ", data='" + this.data + '\'' +
-                ", duração='" + this.duracao + '\'' +
-                ", bpm médio='" + this.bpm + '\'' +
-                ", séries='" + this.series + '\'' +
-                ", calorias='" + this.calorias +
-                "'}";
+        return  "código = '" + this.codigo + '\'' +
+                ", descrição = '" + this.descricao + '\'' +
+                ", data = '" + this.data + '\'' +
+                ", duração = '" + this.duracao + '\'' +
+                ", bpm médio = '" + this.bpm + '\'' +
+                ", séries = '" + this.series + '\'' +
+                ", calorias = '" + this.calorias + '\'';
     }
 
     public boolean equals(Object o) {

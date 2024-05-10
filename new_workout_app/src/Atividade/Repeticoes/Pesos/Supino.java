@@ -40,10 +40,9 @@ public class Supino extends Pesos implements Hard {
 
      
     public String toString() {
-        return "Supino{" +
+        return "Supino - " +
                 super.toString() +
-                "inclinação=" + this.inclinacao +
-                '}';
+                ", inclinação = '" + this.inclinacao + '\'';
     }
 
      

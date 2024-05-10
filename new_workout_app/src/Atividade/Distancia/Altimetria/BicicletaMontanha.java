@@ -74,12 +74,11 @@ public class BicicletaMontanha extends Altimetria implements Hard {
 
      
     public String toString() {
-        return "BicicletaMontanha{" +
+        return "BicicletaMontanha - " +
             super.toString() + 
-            "variacaoSuspencao='" + this.variacaoSuspensao + '\'' +
-            ", numeroMudancas='" + this.numeroMudancas + '\'' +
-            ", discoTravao='" + this.discoTravao + '\'' +
-            '}';
+            ", variação da Suspenção = '" + this.variacaoSuspensao + '\'' +
+            ", numero de Mudanças = '" + this.numeroMudancas + '\'' +
+            ", disco Travão = '" + this.discoTravao + '\'';
     }
 
      
@@ -87,10 +86,9 @@ public class BicicletaMontanha extends Altimetria implements Hard {
         return new BicicletaMontanha(this);
     }
 
-     
     public double calorias() {
-      double mult = this.hasDiscoTravao() ? 1 : 0.8;
-      return mult * this.getUtilizador().fatorMultiplicativo() * ((this.getVelocidade()/2 + 1)) * ((this.getDuracao()/10 + 1)) * ((this.getAltimetria()/10 + 1)) * ((this.variacaoSuspensao/20 + 1)) * ((this.numeroMudancas/4 + 1)) * ((this.bpm()/100 + 1)) * this.getSeries();
+      double mult = this.hasDiscoTravao() ? 0.8 : 1;
+      return mult * this.getUtilizador().fatorMultiplicativo() * ((this.getVelocidade()/2 + 1)) * ((this.getDuracao()/100 + 1)) * ((this.getAltimetria()/10 + 1)) * ((this.variacaoSuspensao/20 + 1)) * ((this.numeroMudancas/4 + 1)) * ((this.bpm()/100 + 1)) * this.getSeries();
     }
 
     public int bpm(){

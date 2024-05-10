@@ -60,10 +60,9 @@ public abstract class Distancia extends Atividade {
 
      
     public String toString() {
-        return "Distancia{" +
-            super.toString() + 
-            "distancia='" + this.distancia + '\'' +
-            ", velocidade='" + this.velocidade + "'}";
+        return super.toString() + 
+               ", distância = '" + this.distancia + '\'' +
+               ", velocidade = '" + this.velocidade + '\'';
     }
 
 

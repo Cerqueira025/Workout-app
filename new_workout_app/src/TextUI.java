@@ -21,13 +21,12 @@ import Atividade.Repeticoes.Repeticoes;
 import Atividade.Repeticoes.Abdominais;
 import Atividade.Repeticoes.Pesos.Pesos;
 import Atividade.Repeticoes.Pesos.Supino;
-import Excessoes.AtividadeExisteException;
-import Excessoes.AtividadeNaoExisteException;
-import Excessoes.EmailExisteException;
-import Excessoes.NomeAtividadeNaoExisteException;
-import Excessoes.ParametrosInvalidosException;
-import Excessoes.UtilizadorExisteException;
-import Excessoes.UtilizadorNaoExisteException;
+import Excecoes.AtividadeExisteException;
+import Excecoes.AtividadeNaoExisteException;
+import Excecoes.EmailExisteException;
+import Excecoes.ParametrosInvalidosException;
+import Excecoes.UtilizadorExisteException;
+import Excecoes.UtilizadorNaoExisteException;
 import PlanoTreino.PlanoDeTreino;
 import Utilizador.Genero;
 import Utilizador.Utilizador;
@@ -58,7 +57,7 @@ public class TextUI {
         ToDoubleFunction<Atividade> calculoPeso = (ToDoubleFunction<Atividade> & Serializable) a -> ((Pesos) a).getPeso();
         FitnessModel.addToDoubleFunction("obtémPeso", calculoPeso);
         ToDoubleFunction<Atividade> calculoDistancia = (ToDoubleFunction<Atividade> & Serializable) a -> ((Distancia) a).getDistancia();
-        FitnessModel.addToDoubleFunction("obtémDistancia", calculoDistancia);
+        FitnessModel.addToDoubleFunction("obtémDistância", calculoDistancia);
         ToDoubleFunction<Atividade> calculoAltimetria = (ToDoubleFunction<Atividade> & Serializable) a -> ((Altimetria) a).getAltimetria();
         FitnessModel.addToDoubleFunction("obtémAltimetria", calculoAltimetria);
         
@@ -74,7 +73,7 @@ public class TextUI {
                         });
 
         menu.setHandler(1, () -> carregaEstado());
-        menu.setHandler(2, () -> paginaInicial());
+        menu.setHandler(2, () -> novaSimulacao());
         menu.setHandler(3, () -> guardaEstado());
 
         menu.run();
@@ -85,7 +84,7 @@ public class TextUI {
         String ficheiroACarregar = sc.nextLine();
 
         try {
-            this.model.carregaEstado(ficheiroACarregar);
+            this.model = FitnessModel.carregaEstado(ficheiroACarregar);
             System.out.println("\n[SUCESSO] Ficheiro carregado\n");
             paginaInicial();
         } catch (IOException | ClassNotFoundException e) {
@@ -103,6 +102,11 @@ public class TextUI {
         } catch (IOException e) {
             System.out.println("\n[ERRO] Falha ao guardar dados\n");
         } 
+    }
+
+    public void novaSimulacao() {
+        this.model = new FitnessModel();
+        paginaInicial();
     }
 
     public void paginaInicial() {
@@ -216,9 +220,6 @@ public class TextUI {
     }
 
 
-
-    
-
     public void loginUtilizador() {
         System.out.print("\nNome de utlizador: ");
         String codigoUtilizador = sc.nextLine();
@@ -239,7 +240,7 @@ public class TextUI {
                             "Mostrar todas as atividades realizadas", 
                             "Adicionar um plano de treino",
                             "Criar plano de treino Automático",
-                            "Remover um plano de treino", 
+                            "Remover o plano de treino", 
                             "Adicionar uma atividade ao plano de treino", 
                             "Remover uma atividade do plano de treino", 
                             "Mostrar o plano de treino",
@@ -260,7 +261,7 @@ public class TextUI {
             menu.setHandler(5, () -> this.criarPlanoDeTreinoComObjetivos(codigoUtilizador));
 
             menu.setCondicao(6, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(6, () -> this.model.limparPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(6, () -> this.limparPlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(7, () -> this.model.getDuracaoPlanoDeTreino(codigoUtilizador) > 0);
             menu.setHandler(7, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
@@ -285,16 +286,14 @@ public class TextUI {
         try {
             Atividade a = criarAtividade(codigoUtilizador);
             this.model.addAtividadeRealizada(codigoUtilizador, a);
+            System.out.println("\n[SUCESSO] Atividade adicionada\n");
         } catch (ParametrosInvalidosException e) {
-            System.out.println("[ERRO] Parâmetros inválidos\n");
+            System.out.println("\n[ERRO] Parâmetros inválidos\n");
         } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
+            System.out.println("\n[ERRO] Utilizador não existe\n");
         } catch (AtividadeExisteException e) {
-            System.out.println("[ERRO] Atividade já existe\n");
-        } catch (NomeAtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não tem recordes\n");
+            System.out.println("\n[ERRO] Atividade já existe\n");
         }
-   
     }
 
     public void removerAtividadeRealizada(String codigoUtilizador) {
@@ -303,21 +302,17 @@ public class TextUI {
         
         try {
             this.model.removerAtividade(codigoUtilizador, codigoAtividade);
-            System.out.println("[SUCESSO] Atividade removida\n");
+            System.out.println("\n[SUCESSO] Atividade removida\n");
         } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
+            System.out.println("\n[ERRO] Utilizador não existe\n");
         } catch (AtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não existe\n");
+            System.out.println("\n[ERRO] Atividade não existe\n");
         } 
     }
 
     public void mostrarAtividadesRealizadas(String codigoUtilizador) {
         System.out.println("\nAtividades realizadas: ");
         System.out.println(this.model.getAtividadesRealizadas(codigoUtilizador));
-
-        //List<Atividade> atividades = this.model.getAtividadesRealizadas(codigoUtilizador);
-        //for (Atividade a : atividades) 
-        //    System.out.println(a);
     }
 
     public void criarPlanoDeTreino(String codigoUtilizador) {
@@ -335,27 +330,34 @@ public class TextUI {
         System.out.print("Duração (semanas): ");
         int duracao = sc.nextInt();
         sc.nextLine(); // limpar o buffer
-
-        try {
-            this.model.setPlanoDeTreino(codigoUtilizador, new PlanoDeTreino(data, duracao));
-    
-            System.out.print("Quantas atividades pretende inserir: ");
-            int nAtividades = sc.nextInt();
-            sc.nextLine(); // limpar o buffer
-    
-            for(int i=0; i<nAtividades; i++) {
-                try {
-                    this.model.addAtividadePlanoDeTreino(codigoUtilizador, criarAtividade(codigoUtilizador));
-                } catch (ParametrosInvalidosException e) {
-                    System.out.println("\n[ERRO] Parâmetros inválidos\n");
+        
+        if (duracao <= 0 || data.isBefore(this.model.getData())) {
+            System.out.println(codigoUtilizador);
+        }
+        else {
+            try {
+                this.model.setPlanoDeTreino(codigoUtilizador, new PlanoDeTreino(data, duracao));
+            
+                System.out.print("Quantas atividades pretende inserir: ");
+                int nAtividades = sc.nextInt();
+                sc.nextLine(); // limpar o buffer
+            
+                for(int i=0; i<nAtividades; i++) {
+                    try {
+                        this.model.addAtividadePlanoDeTreino(codigoUtilizador, criarAtividade(codigoUtilizador));
+                    } catch (ParametrosInvalidosException e) {
+                        System.out.println("\n[ERRO] Parâmetros inválidos\n");
+                    }
                 }
+            } catch (UtilizadorNaoExisteException e) {
+                System.out.println("\n[ERRO] Utilizador não existe\n");
+            } catch (AtividadeExisteException e) {
+                System.out.println("\n[ERRO] Atividade já existe\n");
             }
-        } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
-        } catch (AtividadeExisteException e) {
-            System.out.println("[ERRO] Atividade já existe\n");
         }
     }
+
+    ////// Verificar parâmetros daqui para baixo
 
 
     public void criarPlanoDeTreinoComObjetivos(String codigoUtilizador) {
@@ -384,11 +386,6 @@ public class TextUI {
         Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
         Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 3, 3, utilizador, 40, 60);
         Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 1, 3, utilizador, 20, 40, 25);
-
-        System.out.println(sprint.calorias());
-        System.out.println(bicicletaMontanha.calorias());
-        System.out.println(abdominais.calorias());
-        System.out.println(supino.calorias());
 
         List<Atividade> atividadesDistancia = new ArrayList<>();
         atividadesDistancia.add(sprint);
@@ -454,7 +451,7 @@ public class TextUI {
         int acumuladorAtividades = 999; // atribuir um valor suficientemente grande para entrar no ciclo while
         int acumuladorAtividadesHard = 999;
         int numMaxAtividadesPorSemana = 7*numMaxAtividadesPorDia;
-        while (numMaxAtividadesPorSemana < acumuladorAtividades || acumuladorAtividadesHard > 3) {
+        while (acumuladorAtividades > numMaxAtividadesPorSemana || acumuladorAtividades <= 0 || acumuladorAtividadesHard > 3) {
             acumuladorAtividades = 0; // reset
             acumuladorAtividadesHard = 0;
 
@@ -470,12 +467,21 @@ public class TextUI {
                 if (atividade instanceof Hard) acumuladorAtividadesHard += vezesPorSemana;
             }
 
-            if (numMaxAtividadesPorSemana < acumuladorAtividades) System.out.println("[ERRO] Ultrapassou o limite máximo de atividades numa semana (" + numMaxAtividadesPorSemana + " atividades) ");
-            else if (acumuladorAtividadesHard > 3) System.out.println("[ERRO] Ultrapassou o limite máximo de atividades hard numa semana (3 atividades hard) ");
-            else this.model.planoDeTreinoComObjetivos(codigoUtilizador, atividadesComRecorrenciaSemanal, numMaxAtividadesPorDia, caloriasObjetivo);
+            if (numMaxAtividadesPorSemana < acumuladorAtividades) System.out.println("\n[ERRO] Ultrapassou o limite máximo de atividades numa semana (" + numMaxAtividadesPorSemana + " atividades)\n");
+            else if (acumuladorAtividades <= 0) System.out.println("\n[ERRO] Necessita de pelo menos uma atividade\n");
+            else if (acumuladorAtividadesHard > 3) System.out.println("\n[ERRO] Ultrapassou o limite máximo de atividades hard numa semana (3 atividades hard)\n");
+            else { 
+                this.model.planoDeTreinoComObjetivos(codigoUtilizador, atividadesComRecorrenciaSemanal, numMaxAtividadesPorDia, caloriasObjetivo);
+                System.out.println("\n[SUCESSO] Plano de treino criado!\n");
+            }
         }
     }
 
+
+    public void limparPlanoDeTreino(String codigoUtilizador) {
+        this.model.limparPlanoDeTreino(codigoUtilizador);
+        System.out.println("\n[SUCESSO] Plano de treino limpo\n");
+    }
 
 
     public void addAtividadePlanoDeTreino(String codigoUtilizador) {
@@ -485,13 +491,13 @@ public class TextUI {
         } catch (ParametrosInvalidosException e) {
             System.out.println("\n[ERRO] Parâmetros inválidos\n");
         } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
+            System.out.println("\n[ERRO] Utilizador não existe\n");
         } catch (AtividadeExisteException e) {
-            System.out.println("[ERRO] Atividade já existe\n");
+            System.out.println("\n[ERRO] Atividade já existe\n");
         }
     }
 
-    public Atividade criarAtividade(String codigoUtilizador) throws ParametrosInvalidosException, UtilizadorNaoExisteException {
+    public Atividade criarAtividade(String codigoUtilizador) throws ParametrosInvalidosException, UtilizadorNaoExisteException, AtividadeExisteException {
         Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
 
         System.out.print("\nCodigo da atividade: ");
@@ -529,6 +535,12 @@ public class TextUI {
         int series = sc.nextInt();
         sc.nextLine(); // limpar o buffer
 
+        
+        if (codigo.length() == 0 || duracao <= 0 || series <= 0) throw new ParametrosInvalidosException();
+        if (!this.model.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
+        if (this.model.existeAtividade(codigoUtilizador, codigo)) throw new AtividadeExisteException();
+        
+
         System.out.print("Tipo de atividade (1 - Atividades de Distância, 2 - Atividades de Repetições): ");
         int tipoAtividade = sc.nextInt();
         sc.nextLine(); // limpar o buffer
@@ -541,6 +553,8 @@ public class TextUI {
                 System.out.print("Distância percorrida (kms): ");
                 double distancia = sc.nextDouble();
                 sc.nextLine(); // limpar o buffer
+
+                if (distancia <= 0) throw new ParametrosInvalidosException();
 
                 System.out.print("Atividades de Distância (1 - Sprint, 2 - Atividades de Distância e Altimetria): ");
                 int tipoAtividadeDistancia = sc.nextInt();
@@ -557,6 +571,8 @@ public class TextUI {
                         System.out.print("Altimetria (m): ");
                         int altimetria = sc.nextInt();
                         sc.nextLine(); // limpar o buffer
+
+                        if (altimetria <= 0) throw new ParametrosInvalidosException();
                         
                         System.out.print("Atividades de Distância e Altimetria (1 - BicicletaMontanha): ");
                         int tipoAtividadeDistanciaAltimetria = sc.nextInt();
@@ -576,6 +592,8 @@ public class TextUI {
                                 System.out.print("Disco de travão (1 - Sim, 2 - Não): ");
                                 boolean discoTravao = sc.nextInt() == 1 ? true : false;
                                 sc.nextLine(); // limpar o buffer
+
+                                if (variacaoSuspencao <= 0 || numeroMudancas <= 0) throw new ParametrosInvalidosException();
                                                                                                                                 
                                 a = new BicicletaMontanha(codigo, descricao, data, duracao, series, utilizador, distancia, altimetria, variacaoSuspencao, numeroMudancas, discoTravao);
                                 break;
@@ -596,6 +614,8 @@ public class TextUI {
                 int repeticoes = sc.nextInt();
                 sc.nextLine(); // limpar o buffer
 
+                if (repeticoes <= 0) throw new ParametrosInvalidosException();
+
                 System.out.print("Atividades de Repetições (1 - Abdominais, 2 - Atividades de Repetições com Pesos): ");
                 int tipoAtividadeRepeticoes = sc.nextInt();
                 sc.nextLine(); // limpar o buffer
@@ -606,6 +626,8 @@ public class TextUI {
                         double amplitude = sc.nextDouble();
                         sc.nextLine(); // limpar o buffer
 
+                        if (amplitude <= 0 || amplitude >= 90) throw new ParametrosInvalidosException();
+
                         a = new Abdominais(codigo, descricao, data, duracao, series, utilizador, repeticoes, amplitude);
                         break;
                     /*-------ATIVIDADES DE REPETIÇÕES COM PESOS-------*/
@@ -613,6 +635,8 @@ public class TextUI {
                         System.out.print("Peso (kg): ");
                         double peso = sc.nextDouble();
                         sc.nextLine(); // limpar o buffer
+
+                        if (peso <= 0) throw new ParametrosInvalidosException();
 
                         System.out.print("Atividades de Repetições com Peso (1 - Supino): ");
                         int tipoAtividadeRepeticoesPeso = sc.nextInt();
@@ -624,6 +648,8 @@ public class TextUI {
                                 System.out.print("Inclinacao (graus): ");
                                 double inclinacao = sc.nextDouble();
                                 sc.nextLine(); // limpar o buffer
+
+                                if (inclinacao <= 0 || inclinacao >= 45) throw new ParametrosInvalidosException();
     
                                 a = new Supino(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso, inclinacao);
                                 break;
@@ -651,16 +677,17 @@ public class TextUI {
         String codigoAtividade = sc.nextLine();
         
         try {
-            this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);      
+            this.model.removeAtividadePlanoDeTreino(codigoUtilizador, codigoAtividade);  
+            System.out.println("\n[SUCESSO] Atividade removida\n");    
         } catch (UtilizadorNaoExisteException e) {
-            System.out.println("[ERRO] Utilizador não existe\n");
+            System.out.println("\n[ERRO] Utilizador não existe\n");
         } catch (AtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não existe\n");
+            System.out.println("\n[ERRO] Atividade não existe\n");
         }
     }
 
     public void mostrarPlanoDeTreino(String codigoUtilizador) {
-        System.out.println("\nPlano de Treino: ");
+        System.out.println("Plano de treino " + this.model.getdataPlanoDeTreino(codigoUtilizador));
         System.out.println(this.model.getAtividadesPlanoDeTreinoCrescente(codigoUtilizador));
     }
 
@@ -669,12 +696,8 @@ public class TextUI {
         int dias = sc.nextInt();
         sc.nextLine();
 
-        try {
-            this.model.saltoNoTempo(dias);
-            System.out.println("\n[SUCESSO] Avançou " + dias + " dias: ");
-        } catch (NomeAtividadeNaoExisteException e) {
-            System.out.println("[ERRO] Atividade não tem recordes\n");
-        }
+        this.model.saltoNoTempo(dias);
+        System.out.println("\n[SUCESSO] Avançou " + dias + " dias");
     }
 
     public void estatisticasGerias(String codigoUtilizador) {
@@ -715,9 +738,7 @@ public class TextUI {
 
                 dataFim = LocalDate.of(dataFimAno, dataFimMes, dataFimDia);
 
-                if (dataFim.isBefore(dataInicio)) {
-                    System.out.println("[ERRO] Datas inválidas\n");
-                }
+                if (dataFim.isBefore(dataInicio)) System.out.println("\n[ERRO] Datas inválidas\n");
             } while (dataFim.isBefore(dataInicio));
         }
         
@@ -732,43 +753,98 @@ public class TextUI {
                             "Quantos kg de peso é que levantou num período ou desde sempre",
                             "Quantas repetições é que totalizou num período ou desde sempre",
                             "Qual é o tipo de actividade mais realizada",
-                            "Qual é o plano de treino mais exigente em função do dispêndio de calorias proposto (Média semanal)"
-                            //"Recordes individuais",
-                            //"Recordes da aplicação"
+                            "Qual é o plano de treino mais exigente em função do dispêndio de calorias proposto (Média semanal)",
+                            "Recordes individuais",
+                            "Recordes da aplicação"
                         });
 
-        menu.setHandler(1, () -> System.out.println(this.model.utilizadorMaisCalorias(constDataInicio, constDataFim)));
+        menu.setHandler(1, () -> this.utilizadorMaisCalorias(constDataInicio, constDataFim));
             
         menu.setCondicao(2, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-        menu.setHandler(2, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividade"), FitnessModel.getToDoubleFunction("obtémCalorias")) + " calorias"));
+        menu.setHandler(2, () -> this.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, "éAtividade", "obtémCalorias"));
 
-        menu.setHandler(3, () -> System.out.println(this.model.utilizadorComMaisAtividades(constDataInicio, constDataFim)));
+        menu.setHandler(3, () -> this.utilizadorComMaisAtividades(constDataInicio, constDataFim));
                         
         menu.setCondicao(4, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-        menu.setHandler(4, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeDistância"), FitnessModel.getToDoubleFunction("obtémDistancia")) + " kms"));
+        menu.setHandler(4, () -> this.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, "éAtividadeDistância", "obtémDistância"));
         
         menu.setCondicao(5, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-        menu.setHandler(5, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeDistânciaAltimetria"), FitnessModel.getToDoubleFunction("obtémAltimetria")) + " m"));
+        menu.setHandler(5, () -> this.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, "éAtividadeDistânciaAltimetria", "obtémAltimetria"));
 
         menu.setCondicao(6, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-        menu.setHandler(6, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeRepetiçõesPesos"), FitnessModel.getToDoubleFunction("obtémPeso")) + " kg"));
+        menu.setHandler(6, () -> this.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, "éAtividadeRepetiçõesPesos", "obtémPeso"));
 
         menu.setCondicao(7, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-        menu.setHandler(7, () -> System.out.println(this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, FitnessModel.getPredicate("éAtividadeRepetições"), FitnessModel.getToDoubleFunction("obtémRepetições")) + " repetições"));
+        menu.setHandler(7, () -> this.estatisticaAcumulacaoPeriodo(codigoUtilizador, constDataInicio, constDataFim, "éAtividadeRepetições", "obtémRepetições"));
 
-        menu.setHandler(8, () -> System.out.println(this.model.atividadeMaisRealizada()));
+        menu.setHandler(8, () -> this.atividadeMaisRealizada());
             
-        menu.setHandler(9, () -> System.out.println(this.model.planoDeTreinoMaisExigente()));                        
+        menu.setHandler(9, () -> this.planoDeTreinoMaisExigente());                       
 
-        //menu.setHandler(10, () -> );
+        menu.setCondicao(10, () -> this.model.recordesUtilizador(codigoUtilizador).size() > 0);
+        menu.setHandler(10, () -> this.recordesUtilizador(codigoUtilizador));
 
-        //menu.setHandler(11, () -> );
+        menu.setCondicao(11, () -> this.model.getRecordesGerais().size() > 0);
+        menu.setHandler(11, () -> this.recordesGerais());
 
         menu.run();
     }
 
 
-    public void utilizadorMaisCalorias() {
+    public void utilizadorMaisCalorias(LocalDate dataInicio, LocalDate dataFim) {
+        Utilizador utilizador = this.model.utilizadorMaisCalorias(dataInicio, dataFim);
+        System.out.print("O utilizador com mais calorias gastas é o(a) " + this.model.getCodigoUtilizador(utilizador) + " e gastou ");
+        this.estatisticaAcumulacaoPeriodo(this.model.getCodigoUtilizador(utilizador), dataInicio, dataFim, "éAtividade", "obtémCalorias");
     }
 
+    public void estatisticaAcumulacaoPeriodo(String codigoUtilizador, LocalDate dataInicio, LocalDate dataFim, String predicate, String toDoubleFunction) {
+        double total = this.model.estatisticaAcumulacaoPeriodo(codigoUtilizador, dataInicio, dataFim, FitnessModel.getPredicate(predicate), FitnessModel.getToDoubleFunction(toDoubleFunction));
+        String res = "" + total;
+        switch (toDoubleFunction) {
+            case "obtémCalorias": 
+                res += " calorias";
+                break;
+            case "obtémDistância": 
+                res += " kms";
+                break;
+            case "obtémAltimetria": 
+                res += " m";
+                break;
+            case "obtémPeso": 
+                res += " kg";
+                break;
+            case "obtémRepetições": 
+                res += " repetições";
+                break;
+        }
+        System.out.println(res);  
+    }
+
+    public void utilizadorComMaisAtividades(LocalDate dataInicio, LocalDate dataFim) {
+        Utilizador utilizador = this.model.utilizadorComMaisAtividades(dataInicio, dataFim);
+        System.out.println("O utilizador com mais atividades é o(a) " + this.model.getCodigoUtilizador(utilizador) + " e realizou " + this.model.getAtividadesRealizadas(utilizador).size() + " atividades");
+    }
+
+    public void atividadeMaisRealizada() {
+        String atividade = this.model.atividadeMaisRealizada();
+        System.out.println("A atividade mais realizada é " + atividade);
+    }
+
+    public void planoDeTreinoMaisExigente() {
+        PlanoDeTreino planoDeTreino = this.model.planoDeTreinoMaisExigente();
+        System.out.println("O plano de treino mais exigente é:\n" + planoDeTreino);
+    }
+
+    public void recordesUtilizador(String codigoUtilizador) {
+        System.out.println("Os seus recordes são:\n" + this.model.recordesUtilizador(codigoUtilizador));
+    }
+
+    public void recordesGerais() {
+        System.out.println("Os recordes da aplicação são:\n"); 
+        for (Map.Entry<String, Utilizador> e : this.model.getRecordesGerais().entrySet()) {
+            Utilizador utilizador = e.getValue();
+            String nomeAtividade = e.getKey();
+            System.out.println(nomeAtividade + " - " + this.model.getCodigoUtilizador(utilizador) + " gastou " + this.model.caloriasRecordeAtividade(nomeAtividade));
+        }
+    }
 }

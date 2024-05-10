@@ -47,9 +47,8 @@ public abstract class Altimetria extends Distancia {
 
      
     public String toString() {
-        return "Altimetria{" +
-            super.toString() + 
-            ", altimetria='" + this.altimetria + '}';
+        return super.toString() + 
+               ", altimetria = '" + this.altimetria + '\'';
     }
 
     public abstract Distancia clone();

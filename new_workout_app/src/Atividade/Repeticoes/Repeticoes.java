@@ -40,10 +40,8 @@ public abstract class Repeticoes extends Atividade {
 
      
     public String toString() {
-        return "Repetições{" +
-                super.toString()+
-                "repetições=" + this.repeticoes +
-                '}';
+        return  super.toString() +
+                ", repetições = '" + this.repeticoes + '\'';
     }
 
      

@@ -1,4 +1,4 @@
-package Excessoes;
+package Excecoes;
 
 public class AtividadeExisteException extends Exception{
     public AtividadeExisteException() {

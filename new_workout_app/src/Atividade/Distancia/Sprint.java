@@ -29,8 +29,8 @@ public class Sprint extends Distancia {
 
      
     public String toString() {
-        return "Sprint{" +
-            super.toString() + '}';
+        return "Sprint - " +
+            super.toString();
     }
 
      
@@ -39,7 +39,7 @@ public class Sprint extends Distancia {
     }
 
     public double calorias() {
-        return this.getUtilizador().fatorMultiplicativo() * (this.getVelocidade()/2) * this.getDuracao() * (this.bpm()/100) * this.getSeries();
+        return this.getUtilizador().fatorMultiplicativo() * ((this.getVelocidade()/2 + 1)) * this.getDuracao() * ((this.bpm()/100 + 1)) * this.getSeries();
     }
 
     public int bpm(){

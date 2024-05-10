@@ -115,15 +115,15 @@ public class PlanoDeTreino implements Serializable {
     }
 
     public String toString() {
-        String a = "Plano de Treino{" +
-                "data='" + this.dataRealizacao + '\'' +
-                ", duração=" + this.duracao + '\'' +
-                ", calorias totais=" + this.caloriasTotais + '\'' +
-                ", atividades={";
+        String a = "Plano de Treino - " + '\n' +
+                "data = '" + this.dataRealizacao + '\'' +
+                ", duração = '" + this.duracao + '\'' +
+                ", calorias totais = '" + this.caloriasTotais + '\'' +
+                ", ATIVIDADES [\n";
         for(Atividade atividade : this.atividades.values()) {
-           a += atividade.toString() + ",";
+           a += atividade.toString() + ",\n";
         }
-        a += '}';
+        a += "]";
         return a;
     }
 

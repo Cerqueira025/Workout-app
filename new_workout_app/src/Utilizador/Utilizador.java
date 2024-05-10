@@ -1,6 +1,7 @@
 package Utilizador;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -216,6 +217,14 @@ public abstract class Utilizador implements Serializable {
         return this.plano.getAtividade(codigoAtividade);
     }
 
+    public void setDataPlanoDeTreino(LocalDate data) {
+        this.plano.setDataRealizacao(data);
+    }
+    
+    public void setDuracaoPlanoDeTreino(int numeroSemanas) {
+        this.plano.setDuracao(numeroSemanas);
+    }
+
     // ----------------- outros métodos ----------------- //
 
 
@@ -269,24 +278,23 @@ public abstract class Utilizador implements Serializable {
     }
 
     public String toString() {
-        String a = "Utiliador{" +
-                "código='" + this.codigo + '\'' +
-                ", nome='" + this.nome + '\'' +
-                ", genero='" + this.genero + '\'' +
-                ", morada='" + this.morada + '\'' +
-                ", email='" + this.email + '\'' +
-                /*", password='" + this.password + '\'' + */
-                ", bpm='" + this.bpmMedio + '\'' +
-                ", altura='" + this.altura + '\'' +
-                ", peso='" + this.peso + '\'' +
-                ", calorias gastas='" + this.caloriasGastas + '\'' +
-                ", recordes de atividades='" + this.recordesAtividades + '\'' +
-                ", plano de treino=' " + this.plano.toString() + '\'' +
-                ", atividades={";
+        String a = "Utiliador - " +
+                "código = '" + this.codigo + '\'' +
+                ", nome = '" + this.nome + '\'' +
+                ", genero = '" + this.genero + '\'' +
+                ", morada = '" + this.morada + '\'' +
+                ", email = '" + this.email + '\'' +
+                ", bpm = '" + this.bpmMedio + '\'' +
+                ", altura = '" + this.altura + '\'' +
+                ", peso = '" + this.peso + '\'' +
+                ", calorias gastas = '" + this.caloriasGastas + '\'' +
+                ", recordes de atividades = '" + this.recordesAtividades + '\'' +
+                ", '" + this.plano.toString() + '\'' +
+                ", ATIVIDADES REALIZADAS = [\n";
         for(Atividade atividade : this.atividades.values()) {
-           a += atividade.toString() + ",";
+           a += atividade.toString() + ",\n";
         }   
-        a += "}";
+        a += "]";
         return a;
     }
     
