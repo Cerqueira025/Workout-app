@@ -256,7 +256,7 @@ public class FitnessModel implements Serializable {
         public void removeAtividadePlanoDeTreino(String codigoUtilizador, String codAtividade) throws UtilizadorNaoExisteException, AtividadeNaoExisteException {
             if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
             if (!this.existeAtividadePlanoDeTreino(codigoUtilizador, codAtividade)) throw new AtividadeNaoExisteException();
-            this.utilizadores.get(codigoUtilizador).removeAtividadePlanoDeTreino(codAtividade);
+            this.utilizadores.get(codigoUtilizador).apagaAtividadePlanoDeTreino(codAtividade);
         }
         
         public PlanoDeTreino getPlanoDeTreino(String codigoUtilizador) {

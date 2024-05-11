@@ -240,7 +240,7 @@ public class TextUI {
         else {
             System.out.println("\n[SUCESSO] Login efetuado!\n");
             
-            Menu menu = new Menu(new String[] { "Informação Pesosal",
+            Menu menu = new Menu(new String[] { "Informação Pessoal",
                             "Adicionar uma atividade realizada", 
                             "Remover uma atividade realizada", 
                             "Mostrar todas as atividades realizadas", 
@@ -407,8 +407,6 @@ public class TextUI {
         }
     }
 
-    ////// Verificar parâmetros daqui para baixo
-
 
     public void criarPlanoDeTreinoComObjetivos(String codigoUtilizador) {
         Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
@@ -420,79 +418,82 @@ public class TextUI {
         System.out.print("Número máximo de atividades por dia: ");
         int numMaxAtividadesPorDia = sc.nextInt();
         sc.nextLine(); // limpar o buffer
+        
+        if (caloriasObjetivo <= 0 || numMaxAtividadesPorDia <= 0) {
+            System.out.println("\n[ERRO] Parâmetros inválidos\n");
+        } else {      
+            Menu menu = new Menu(new String[] { "Plano de treino de distância",
+                                "Plano de treino de distância e altimetria",
+                                "Plano de treino de repetições",
+                                "Plano de treino de repetições com pesos",
+                                "Plano de treino de distância com atividades HARD",
+                                "Plano de treino de distância e altimetria com atividades HARD",
+                                "Plano de treino de repetições com atividades HARD",
+                                "Plano de treino de repetições com pesos com atividades HARD"
+                            });
+
+
+            Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
+            Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
+            Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 3, 3, utilizador, 40, 60);
+            Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 1, 3, utilizador, 20, 40, 25);
+
+            List<Atividade> atividadesDistancia = new ArrayList<>();
+            atividadesDistancia.add(sprint);
+
+            List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
+            atividadesDistanciaComHard.add(bicicletaMontanha);
+            atividadesDistanciaComHard.add(sprint);
+
+
+            List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
+            // falta uma atividade não hard
+
+            List<Atividade> atividadesDistanciaEAltimetriaComHard = new ArrayList<>();
+            atividadesDistanciaEAltimetriaComHard.add(bicicletaMontanha);
+
+            
+            List<Atividade> atividadesRepeticoes = new ArrayList<>();
+            atividadesRepeticoes.add(abdominais);
+
+            List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
+            atividadesRepeticoesComHard.add(supino);
+            atividadesRepeticoesComHard.add(abdominais);
+
+
+            List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();
+            // falta uma atividade não hard
+
+            List<Atividade> atividadesRepeticoesComPesosComHard = new ArrayList<>();
+            atividadesRepeticoesComPesosComHard.add(supino);
+
+
+            menu.setCondicao(1, () -> atividadesDistancia.size() > 0);
+            menu.setHandler(1, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistancia, numMaxAtividadesPorDia, caloriasObjetivo));
                 
-        Menu menu = new Menu(new String[] { "Plano de treino de distância",
-                            "Plano de treino de distância e altimetria",
-                            "Plano de treino de repetições",
-                            "Plano de treino de repetições com pesos",
-                            "Plano de treino de distância com atividades hard",
-                            "Plano de treino de distância e altimetria com atividades hard",
-                            "Plano de treino de repetições com atividades hard",
-                            "Plano de treino de repetições com pesos com atividades hard"
-                        });
-
-
-        Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
-        Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
-        Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 3, 3, utilizador, 40, 60);
-        Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 1, 3, utilizador, 20, 40, 25);
-
-        List<Atividade> atividadesDistancia = new ArrayList<>();
-        atividadesDistancia.add(sprint);
-
-        List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
-        atividadesDistanciaComHard.add(bicicletaMontanha);
-        atividadesDistanciaComHard.add(sprint);
-
-
-        List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
-        // falta uma atividade não hard
-
-        List<Atividade> atividadesDistanciaEAltimetriaComHard = new ArrayList<>();
-        atividadesDistanciaEAltimetriaComHard.add(bicicletaMontanha);
-
-        
-        List<Atividade> atividadesRepeticoes = new ArrayList<>();
-        atividadesRepeticoes.add(abdominais);
-
-        List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
-        atividadesRepeticoesComHard.add(supino);
-        atividadesRepeticoesComHard.add(abdominais);
-
-
-        List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();
-        // falta uma atividade não hard
-
-        List<Atividade> atividadesRepeticoesComPesosComHard = new ArrayList<>();
-        atividadesRepeticoesComPesosComHard.add(supino);
-
-
-        menu.setCondicao(1, () -> atividadesDistancia.size() > 0);
-        menu.setHandler(1, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistancia, numMaxAtividadesPorDia, caloriasObjetivo));
+            menu.setCondicao(2, () -> atividadesDistanciaEAltimetria.size() > 0);
+            menu.setHandler(2, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetria, numMaxAtividadesPorDia, caloriasObjetivo));
+                            
+            menu.setCondicao(3, () -> atividadesRepeticoes.size() > 0);                
+            menu.setHandler(3, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoes, numMaxAtividadesPorDia, caloriasObjetivo));
             
-        menu.setCondicao(2, () -> atividadesDistanciaEAltimetria.size() > 0);
-        menu.setHandler(2, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetria, numMaxAtividadesPorDia, caloriasObjetivo));
-                        
-        menu.setCondicao(3, () -> atividadesRepeticoes.size() > 0);                
-        menu.setHandler(3, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoes, numMaxAtividadesPorDia, caloriasObjetivo));
-        
-        menu.setCondicao(4, () -> atividadesRepeticoesComPesos.size() > 0);                
-        menu.setHandler(4, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesos, numMaxAtividadesPorDia, caloriasObjetivo));
-        
-        menu.setCondicao(5, () -> atividadesDistanciaComHard.size() > 0);
-        menu.setHandler(5, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-        
-        menu.setCondicao(6, () -> atividadesDistanciaEAltimetriaComHard.size() > 0);    
-        menu.setHandler(6, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetriaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-        
-        menu.setCondicao(7, () -> atividadesRepeticoesComHard.size() > 0);                
-        menu.setHandler(7, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComHard, numMaxAtividadesPorDia, caloriasObjetivo));
-        
-        menu.setCondicao(8, () -> atividadesRepeticoesComPesosComHard.size() > 0);                
-        menu.setHandler(8, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesosComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            menu.setCondicao(4, () -> atividadesRepeticoesComPesos.size() > 0);                
+            menu.setHandler(4, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesos, numMaxAtividadesPorDia, caloriasObjetivo));
             
-        menu.run();
-
+            menu.setCondicao(5, () -> atividadesDistanciaComHard.size() > 0);
+            menu.setHandler(5, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+            menu.setCondicao(6, () -> atividadesDistanciaEAltimetriaComHard.size() > 0);    
+            menu.setHandler(6, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesDistanciaEAltimetriaComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+            menu.setCondicao(7, () -> atividadesRepeticoesComHard.size() > 0);                
+            menu.setHandler(7, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+            
+            menu.setCondicao(8, () -> atividadesRepeticoesComPesosComHard.size() > 0);                
+            menu.setHandler(8, () -> this.preencherPlanoDeTreinoComObjetivos(codigoUtilizador, atividadesRepeticoesComPesosComHard, numMaxAtividadesPorDia, caloriasObjetivo));
+                
+            menu.run();
+        }
     }
 
 

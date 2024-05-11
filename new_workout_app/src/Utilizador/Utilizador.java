@@ -261,6 +261,10 @@ public abstract class Utilizador implements Serializable {
         this.plano.removeAtividade(codAtividade);
     }
 
+    public void apagaAtividadePlanoDeTreino(String codAtividade) {
+        this.plano.apagaAtividade(codAtividade);
+    }
+
     public boolean existeAtividadePlanoDeTreino(String codigo) {
         return this.plano.existeAtividade(codigo);
     }
