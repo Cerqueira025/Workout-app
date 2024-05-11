@@ -345,6 +345,7 @@ public class TextUI {
                 for(int i=0; i<nAtividades; i++) {
                     try {
                         this.model.addAtividadePlanoDeTreino(codigoUtilizador, criarAtividade(codigoUtilizador));
+                        System.out.println("\n[SUCESSO] Atividade adicionada\n");
                     } catch (ParametrosInvalidosException e) {
                         System.out.println("\n[ERRO] Parâmetros inválidos\n");
                     }
@@ -487,7 +488,8 @@ public class TextUI {
     public void addAtividadePlanoDeTreino(String codigoUtilizador) {
         try {
             Atividade a = criarAtividade(codigoUtilizador);
-            this.model.addAtividadePlanoDeTreino(codigoUtilizador, a); 
+            this.model.addAtividadePlanoDeTreino(codigoUtilizador, a);
+            System.out.println("\n[SUCESSO] Atividade adicionada ao plano de treino\n"); 
         } catch (ParametrosInvalidosException e) {
             System.out.println("\n[ERRO] Parâmetros inválidos\n");
         } catch (UtilizadorNaoExisteException e) {

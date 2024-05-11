@@ -4,7 +4,6 @@ DELEGATE:
 - fazer apagar conta
 - fazer tratamento de parametros no controller com handlers (Em progresso)
 - colocar data visível na aplicação e peso do utiliador
-- rever se existem mensagens de [ERRO] e [SUCESSO] + meter "\n"
 ```
 
 MODEL:
