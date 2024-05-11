@@ -14,11 +14,15 @@ import java.util.HashMap;
 import Atividade.Atividade;
 import Atividade.Hard;
 import Atividade.Distancia.Distancia;
+import Atividade.Distancia.Jogging;
 import Atividade.Distancia.Sprint;
 import Atividade.Distancia.Altimetria.Altimetria;
 import Atividade.Distancia.Altimetria.BicicletaMontanha;
+import Atividade.Distancia.Altimetria.TrailMontanha;
 import Atividade.Repeticoes.Repeticoes;
 import Atividade.Repeticoes.Abdominais;
+import Atividade.Repeticoes.Polichinelo;
+import Atividade.Repeticoes.Pesos.Biceps;
 import Atividade.Repeticoes.Pesos.Pesos;
 import Atividade.Repeticoes.Pesos.Supino;
 import Excecoes.AtividadeExisteException;
@@ -433,39 +437,51 @@ public class TextUI {
                             });
 
 
-            Atividade sprint = new Sprint("sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
+            Atividade sprint = new Sprint("Sprint", "", LocalDateTime.now(), 15, 1, utilizador, 0.2);
+            Atividade jogging = new Jogging("Jogging", "", LocalDateTime.now(), 60, 1, utilizador, 10);
             Atividade bicicletaMontanha = new BicicletaMontanha("BicicletaMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 20, 20, 8, true);
+            Atividade trailMontanha = new TrailMontanha("TrailMontanha", "", LocalDateTime.now(), 120, 1, utilizador, 15, 100, true);
             Atividade abdominais = new Abdominais("Abdominais", "", LocalDateTime.now(), 3, 3, utilizador, 40, 60);
+            Atividade polichinelo = new Polichinelo("Polichinelo", "", LocalDateTime.now(), 3, 3, utilizador, 40);
             Atividade supino = new Supino("Supino", "", LocalDateTime.now(), 1, 3, utilizador, 20, 40, 25);
+            Atividade biceps = new Biceps("Bíceps", "", LocalDateTime.now(), 1, 3, utilizador, 25, 10, false);
+
 
             List<Atividade> atividadesDistancia = new ArrayList<>();
             atividadesDistancia.add(sprint);
-
+            atividadesDistancia.add(jogging);
+            
             List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
-            atividadesDistanciaComHard.add(bicicletaMontanha);
             atividadesDistanciaComHard.add(sprint);
-
+            atividadesDistanciaComHard.add(jogging);
+            atividadesDistanciaComHard.add(trailMontanha);
+            atividadesDistanciaComHard.add(bicicletaMontanha);
 
             List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
-            // falta uma atividade não hard
-
+            // não existem atividades de distância e altimetria não HARD
+            
             List<Atividade> atividadesDistanciaEAltimetriaComHard = new ArrayList<>();
             atividadesDistanciaEAltimetriaComHard.add(bicicletaMontanha);
-
+            atividadesDistanciaEAltimetriaComHard.add(trailMontanha);
             
             List<Atividade> atividadesRepeticoes = new ArrayList<>();
             atividadesRepeticoes.add(abdominais);
+            atividadesRepeticoes.add(polichinelo);
+            atividadesRepeticoes.add(biceps);
 
             List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
-            atividadesRepeticoesComHard.add(supino);
             atividadesRepeticoesComHard.add(abdominais);
-
+            atividadesRepeticoesComHard.add(polichinelo);
+            atividadesRepeticoesComHard.add(supino);
+            atividadesRepeticoesComHard.add(biceps);
 
             List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();
-            // falta uma atividade não hard
+            atividadesRepeticoesComPesos.add(biceps);
 
             List<Atividade> atividadesRepeticoesComPesosComHard = new ArrayList<>();
             atividadesRepeticoesComPesosComHard.add(supino);
+            atividadesRepeticoesComPesosComHard.add(biceps);
+
 
 
             menu.setCondicao(1, () -> atividadesDistancia.size() > 0);
@@ -608,7 +624,7 @@ public class TextUI {
 
                 if (distancia <= 0) throw new ParametrosInvalidosException();
 
-                System.out.print("Atividades de Distância (1 - Sprint, 2 - Atividades de Distância e Altimetria): ");
+                System.out.print("Atividades de Distância (1 - Sprint, 2 - Jogging, 3 - Atividades de Distância e Altimetria): ");
                 int tipoAtividadeDistancia = sc.nextInt();
                 sc.nextLine(); // limpar o buffer
                 switch (tipoAtividadeDistancia) {
@@ -617,16 +633,19 @@ public class TextUI {
                     case 1:
                         a = new Sprint(codigo, descricao, data, duracao, series, utilizador, distancia);
                         break;
-
-                    /*-------ATIVIDADES DE DISTÂNCIA E ALTIMETRIA-------*/
+                    /*-------JOGGING-------*/
                     case 2:
+                        a = new Jogging(codigo, descricao, data, duracao, series, utilizador, distancia);
+                        break;
+                    /*-------ATIVIDADES DE DISTÂNCIA E ALTIMETRIA-------*/
+                    case 3:
                         System.out.print("Altimetria (m): ");
                         int altimetria = sc.nextInt();
                         sc.nextLine(); // limpar o buffer
 
                         if (altimetria <= 0) throw new ParametrosInvalidosException();
                         
-                        System.out.print("Atividades de Distância e Altimetria (1 - BicicletaMontanha): ");
+                        System.out.print("Atividades de Distância e Altimetria (1 - BicicletaMontanha, 2 - TrailMontanha): ");
                         int tipoAtividadeDistanciaAltimetria = sc.nextInt();
                         sc.nextLine(); // limpar o buffer
                         switch (tipoAtividadeDistanciaAltimetria) {
@@ -649,6 +668,14 @@ public class TextUI {
                                                                                                                                 
                                 a = new BicicletaMontanha(codigo, descricao, data, duracao, series, utilizador, distancia, altimetria, variacaoSuspencao, numeroMudancas, discoTravao);
                                 break;
+                            /*-------TRAIL MONTANHA-------*/
+                            case 2:
+                                System.out.print("Bastões (1 - Sim, 2 - Não): ");
+                                boolean bastoes = sc.nextInt() == 1 ? true : false;
+                                sc.nextLine(); // limpar o buffer
+
+                                a = new TrailMontanha(codigo, descricao, data, duracao, series, utilizador, distancia, altimetria, bastoes);
+                                break;
                             default:
                                 throw new ParametrosInvalidosException();
 
@@ -668,7 +695,7 @@ public class TextUI {
 
                 if (repeticoes <= 0) throw new ParametrosInvalidosException();
 
-                System.out.print("Atividades de Repetições (1 - Abdominais, 2 - Atividades de Repetições com Pesos): ");
+                System.out.print("Atividades de Repetições (1 - Abdominais, 2 - Polichinelo, 3 - Atividades de Repetições com Pesos): ");
                 int tipoAtividadeRepeticoes = sc.nextInt();
                 sc.nextLine(); // limpar o buffer
                 switch (tipoAtividadeRepeticoes) {
@@ -682,15 +709,19 @@ public class TextUI {
 
                         a = new Abdominais(codigo, descricao, data, duracao, series, utilizador, repeticoes, amplitude);
                         break;
-                    /*-------ATIVIDADES DE REPETIÇÕES COM PESOS-------*/
+                    /*-------POLICHINELO-------*/
                     case 2:
+                        a = new Polichinelo(codigo, descricao, data, duracao, series, utilizador, repeticoes);
+                        break;
+                    /*-------ATIVIDADES DE REPETIÇÕES COM PESOS-------*/
+                    case 3:
                         System.out.print("Peso (kg): ");
                         double peso = sc.nextDouble();
                         sc.nextLine(); // limpar o buffer
 
                         if (peso <= 0) throw new ParametrosInvalidosException();
 
-                        System.out.print("Atividades de Repetições com Peso (1 - Supino): ");
+                        System.out.print("Atividades de Repetições com Peso (1 - Supino, 2 - Bíceps): ");
                         int tipoAtividadeRepeticoesPeso = sc.nextInt();
                         sc.nextLine(); // limpar o buffer
 
@@ -704,6 +735,14 @@ public class TextUI {
                                 if (inclinacao <= 0 || inclinacao >= 45) throw new ParametrosInvalidosException();
     
                                 a = new Supino(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso, inclinacao);
+                                break;
+                            /*-------BÍCEPS-------*/
+                            case 2:
+                                System.out.print("Bilateral (1 - Sim, 2 - Não): ");
+                                boolean bastoes = sc.nextInt() == 1 ? true : false;
+                                sc.nextLine(); // limpar o buffer
+    
+                                a = new Biceps(codigo, descricao, data, duracao, series, utilizador, repeticoes, peso, bastoes);
                                 break;
                             default:
                                 throw new ParametrosInvalidosException();
