@@ -141,7 +141,6 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.get(codigoUtilizador).getRecordesAtividades();
     }
 
-
     public String getNomeUtilizador(String codigoUtilizador) {
 		return this.utilizadores.get(codigoUtilizador).getNome();
 	}
@@ -171,12 +170,6 @@ public class FitnessModel implements Serializable {
 	}
 
 
- 
-
-   
-
-	
-
     // ----------------- Atividades ---------------- //
 
     public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) {
@@ -189,6 +182,14 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codigoUtilizador).addAtividade(atividade);
     }
 
+    /** 
+     * quando se adiciona uma atividade realizada, o que realmente acontece é:
+     * - define-se na atividade o valor das calorias e bpm médio esperado
+     * - adiciona-se a atividade no map de atividades realizadas do utilizador
+     * - atualizam-se os valores de calorias totais gastas, peso atual e recordes
+     * do utilizador
+     * - atualizam-se os recordes gerais
+    */
     public void addAtividadeRealizada(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
         double caloriasAtividade = atividade.calorias();
         Utilizador utilizador = this.utilizadores.get(codigoUtilizador);
@@ -245,6 +246,11 @@ public class FitnessModel implements Serializable {
             this.utilizadores.get(codigoUtilizador).limparPlanoDeTreino();
         }
         
+        /**
+         * é importante notar que, quando se adiciona uma atividade no plano
+         * de treino, é necessário definir o bpm médio e as calorias da atividade
+         * antes de inseri-la
+         */
         public void addAtividadePlanoDeTreino(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
             if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
             if (this.existeAtividade(codigoUtilizador, atividade.getCodigo()) || this.existeAtividadePlanoDeTreino(codigoUtilizador, atividade.getCodigo())) throw new AtividadeExisteException();
@@ -295,6 +301,11 @@ public class FitnessModel implements Serializable {
 
     // ----------------- Outras queries e auxiliares ---------------- //
 
+    /**
+     * método geral responsável por filtrar as atividades de um utilizador
+     * consoante um predicate e por aplicar uma função toDouble, devolvendo
+     * o valor acumulado
+     */
     public double estatisticaAcumulacaoPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim, Predicate<Atividade> insOf, ToDoubleFunction<Atividade> fun) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return this.utilizadores
@@ -308,6 +319,7 @@ public class FitnessModel implements Serializable {
                .sum();
     }
 
+    
     private int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return (int) this.utilizadores.get(codigoUtilizador).getAtividades().values().stream().filter(predicate).count();
@@ -336,7 +348,13 @@ public class FitnessModel implements Serializable {
     // ----------------- Queries ---------------- //
 
 
-    // 1. qual é o utilizador que mais calorias dispendeu num período ou desde sempre
+    /**
+     * responde à query 1 "qual é o utilizador que mais calorias dispendeu
+     * num período ou desde sempre". faz uso do método geral de iteração
+     * mencionado em cima para comparar as calorias dos utilizadores 
+     * acumuladas num período, de forma a perceber qual o que gastou
+     * mais calorias
+     */
     public Utilizador utilizadorMaisCalorias(LocalDate inicio, LocalDate fim) { // referência no relatório
         Comparator<Utilizador> comparator = (u1, u2) -> {
                                                             double dif = this.estatisticaAcumulacaoPeriodo(u2.getCodigo(), inicio, fim, a -> a instanceof Atividade, a -> a.calorias())
@@ -347,13 +365,22 @@ public class FitnessModel implements Serializable {
         return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null);
     }
     
-    // 2. qual o utilizador que mais actividades realizou num período ou desde sempre
+    /**
+     * responde à query 2 "qual o utilizador que mais actividades realizou
+     * num período ou desde sempre".
+     */
     public Utilizador utilizadorComMaisAtividades(LocalDate inicio, LocalDate fim) {
         Comparator<Utilizador> comparator = (u1, u2) -> this.numeroAtividadesPeriodo(u2.getCodigo(), inicio, fim) - this.numeroAtividadesPeriodo(u1.getCodigo(), inicio, fim);
         return this.utilizadores.values().stream().sorted(comparator).findFirst().orElse(null);
     }
 
-    // 3. qual o tipo de actividade mais realizada
+    /**
+     * responde à query 3 "qual o tipo de actividade mais realizada". este
+     * método cria um Map<String, Integer> com o objetivo de mapear a string
+     * correspondete ao nome simples da classe da atividade ao número de vezes
+     * que a atividade é feita. deste modo, devolve-se a string que corresponde
+     * ao nome da atividade que mais vezes apareceu.
+     */
     public String atividadeMaisRealizada() {
         Map<String,Integer> nomeAtividades = new HashMap<>();
         for (Utilizador u : this.utilizadores.values()) {
@@ -376,7 +403,13 @@ public class FitnessModel implements Serializable {
         return atividadeMaisRealizada;
     }
     
-    // 6. qual o plano de treino mais exigente em função do dispêndio de calorias proposto
+    /**
+     * responde à query 6 "qual o plano de treino mais exigente em função 
+     * do dispêndio de calorias proposto". faz uso do método geral de iteração
+     * mencionado em cima para comparar a média das calorias semanais dos planos
+     * de treino dos utilizadores, num período, de forma a perceber qual o mais
+     * exigente.
+     */
     public PlanoDeTreino planoDeTreinoMaisExigente() {
         Comparator<Utilizador> comparator = (u1, u2) -> {
                                                             double dif = u2.getPlanoDeTreino().mediaCaloriasSemanal() - u1.getPlanoDeTreino().mediaCaloriasSemanal();
@@ -387,6 +420,19 @@ public class FitnessModel implements Serializable {
 
     // ----------------- Salto no tempo ---------------- //
 
+    /**
+     * este método tem em atenção o número de dias proposto a saltar
+     * e, para cada atividade de cada utilizador, verifica se a mesma
+     * encontra-se antes da nova data proposta. caso tal se verifique,
+     * significa que a atividade tem de ser "realizada", o que se resume
+     * aos seguintes passos: 
+     * - registar as calorias da atividade na atividade
+     * - remover a atividade do plano de treino e adicioná-la ao map
+     * de atividades realizadas
+     * - atualizar os valores de calorias totais gastas, peso atual e recordes
+     * do utilizador
+     * - atualizar os recordes gerais
+     */
     public void saltoNoTempo(int dias) {
         LocalDate proximaData = this.dataAtual.plusDays(dias);
 
@@ -426,6 +472,26 @@ public class FitnessModel implements Serializable {
         return temHard;
     }
 
+    /**
+     * este método tem como vista simplificar o método de criação de
+     * um plano de treino com objetivos. o método itera pela lista de
+     * atividades a realizar e preenche a semana as vezes que foram 
+     * determinadas. para fazer o que foi dito anteriormente, cria uma
+     * data aleatória dentro da semana em questão, e verifica se
+     * é possível inserir a atividade nesse dia, segundo as seguintes
+     * restrições:
+     * - uma atividade hard não pode ser realizada em dias consecutivos
+     * - não pode haver mais do que uma ativdade hard no mesmo dia
+     * - o número de atividades nesse dia não pode exceder o máximo
+     * imposto pelo utilizador
+     * 
+     * caso a atividade possa ser inserida, é lhe então atribuída a data
+     * aleatória, cria-se e define-se um código novo válido e dá-se
+     * uma hora de realização. por último, a atividade é inserida no plano
+     * de treino, e decrementa-se o número de vezes que se pretende realizar
+     * a atividade em questão (cria-se um Map auxiliar para não alterar os valores
+     * estritamente definidos)
+     */
     private void preencheSemana(String codigoUtilizador, PlanoDeTreino plano, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, LocalDate dataInicioSemana, int nMaximoAtividadesDia) {
         Map<Atividade, Integer> atividadesRestantes = atividadesComRecorrenciaSemanal.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         
@@ -473,8 +539,18 @@ public class FitnessModel implements Serializable {
         }
     }
 
-
-
+    /** 
+     * este método recebe um Map<Atividade, Integer>, que mapea
+     * uma atividade ao número de vezes a realizar por semana (as 
+     * restrições dos valores já são previamente verificadas), o número
+     * máximo de atividades a realizar por dia e as calorias objetivo.
+     * com isto, o método define a data inicial do plano de treino como
+     * sendo a próxima segunda feira em relação à data atual, limpa o
+     * plano de treino antigo e, até atingir as calorias objetivo,
+     * preenche todos os dias de uma semana com as atividades pedidas.
+     * no final define a duração do plano, assim como repõe o plano 
+     * de treino no utilizador
+     */ 
     public void planoDeTreinoComObjetivos(String codigoUtilizador, Map<Atividade, Integer> atividadesComRecorrenciaSemanal, int nMaximoAtividadesDia, double caloriasObjetivo) {
         LocalDate dataInicio = this.dataAtual.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         this.limparPlanoDeTreino(codigoUtilizador);

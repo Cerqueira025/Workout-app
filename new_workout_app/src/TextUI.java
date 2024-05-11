@@ -414,7 +414,6 @@ public class TextUI {
 
     public void criarPlanoDeTreinoComObjetivos(String codigoUtilizador) {
         Utilizador utilizador = this.model.getUtilizador(codigoUtilizador);
-        // Map<Atividade, Integer> atividadesComRecorrenciaSemanal
 
         System.out.print("\nCalorias objetivo: ");
         double caloriasObjetivo = sc.nextDouble();
