@@ -446,15 +446,20 @@ public class TextUI {
             Atividade biceps = new Biceps("Bíceps", "", LocalDateTime.now(), 1, 3, utilizador, 25, 10, false);
 
 
+            /**
+             * para assegurar que o plano de treino é criado corretamente,
+             * é necessário colocar as atividades hard PRIMEIRO na lista
+             */
+
             List<Atividade> atividadesDistancia = new ArrayList<>();
             atividadesDistancia.add(sprint);
             atividadesDistancia.add(jogging);
             
             List<Atividade> atividadesDistanciaComHard = new ArrayList<>();
+            atividadesDistanciaComHard.add(bicicletaMontanha);
+            atividadesDistanciaComHard.add(trailMontanha);
             atividadesDistanciaComHard.add(sprint);
             atividadesDistanciaComHard.add(jogging);
-            atividadesDistanciaComHard.add(trailMontanha);
-            atividadesDistanciaComHard.add(bicicletaMontanha);
 
             List<Atividade> atividadesDistanciaEAltimetria = new ArrayList<>();
             // não existem atividades de distância e altimetria não HARD
@@ -469,9 +474,9 @@ public class TextUI {
             atividadesRepeticoes.add(biceps);
 
             List<Atividade> atividadesRepeticoesComHard = new ArrayList<>();
+            atividadesRepeticoesComHard.add(supino);
             atividadesRepeticoesComHard.add(abdominais);
             atividadesRepeticoesComHard.add(polichinelo);
-            atividadesRepeticoesComHard.add(supino);
             atividadesRepeticoesComHard.add(biceps);
 
             List<Atividade> atividadesRepeticoesComPesos = new ArrayList<>();
