@@ -27,6 +27,7 @@ import Excecoes.EmailExisteException;
 import Excecoes.UtilizadorExisteException;
 import Excecoes.UtilizadorNaoExisteException;
 import PlanoTreino.PlanoDeTreino;
+import Utilizador.Genero;
 import Utilizador.Utilizador;
 
 public class FitnessModel implements Serializable {
@@ -139,6 +140,43 @@ public class FitnessModel implements Serializable {
     public Map<String,Double> recordesUtilizador(String codigoUtilizador) {
         return this.utilizadores.get(codigoUtilizador).getRecordesAtividades();
     }
+
+
+    public String getNomeUtilizador(String codigoUtilizador) {
+		return this.utilizadores.get(codigoUtilizador).getNome();
+	}
+    
+    public Genero getGeneroUtilizador(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getGenero();
+    }
+ 
+	public String getMoradaUtilizador(String codigoUtilizador) {
+		return this.utilizadores.get(codigoUtilizador).getMorada();
+	}
+
+    public String getEmailUtilizador(String codigoUtilizador) {
+		return this.utilizadores.get(codigoUtilizador).getEmail();
+	}
+
+	public int getBpmUtilizador(String codigoUtilizador) {
+		return this.utilizadores.get(codigoUtilizador).getBpmMedio();
+	}
+
+    public int getAlturaUtilizador(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getAltura();
+    }
+
+	public double getPesoUtilizador(String codigoUtilizador) {
+		return this.utilizadores.get(codigoUtilizador).getPeso();
+	}
+
+
+ 
+
+   
+
+	
+
     // ----------------- Atividades ---------------- //
 
     public boolean existeAtividade(String codigoUtilizador, String codigoAtividade) {
@@ -191,57 +229,69 @@ public class FitnessModel implements Serializable {
         }        
         return existe;
      }
+     
+     // ----------------- Plano de treino ---------------- //
+     
+     public boolean existeAtividadePlanoDeTreino(String codigoUtilizador, String codAtividade) {
+         return this.utilizadores.get(codigoUtilizador).existeAtividadePlanoDeTreino(codAtividade);
+        }
+        
+        public void setPlanoDeTreino(String codigoUtilizador, PlanoDeTreino planoDeTreino) throws UtilizadorNaoExisteException {
+            if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+            this.utilizadores.get(codigoUtilizador).setPlanoDeTreino(planoDeTreino);
+        }
+        
+        public void limparPlanoDeTreino(String codigoUtilizador) {
+            this.utilizadores.get(codigoUtilizador).limparPlanoDeTreino();
+        }
+        
+        public void addAtividadePlanoDeTreino(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
+            if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+            if (this.existeAtividade(codigoUtilizador, atividade.getCodigo()) || this.existeAtividadePlanoDeTreino(codigoUtilizador, atividade.getCodigo())) throw new AtividadeExisteException();
+            atividade.setBpm(atividade.bpm());
+            atividade.setCalorias(atividade.calorias());
+            this.utilizadores.get(codigoUtilizador).addAtividadePlanoDeTreino(atividade);
+        }
+        
+        public void removeAtividadePlanoDeTreino(String codigoUtilizador, String codAtividade) throws UtilizadorNaoExisteException, AtividadeNaoExisteException {
+            if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
+            if (!this.existeAtividadePlanoDeTreino(codigoUtilizador, codAtividade)) throw new AtividadeNaoExisteException();
+            this.utilizadores.get(codigoUtilizador).removeAtividadePlanoDeTreino(codAtividade);
+        }
+        
+        public PlanoDeTreino getPlanoDeTreino(String codigoUtilizador) {
+            return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
+        }
+        
+        public int getDuracaoPlanoDeTreino(String codigoUtilizador) {
+            return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDuracao();
+        }
+        
+        public Map<String, Atividade> getAtividadesPlanoDeTreino(String codigoUtilizador) {
+            return this.utilizadores.get(codigoUtilizador).getAtividadesPlanoDeTreino();
+        }
+        
+        public List<Atividade> getAtividadesPlanoDeTreinoCrescente(String codigoUtilizador) {
+            Comparator<Atividade> comparator = (a1,a2) -> a1.getData().compareTo(a2.getData());
+            
+            return this.getAtividadesPlanoDeTreino(codigoUtilizador).values().stream().sorted(comparator).collect(Collectors.toList());
+        }
+        
+        public LocalDate getdataPlanoDeTreino(String codigoUtilizador) {
+            return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDataRealizacao();
+        }
 
-    // ----------------- Plano de treino ---------------- //
-
-    public boolean existeAtividadePlanoDeTreino(String codigoUtilizador, String codAtividade) {
-        return this.utilizadores.get(codigoUtilizador).existeAtividadePlanoDeTreino(codAtividade);
-    }
-
-    public void setPlanoDeTreino(String codigoUtilizador, PlanoDeTreino planoDeTreino) throws UtilizadorNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        this.utilizadores.get(codigoUtilizador).setPlanoDeTreino(planoDeTreino);
-    }
-
-    public void limparPlanoDeTreino(String codigoUtilizador) {
-        this.utilizadores.get(codigoUtilizador).limparPlanoDeTreino();
-    }
-
-    public void addAtividadePlanoDeTreino(String codigoUtilizador, Atividade atividade) throws UtilizadorNaoExisteException, AtividadeExisteException {
-        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (this.existeAtividade(codigoUtilizador, atividade.getCodigo()) || this.existeAtividadePlanoDeTreino(codigoUtilizador, atividade.getCodigo())) throw new AtividadeExisteException();
-        atividade.setBpm(atividade.bpm());
-        atividade.setCalorias(atividade.calorias());
-        this.utilizadores.get(codigoUtilizador).addAtividadePlanoDeTreino(atividade);
-    }
-
-    public void removeAtividadePlanoDeTreino(String codigoUtilizador, String codAtividade) throws UtilizadorNaoExisteException, AtividadeNaoExisteException {
-        if (!this.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
-        if (!this.existeAtividadePlanoDeTreino(codigoUtilizador, codAtividade)) throw new AtividadeNaoExisteException();
-        this.utilizadores.get(codigoUtilizador).removeAtividadePlanoDeTreino(codAtividade);
-    }
-
-    public PlanoDeTreino getPlanoDeTreino(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
-    }
-
-    public int getDuracaoPlanoDeTreino(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDuracao();
-    }
-
-    public Map<String, Atividade> getAtividadesPlanoDeTreino(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getAtividadesPlanoDeTreino();
-    }
-
-    public List<Atividade> getAtividadesPlanoDeTreinoCrescente(String codigoUtilizador) {
-        Comparator<Atividade> comparator = (a1,a2) -> a1.getData().compareTo(a2.getData());
-                                                      
-        return this.getAtividadesPlanoDeTreino(codigoUtilizador).values().stream().sorted(comparator).collect(Collectors.toList());
-    }
-
-    public LocalDate getdataPlanoDeTreino(String codigoUtilizador) {
-        return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDataRealizacao();
-    }
+        public boolean existePlanoDeTreino() {
+            boolean existe = false;
+            Iterator<Utilizador> utilizadores = this.utilizadores.values().iterator();
+    
+            while (utilizadores.hasNext() && !existe) {
+                Utilizador u = utilizadores.next();
+                if (u.getAtividadesPlanoDeTreino().size() > 0) 
+                    existe = true;
+            }        
+            return existe;
+         }
 
     // ----------------- Outras queries e auxiliares ---------------- //
 
@@ -384,7 +434,8 @@ public class FitnessModel implements Serializable {
                 Atividade atividade = e.getKey().clone();
                 
                 boolean inseriuAtividade = false;
-                while (!inseriuAtividade) {
+                int thresholdIteracoes = 100;
+                while (!inseriuAtividade && thresholdIteracoes > 0) {
                     boolean podeInserir = true;
 
                     Random randomDias = new Random(); 
@@ -415,6 +466,7 @@ public class FitnessModel implements Serializable {
                         plano.addAtividade(atividade);
                         inseriuAtividade = true;
                     }
+                    thresholdIteracoes--;
                 } 
                 e.setValue(e.getValue() - 1);
             }

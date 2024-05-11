@@ -1,9 +1,7 @@
 
 DELEGATE:
 ```
-- fazer apagar conta
 - fazer tratamento de parametros no controller com handlers (Em progresso)
-- colocar data visível na aplicação e peso do utiliador
 ```
 
 MODEL:

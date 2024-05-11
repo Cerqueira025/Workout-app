@@ -112,12 +112,17 @@ public class TextUI {
     public void paginaInicial() {
         Menu menu = new Menu(new String[] {
                         "Registar",
-                        "Login"
+                        "Login",
+                        "Apagar Conta"
                         });
 
-        menu.setHandler(1, () -> registarUtilizador());
+        menu.setHandler(1, () -> this.registarUtilizador());
+
         menu.setCondicao(2, () -> this.model.getUtilizadores().size() > 0);
-        menu.setHandler(2, () -> loginUtilizador());
+        menu.setHandler(2, () -> this.loginUtilizador());
+        
+        menu.setCondicao(3, () -> this.model.getUtilizadores().size() > 0);
+        menu.setHandler(3, () -> this.apagaConta());
 
         menu.run();
     }
@@ -235,7 +240,8 @@ public class TextUI {
         else {
             System.out.println("\n[SUCESSO] Login efetuado!\n");
             
-            Menu menu = new Menu(new String[] { "Adicionar uma atividade realizada", 
+            Menu menu = new Menu(new String[] { "Informação Pesosal",
+                            "Adicionar uma atividade realizada", 
                             "Remover uma atividade realizada", 
                             "Mostrar todas as atividades realizadas", 
                             "Adicionar um plano de treino",
@@ -248,38 +254,81 @@ public class TextUI {
                             "Saltar no tempo"
                         });
             
-            menu.setHandler(1, () -> addAtividadeRealizada(codigoUtilizador));
-            
-            menu.setCondicao(2, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-            menu.setHandler(2, () -> this.removerAtividadeRealizada(codigoUtilizador));
+            menu.setHandler(1, () -> informacaoPessoal(codigoUtilizador));
+
+            menu.setHandler(2, () -> addAtividadeRealizada(codigoUtilizador));
             
             menu.setCondicao(3, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
-            menu.setHandler(3, () -> this.mostrarAtividadesRealizadas(codigoUtilizador));
+            menu.setHandler(3, () -> this.removerAtividadeRealizada(codigoUtilizador));
             
-            menu.setHandler(4, () -> this.criarPlanoDeTreino(codigoUtilizador));
+            menu.setCondicao(4, () -> this.model.getAtividadesRealizadas(codigoUtilizador).size() > 0);
+            menu.setHandler(4, () -> this.mostrarAtividadesRealizadas(codigoUtilizador));
             
-            menu.setHandler(5, () -> this.criarPlanoDeTreinoComObjetivos(codigoUtilizador));
+            menu.setHandler(5, () -> this.criarPlanoDeTreino(codigoUtilizador));
+            
+            menu.setHandler(6, () -> this.criarPlanoDeTreinoComObjetivos(codigoUtilizador));
 
-            menu.setCondicao(6, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(6, () -> this.limparPlanoDeTreino(codigoUtilizador));
+            menu.setCondicao(7, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(7, () -> this.limparPlanoDeTreino(codigoUtilizador));
             
-            menu.setCondicao(7, () -> this.model.getDuracaoPlanoDeTreino(codigoUtilizador) > 0);
-            menu.setHandler(7, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
-            
-            menu.setCondicao(8, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(8, () -> this.removerAtividadePlanoDeTreino(codigoUtilizador));
+            menu.setCondicao(8, () -> this.model.getDuracaoPlanoDeTreino(codigoUtilizador) > 0);
+            menu.setHandler(8, () -> this.addAtividadePlanoDeTreino(codigoUtilizador));
             
             menu.setCondicao(9, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(9, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
+            menu.setHandler(9, () -> this.removerAtividadePlanoDeTreino(codigoUtilizador));
+            
+            menu.setCondicao(10, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(10, () -> this.mostrarPlanoDeTreino(codigoUtilizador));
 
-            menu.setCondicao(10, () -> this.model.existemAtividadesRealizadas());
-            menu.setHandler(10, () -> this.estatisticasGerias(codigoUtilizador));
+            menu.setCondicao(11, () -> this.model.existemAtividadesRealizadas());
+            menu.setHandler(11, () -> this.estatisticasGerias(codigoUtilizador));
 
-            menu.setCondicao(11, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
-            menu.setHandler(11, () -> this.saltoNoTempo());
-
+            menu.setCondicao(12, () -> this.model.getAtividadesPlanoDeTreino(codigoUtilizador).size() > 0);
+            menu.setHandler(12, () -> this.saltoNoTempo());
+            
             menu.run();
         }
+    }
+
+    public void apagaConta() {
+        System.out.print("\nNome de utlizador: ");
+        String codigoUtilizador = sc.nextLine();
+        System.out.print("Password: ");
+        String password = sc.nextLine();
+
+        if (codigoUtilizador.length() == 0 || password.length() == 0)
+            System.out.println("\n[ERRO] Parâmetros inválidos\n");
+        else if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) 
+            System.out.println("\n[ERRO] Utilizador não existe\n");
+        else if (!this.model.credenciaisCoincidem(codigoUtilizador, password))
+            System.out.println("\n[ERRO] Password incorreta\n");
+        else {
+            System.out.print("Tem a certeza que quer apagar a conta? (1 - sim, 2 - não): ");
+            int op = sc.nextInt();
+            sc.nextLine(); // limpar o buffer
+
+            if (op == 1) {
+                try {
+                    this.model.removeUtilizador(codigoUtilizador);
+                    System.out.println("\n[Sucesso] Utilizador removido com sucesso\n");
+                } catch (UtilizadorNaoExisteException e) {
+                    System.out.println("\n[ERRO] Utilizador não existe\n");
+                }
+            }
+        }
+    }
+
+    public void informacaoPessoal(String codigoUtilizador) {
+        System.out.println("\n------------" + this.model.getData() + "------------");
+        System.out.println("Nome de Utilizador: " + codigoUtilizador);
+        System.out.println("Nome: " + this.model.getNomeUtilizador(codigoUtilizador));
+        System.out.println("Género: " + this.model.getGeneroUtilizador(codigoUtilizador));
+        System.out.println("Morada: " + this.model.getMoradaUtilizador(codigoUtilizador));
+        System.out.println("Email: " + this.model.getEmailUtilizador(codigoUtilizador));
+        System.out.println("Bpm Médio: " + this.model.getBpmUtilizador(codigoUtilizador));
+        System.out.println("Altura: " + this.model.getAlturaUtilizador(codigoUtilizador) + " cm");
+        System.out.println("Peso atual: " + this.model.getPesoUtilizador(codigoUtilizador) + " kg");
+        System.out.println("----------------------------------");
     }
 
     public void addAtividadeRealizada(String codigoUtilizador) {
@@ -468,7 +517,7 @@ public class TextUI {
                 if (atividade instanceof Hard) acumuladorAtividadesHard += vezesPorSemana;
             }
 
-            if (numMaxAtividadesPorSemana < acumuladorAtividades) System.out.println("\n[ERRO] Ultrapassou o limite máximo de atividades numa semana (" + numMaxAtividadesPorSemana + " atividades)\n");
+            if (acumuladorAtividades > numMaxAtividadesPorSemana) System.out.println("\n[ERRO] Ultrapassou o limite máximo de atividades numa semana (" + numMaxAtividadesPorSemana + " atividades)\n");
             else if (acumuladorAtividades <= 0) System.out.println("\n[ERRO] Necessita de pelo menos uma atividade\n");
             else if (acumuladorAtividadesHard > 3) System.out.println("\n[ERRO] Ultrapassou o limite máximo de atividades hard numa semana (3 atividades hard)\n");
             else { 
@@ -539,7 +588,7 @@ public class TextUI {
 
         
         if (codigo.length() == 0 || duracao <= 0 || series <= 0) throw new ParametrosInvalidosException();
-        if (!this.model.codigoUtilizadorExiste(codigo)) throw new UtilizadorNaoExisteException();
+        if (!this.model.codigoUtilizadorExiste(codigoUtilizador)) throw new UtilizadorNaoExisteException();
         if (this.model.existeAtividade(codigoUtilizador, codigo)) throw new AtividadeExisteException();
         
 
@@ -781,6 +830,7 @@ public class TextUI {
 
         menu.setHandler(8, () -> this.atividadeMaisRealizada());
             
+        menu.setCondicao(9, () -> this.model.existePlanoDeTreino());
         menu.setHandler(9, () -> this.planoDeTreinoMaisExigente());                       
 
         menu.setCondicao(10, () -> this.model.recordesUtilizador(codigoUtilizador).size() > 0);
