@@ -65,8 +65,7 @@ public class FitnessModel implements Serializable {
         this.recordesGerais = new HashMap<>();
     }
 
-    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais,
-                        Map<String, Predicate<Atividade>> predicatesAtividade, Map<String, ToDoubleFunction<Atividade>> funcoesAtividade) {
+    public FitnessModel(LocalDate data, Map<String, Utilizador> utilizadores, Map<String, Utilizador> recordesGerais) {
         this.dataAtual = data;
         this.utilizadores = utilizadores.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
         this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
@@ -108,10 +107,6 @@ public class FitnessModel implements Serializable {
 
     public String getCodigoUtilizador(Utilizador utilizador) {
         return utilizador.getCodigo();
-    }
-
-    public double getCaloriasTotaisUtilizador(Utilizador utilizador) {
-        return utilizador.getCaloriasGastas();
     }
 
     public boolean codigoUtilizadorExiste(String codigo) {
@@ -226,9 +221,9 @@ public class FitnessModel implements Serializable {
         this.utilizadores.get(codigoUtilizador).removeAtividadePlanoDeTreino(codAtividade);
     }
 
-    //public PlanoDeTreino getPlanoDeTreino(String codigoUtilizador) {
-    //    return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
-    //}
+    public PlanoDeTreino getPlanoDeTreino(String codigoUtilizador) {
+        return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino();
+    }
 
     public int getDuracaoPlanoDeTreino(String codigoUtilizador) {
         return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDuracao();
@@ -263,7 +258,7 @@ public class FitnessModel implements Serializable {
                .sum();
     }
 
-    public int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
+    private int numeroAtividadesPeriodo(String codigoUtilizador, LocalDate inicio, LocalDate fim) {
         Predicate<Atividade> predicate = a -> (a.getData().toLocalDate().compareTo(inicio) >= 0 && a.getData().toLocalDate().compareTo(fim) <= 0);
         return (int) this.utilizadores.get(codigoUtilizador).getAtividades().values().stream().filter(predicate).count();
     }
@@ -276,7 +271,7 @@ public class FitnessModel implements Serializable {
         return this.recordesGerais.get(nomeAtividade).caloriasRecordeAtividade(nomeAtividade);
     }
 
-    public void atualizaRecordesGerais(Utilizador utilizador) {
+    private void atualizaRecordesGerais(Utilizador utilizador) {
         for(Map.Entry<String,Double> parRecordeCalorias : utilizador.getRecordesAtividades().entrySet()) {
             String nomeAtividade = parRecordeCalorias.getKey();
             Double caloriasAtividade = parRecordeCalorias.getValue();
