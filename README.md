@@ -1,3 +1,6 @@
+Neste repositório encontra o seguinte ficheiro: "ficheiroComEstado"
+
+```
 Os utilizadores possuem planos de treino diferenciados, 
 onde houve um avanço no tempo de 60 dias.
 
@@ -9,3 +12,4 @@ joao               - 1234
 maria              - 1234
 rodri              - 1234
 ana                - 1234
+```
