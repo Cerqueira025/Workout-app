@@ -101,7 +101,7 @@ public class FitnessModel implements Serializable {
     }
 
     public void setRecordesGerais(Map<String, Utilizador> recordesGerais) {
-        this.recordesGerais = recordesGerais.entrySet().stream().collect(Collectors.toMap(k->k.getKey(), v->v.getValue()));
+        this.recordesGerais = recordesGerais.entrySet().stream().collect(Collec§tors.toMap(k->k.getKey(), v->v.getValue()));
     }
 
     // ----------------- Utilizador ---------------- //
@@ -283,7 +283,7 @@ public class FitnessModel implements Serializable {
             return this.getAtividadesPlanoDeTreino(codigoUtilizador).values().stream().sorted(comparator).collect(Collectors.toList());
         }
         
-        public LocalDate getdataPlanoDeTreino(String codigoUtilizador) {
+        public LocalDate getDataPlanoDeTreino(String codigoUtilizador) {
             return this.utilizadores.get(codigoUtilizador).getPlanoDeTreino().getDataRealizacao();
         }
 

@@ -782,7 +782,7 @@ public class TextUI {
     }
 
     public void mostrarPlanoDeTreino(String codigoUtilizador) {
-        System.out.println("Plano de treino " + this.model.getdataPlanoDeTreino(codigoUtilizador));
+        System.out.println("Plano de treino " + this.model.getDataPlanoDeTreino(codigoUtilizador));
         System.out.println(this.model.getAtividadesPlanoDeTreinoCrescente(codigoUtilizador));
     }
 
