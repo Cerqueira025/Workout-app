@@ -154,12 +154,11 @@ public class SupinoTest {
         Profissional profissional = new Profissional();
         LocalDateTime data = LocalDateTime.now();
         Supino supino1 = new Supino("001", "Descrição", data, 30, 4, profissional, 10, 50, 45.0);
-        String expectedToString = "Supino{" +
-                "Pesos{Repetições{Atividade{código='001', descrição='Descrição', data='"+
-                data + "', duração='30', bpm médio='0', séries='4', calorias='0.0'}"+
-                "repetições=10}peso=50.0}"+
-                "inclinação=" + supino1.getInclinacao() +
-                '}';
+        String expectedToString = "Supino - " +
+                "código = '001', descrição = 'Descrição', data = '"+
+                data + "', duração = '30', bpm médio = '0', séries = '4', calorias = '0.0', "+
+                "repetições = '10', peso = '50.0', "+
+                "inclinação = '" + supino1.getInclinacao() + "'";
         assertEquals(expectedToString, supino1.toString());
     }
     @Test

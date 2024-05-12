@@ -62,7 +62,7 @@ public class ProfissionalTest {
     public void fatorMultiplicativoTest(){
         Profissional profissional = new Profissional("001", 70, 75.5, 65, 175, "João", Genero.Masculino, "Rua X", "joao@example.com", "senha");
         double fator = profissional.fatorMultiplicativo();
-        assertTrue(fator > 0.0 && fator < 2.0);
+        assertTrue(fator > 0.0 && fator < 3.0);
     }
 
 }

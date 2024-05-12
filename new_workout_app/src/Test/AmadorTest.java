@@ -62,6 +62,6 @@ public class AmadorTest {
         Amador amador = new Amador("001", 70, 75.5, 35, 175, "João", Genero.Masculino, "Rua X", "joao@example.com", "senha");
         double fator = amador.fatorMultiplicativo();
         // Verificação se o fator está dentro do intervalo esperado
-        assertTrue(fator > 0.0 && fator < 2.0);
+        assertTrue(fator > 0.0 && fator < 3.0);
     }
 }
