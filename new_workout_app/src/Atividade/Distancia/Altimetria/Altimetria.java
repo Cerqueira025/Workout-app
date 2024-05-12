@@ -51,7 +51,7 @@ public abstract class Altimetria extends Distancia {
                ", altimetria = '" + this.altimetria + '\'';
     }
 
-    public abstract Distancia clone();
+    public abstract Altimetria clone();
     public abstract double calorias();
     public abstract int bpm();
 }
