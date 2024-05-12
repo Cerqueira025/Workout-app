@@ -1,11 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Testes" type="JUnit" factoryName="JUnit">
+    <module name="Workout-app" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="11" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="class" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/new_workout_app/src/Test" />
+    <option name="TEST_OBJECT" value="directory" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Test" />
+    <dir value="$PROJECT_DIR$/src/Test" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
