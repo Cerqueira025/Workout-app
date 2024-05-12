@@ -1,8 +1,5 @@
 import Atividade.Atividade;
 import PlanoTreino.PlanoDeTreino;
-import Utilizador.Genero;
-import Utilizador.TiposUtilizador.PraticanteOcasional;
-import Utilizador.TiposUtilizador.Profissional;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -90,6 +87,7 @@ public class PlanoDeTreinoTest {
 
         assertFalse(plano2.equals(plano3));
         assertFalse(plano1.equals(plano3));
+        assertFalse(plano1.equals(plano4));
 
         // Verifica se o plano não é igual a null
         assertFalse(plano1.equals(null));

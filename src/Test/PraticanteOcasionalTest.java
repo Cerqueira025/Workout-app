@@ -2,7 +2,6 @@ import Atividade.Atividade;
 import PlanoTreino.PlanoDeTreino;
 import Utilizador.Genero;
 import Utilizador.TiposUtilizador.PraticanteOcasional;
-import Utilizador.TiposUtilizador.Profissional;
 import org.junit.Test;
 
 import java.util.HashMap;

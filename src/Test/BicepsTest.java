@@ -1,20 +1,20 @@
 import static org.junit.Assert.assertEquals;
-        import static org.junit.Assert.assertTrue;
-        import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-        import java.time.LocalDateTime;
-        import java.util.HashMap;
-        import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
-        import Atividade.Atividade;
-        import PlanoTreino.PlanoDeTreino;
-        import Utilizador.Genero;
-        import Utilizador.TiposUtilizador.Amador;
-        import Utilizador.TiposUtilizador.PraticanteOcasional;
-        import Utilizador.TiposUtilizador.Profissional;
-        import org.junit.Test;
+import Atividade.Atividade;
+import PlanoTreino.PlanoDeTreino;
+import Utilizador.Genero;
+import Utilizador.TiposUtilizador.Amador;
+import Utilizador.TiposUtilizador.PraticanteOcasional;
+import Utilizador.TiposUtilizador.Profissional;
+import org.junit.Test;
 
-        import Atividade.Repeticoes.Pesos.Biceps;
+import Atividade.Repeticoes.Pesos.Biceps;
 
 public class BicepsTest {
     public BicepsTest()
