@@ -10,7 +10,6 @@ import Utilizador.TiposUtilizador.PraticanteOcasional;
 public abstract class Atividade implements Serializable {
     private String codigo;
     private String descricao;
-    //private String local;
     private LocalDateTime data;
     private int duracao;
     private int bpm; //------------ bpm = utilizador.bpmMedio*utilizador.peso*(fator de atividade)
